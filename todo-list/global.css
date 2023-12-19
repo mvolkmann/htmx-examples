@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  button {
+    background-color: cornflowerblue;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  button.plain {
+    background-color: unset;
+    border: none;
+    padding: unset;
+  }
+
+  button:disabled {
+    opacity: 0.2;
+  }
+
+  color: cornflowerblue;
+  /* TODO: Why is this not overridding Tailwind defaults? */
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+input {
+  border: 1px solid red;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
