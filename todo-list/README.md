@@ -1,4 +1,4 @@
-# BETH Stack
+# To Do App with BETH Stack
 
 ## Overview
 
@@ -9,7 +9,13 @@ The BETH stack uses:
 - typed-html
 - HTMX
 
-## Steps
+To run this:
+
+- `bun install`
+- `bun run dev`
+- browse localhost:1919/todos
+
+## Creating a BETH Stack App
 
 - See the YouTube video at https://www.youtube.com/watch?v=cpzowDDJj24.
 - create directory and cd to it
@@ -30,15 +36,15 @@ The BETH stack uses:
 - modify "index.ts" to contain the following:
 
   ```ts
-  import {Elysia} from 'elysia';
+  import { Elysia } from "elysia";
 
   const app = new Elysia();
 
-  app.get('/', () => 'Hello, Elysia!');
+  app.get("/", () => "Hello, Elysia!");
 
   app.listen(1919);
 
-  console.log('listening on port', app.server?.port);
+  console.log("listening on port", app.server?.port);
   ```
 
 - enter "bun run --watch index.ts"
