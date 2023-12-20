@@ -18,7 +18,7 @@
   <body>
     <h1>Infinite Scroll</h1>
     <table class="container">
-      <tr hx-trigger="revealed" hx-get="/rows?page=1" hx-swap="afterend">
+      <tr hx-trigger="revealed once" hx-get="/rows?page=1" hx-swap="afterend">
         <td>ID</td>
         <td>Description</td>
       </tr>

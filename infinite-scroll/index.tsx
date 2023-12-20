@@ -33,7 +33,6 @@ function TableRow(page: number, index: number) {
 
 app.get("/rows", ({ query }) => {
   const page = query.page ? Number(query.page) : 1;
-  console.log("index.tsx get /rows: page =", page);
   const result = (
     <>
       {ROWS.map((_, index) => {
