@@ -1,0 +1,17 @@
+---
+interface Props {
+  breed: string;
+  content: string;
+  name: string;
+  slug: string;
+}
+
+const { breed, content, name, slug } = Astro.props;
+---
+
+<hr />
+<div class="my-4">
+  <p class="font-bold">{name} is a {breed}.</p>
+  <p>{content}</p>
+  <a href={slug}>American Kennel Club</a>
+</div>

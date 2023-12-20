@@ -1,0 +1,44 @@
+---
+import { Image } from "astro:assets";
+import logo1 from "/src/images/astro-logo.png";
+import logo2 from "../images/astro-logo.svg";
+import Layout from "../layouts/Layout.astro";
+
+import dogs from "../data/dogs.json";
+console.log("dogs =", dogs);
+---
+
+<Layout title="Welcome to Astro">
+  <main class="m-4">
+    <h1>Welcome to Astro</h1>
+    <Image alt="PNG logo" src={logo1} width={300} />
+    <Image alt="SVG logo" src={logo2} width={300} />
+
+    <a href="/pets/cats">Cats</a>
+
+    <a href="/pets/dogs">Dogs</a>
+    <div class="mt-4">
+      <button id="my-btn">Press Me</button>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  function handleClick() {
+    alert("got click");
+  }
+  const myBtn = document.getElementById("my-btn");
+  if (myBtn) myBtn.addEventListener("click", handleClick);
+</script>
+
+<style>
+  a {
+    color: blue;
+    text-decoration: underline;
+  }
+
+  h1 {
+    color: purple;
+    font-size: 3rem;
+  }
+</style>

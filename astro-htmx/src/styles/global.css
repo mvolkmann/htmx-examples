@@ -1,0 +1,21 @@
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:hover {
+  font-weight: bold;
+}
+a:visited {
+  color: purple;
+}
+
+button {
+  background-color: yellow;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  color: #666;
+  padding: 0.5rem;
+}
+button:hover {
+  color: black;
+}

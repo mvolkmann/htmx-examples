@@ -1,0 +1,25 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Dog from "../../components/Dog.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+const dogs: CollectionEntry<"dogs">[] = await getCollection("dogs");
+---
+
+<Layout title="Welcome to Astro">
+  <main class="m-4">
+    <!-- <Dog name="Comet" breed="Whippet" />
+    <Dog name="Oscar" breed="German Shorthaired Pointer" /> -->
+    {
+      dogs.map((dog) => (
+        // slug is a special property that is directly on the collection entry.
+        <Dog
+          name={dog.data.name}
+          breed={dog.data.breed}
+          slug={dog.slug}
+          content={dog.body.trim()}
+        />
+      ))
+    }
+  </main>
+</Layout>
