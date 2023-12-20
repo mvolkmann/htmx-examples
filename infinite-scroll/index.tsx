@@ -3,21 +3,21 @@ import { html } from "@elysiajs/html";
 import { staticPlugin } from "@elysiajs/static";
 
 const app = new Elysia();
-app.use(html());
-app.use(staticPlugin({ prefix: "" }));
+app.use(html()); // enables use of JSX
+app.use(staticPlugin({ prefix: "" })); // looks in public directory
 
 const ROWS_PER_PAGE = 20;
-let ROWS = [...Array(ROWS_PER_PAGE)];
-let lastRow = 0;
+// This is an array of undefined values used for mapping below.
+const ROWS = [...Array(ROWS_PER_PAGE)];
 
 function TableRow(page: number, index: number) {
-  const isLast = index === ROWS_PER_PAGE - 1;
   const id = (page - 1) * ROWS_PER_PAGE + index + 1;
-  const nextPage = page + 1;
+  const isLast = index === ROWS_PER_PAGE - 1;
   return isLast ? (
     <tr
       hx-trigger="revealed"
-      hx-get={"/rows?page=" + nextPage}
+      hx-get={"/rows?page=" + (page + 1)}
+      hx-indicator="#spinner"
       hx-swap="afterend"
     >
       <td>{id}</td>
@@ -31,17 +31,17 @@ function TableRow(page: number, index: number) {
   );
 }
 
-app.get("/rows", ({ query }) => {
-  const page = query.page ? Number(query.page) : 1;
-  const result = (
+app.get("/rows", async ({ query }) => {
+  const { page } = query;
+  if (!page) throw new Error("page query parameter is required");
+  Bun.sleepSync(500); // simulates long-running query
+  return (
     <>
       {ROWS.map((_, index) => {
-        return TableRow(page, index);
+        return TableRow(Number(page), index);
       })}
     </>
   );
-  lastRow += ROWS_PER_PAGE;
-  return result;
 });
 
 app.listen(1919);

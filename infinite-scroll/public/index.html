@@ -3,25 +3,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Infinite Scroll</title>
+    <link rel="stylesheet" href="/styles.css" />
     <script src="/htmx.min.js"></script>
-    <style>
-      table {
-        border-collapse: collapse;
-      }
-      td,
-      th {
-        border: 1px solid black;
-        padding: 0.5rem;
-      }
-    </style>
   </head>
   <body>
     <h1>Infinite Scroll</h1>
     <table class="container">
-      <tr hx-trigger="revealed once" hx-get="/rows?page=1" hx-swap="afterend">
+      <tr
+        hx-trigger="revealed once"
+        hx-get="/rows?page=1"
+        hx-indicator="#spinner"
+        hx-swap="afterend"
+      >
         <td>ID</td>
         <td>Description</td>
       </tr>
     </table>
+    <img
+      alt="loading..."
+      class="htmx-indicator h-6 w-6"
+      id="spinner"
+      src="/spinner.gif"
+    />
   </body>
 </html>
