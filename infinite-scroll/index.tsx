@@ -13,18 +13,16 @@ const ROWS = [...Array(ROWS_PER_PAGE)];
 function TableRow(page: number, index: number) {
   const id = (page - 1) * ROWS_PER_PAGE + index + 1;
   const isLast = index === ROWS_PER_PAGE - 1;
-  return isLast ? (
-    <tr
-      hx-trigger="revealed"
-      hx-get={"/rows?page=" + (page + 1)}
-      hx-indicator="#spinner"
-      hx-swap="afterend"
-    >
-      <td>{id}</td>
-      <td>description</td>
-    </tr>
-  ) : (
-    <tr>
+  const attributes = isLast
+    ? {
+        "hx-trigger": "revealed",
+        "hx-get": "/rows?page=" + (page + 1),
+        "hx-indicator": "#spinner",
+        "hx-swap": "afterend",
+      }
+    : {};
+  return (
+    <tr {...attributes}>
       <td>{id}</td>
       <td>description</td>
     </tr>
@@ -34,6 +32,7 @@ function TableRow(page: number, index: number) {
 app.get("/rows", async ({ query }) => {
   const { page } = query;
   if (!page) throw new Error("page query parameter is required");
+
   Bun.sleepSync(500); // simulates long-running query
   return (
     <>
