@@ -6,6 +6,7 @@ const dogs = defineCollection({
   schema: z.object({
     name: z.string(),
     breed: z.string(),
+    website: z.string(),
   }),
 });
 

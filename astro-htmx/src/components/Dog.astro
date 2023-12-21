@@ -3,15 +3,16 @@ interface Props {
   breed: string;
   content: string;
   name: string;
-  slug: string;
+  website: string;
 }
 
-const { breed, content, name, slug } = Astro.props;
+const { breed, content, name, website } = Astro.props;
 ---
 
 <hr />
 <div class="my-4">
   <p class="font-bold">{name} is a {breed}.</p>
-  <p>{content}</p>
-  <a href={slug}>American Kennel Club</a>
+  <p>{content}"</p>
+  <!-- <p set:html="{content}" /> -->
+  <a href={website}>American Kennel Club</a>
 </div>
