@@ -43,7 +43,7 @@ const BaseHtml = ({children}: Attributes) => (
       <title>To Do List</title>
       {/* TODO: Can the staticPlugin default to looking in /public? */}
       <link rel="stylesheet" href="/public/tailwind.css" />
-      <script src="public/htmx.min.js"></script>
+      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
       <script src="public/hyperscript.min.js"></script>
       <script defer src="public/setup.js"></script>
     </head>

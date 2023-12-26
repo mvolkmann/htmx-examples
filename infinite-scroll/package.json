@@ -1,9 +1,10 @@
 {
-  "name": "beth",
+  "name": "infinite-scroll",
   "module": "index.ts",
   "type": "module",
   "scripts": {
     "dev": "bun run --watch index.tsx",
+    "format": "prettier --write '**/*.{css,html,js,ts}'",
     "tw": "bunx tailwindcss -i ./global.css -o public/tailwind.css --watch"
   },
   "devDependencies": {
