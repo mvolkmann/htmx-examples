@@ -185,7 +185,7 @@ app.get('/todos', () => {
       <TodoStatus />
       <TodoForm />
       <TodoList todos={todos} />
-      <button hx-get="/test" hx-select="#id1,#id3">
+      <button hx-get="/test" hx-select="#id1,#id2">
         Test
       </button>
     </Layout>
