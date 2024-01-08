@@ -1,6 +1,7 @@
 import {Elysia} from 'elysia';
 import {html} from '@elysiajs/html'; // enables use of JSX
 import {staticPlugin} from '@elysiajs/static'; // enables static file serving
+import {Html} from '@kitajs/html';
 
 const app = new Elysia();
 app.use(html());
@@ -19,12 +20,7 @@ const names: string[] = [
   'Tami'
 ];
 
-// TODO: What type should be used for children?
-// See https://github.com/elysiajs/elysia-html/issues/72.
-// Consider using https://www.npmjs.com/package/@kitajs/html.
-// import type {Html} from '@kitajs/html';
-// Use the type Html.Children.
-const BaseHtml = ({children}: {children: any}) => (
+const BaseHtml = ({children}: {children: Html.Children}) => (
   <html>
     <head>
       <title>HTMX Active Search</title>

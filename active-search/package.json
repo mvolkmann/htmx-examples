@@ -6,6 +6,7 @@
     "dev": "bun run --watch index.tsx"
   },
   "devDependencies": {
+    "@kitajs/html": "^3.0.10",
     "bun-types": "latest",
     "tailwindcss": "^3.3.6"
   },
