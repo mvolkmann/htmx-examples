@@ -35,7 +35,7 @@ function addTodo(description: string) {
   }
 }
 
-const BaseHtml = ({children}: Attributes) => (
+const Layout = ({children}: Attributes) => (
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -155,17 +155,40 @@ app.delete(
   }
 );
 
+app.get('/', ({set}) => {
+  set.redirect = '/todos';
+});
+
+app.get('/test', () => {
+  return (
+    <html>
+      <head>
+        <title>Test</title>
+        <script src="head.js"></script>
+      </head>
+      <body>
+        <p id="id1">paragraph #1</p>
+        <script src="body.js"></script>
+        <p id="id2">paragraph #2</p>
+      </body>
+    </html>
+  );
+});
+
 // This renders the todo list UI.  It is the R in CRUD.
 app.get('/todos', () => {
   const todos = getAllTodosQuery.all();
 
   return (
-    <BaseHtml>
+    <Layout>
       <h1>To Do List</h1>
       <TodoStatus />
       <TodoForm />
       <TodoList todos={todos} />
-    </BaseHtml>
+      <button hx-get="/test" hx-select="#id1,#id3">
+        Test
+      </button>
+    </Layout>
   );
 });
 
