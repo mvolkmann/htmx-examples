@@ -1,0 +1,21 @@
+{
+  "name": "active-search",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch index.tsx"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "tailwindcss": "^3.3.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^0.7.3",
+    "@elysiajs/static": "^0.7.1",
+    "@kitajs/ts-html-plugin": "^1.3.3",
+    "elysia": "^0.7.30"
+  }
+}
