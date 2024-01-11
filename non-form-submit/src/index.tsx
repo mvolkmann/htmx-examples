@@ -38,6 +38,7 @@ app.get('/', () => {
         <button
           hx-post="/search"
           hx-include="#firstName, #lastName"
+          hx-push-url="/greeting"
           hx-vals='js:{"planet": "Earth", "year": new Date().getFullYear()}'
           hx-target="#result"
           hx-swap="innerHTML"
