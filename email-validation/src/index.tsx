@@ -3,6 +3,8 @@ import {html} from '@elysiajs/html'; // enables use of JSX
 import {staticPlugin} from '@elysiajs/static'; // enables static file serving
 import {Html} from '@kitajs/html';
 
+const badPasswords = ['password', '12345678'];
+
 const existingEmails = [
   'old@aol.com',
   'existing@gmail.com',
@@ -86,8 +88,8 @@ app.get('/email-validate', ({query}: Context) => {
 
 app.get('/password-validate', ({query}: Context) => {
   const {password} = query;
-  const valid = password.length >= 8;
-  return emailContent(valid ? '' : 'invalid password', !valid);
+  const invalid = password.length < 8 || badPasswords.includes(password);
+  return emailContent(invalid ? 'invalid password' : '', invalid);
 });
 
 app.post('/account', ({body}: any) => {
