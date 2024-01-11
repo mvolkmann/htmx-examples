@@ -38,6 +38,7 @@ app.get('/', () => {
         <button
           hx-post="/search"
           hx-include="#firstName, #lastName"
+          hx-vals='js:{"planet": "Earth", "year": new Date().getFullYear()}'
           hx-target="#result"
           hx-swap="innerHTML"
         >
@@ -49,9 +50,16 @@ app.get('/', () => {
   );
 });
 
+app.get('/search', ({query}) => {
+  return (
+    <p>
+      Hello, {query.firstName} {query.lastName}.
+    </p>
+  );
+});
+
 type Body = {firstName: string; lastName: string};
 app.post('/search', ({body}) => {
-  // const name = (body as Body).name;
   console.log('index.tsx search: body =', body);
   return (
     <p>
