@@ -28,10 +28,14 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
 );
 
 app.get('/', () => {
+  const reset = {
+    'hx-on:htmx:after-request': `console.log(event); if (event.detail.pathInfo.requestPath === '/account' && event.detail.successful) this.reset()`
+  };
+
   return (
     <BaseHtml>
       <h2>Sign Up</h2>
-      <form hx-post="/account" hx-target="#result">
+      <form hx-post="/account" hx-target="#result" {...reset}>
         <div>
           <label for="email">Email</label>
           <input
@@ -44,6 +48,7 @@ app.get('/', () => {
             required
             size="30"
             type="email"
+            value="old@aol.co"
           />
           <span class="error" id="email-error" />
         </div>
@@ -62,6 +67,7 @@ app.get('/', () => {
             required
             size="20"
             type="password"
+            value="password"
           />
           <span class="error" id="password-error" />
         </div>
@@ -98,25 +104,29 @@ app.get('/password-validate', ({query}: Context) => {
   return validPassword(query.password) ? '' : 'invalid password';
 });
 
-app.post('/account', ({body}: any) => {
+app.post('/account', ({body, set}: any) => {
   const {email, password} = body;
   const goodEmail = validEmail(email);
   const goodPassword = validPassword(password);
-  const message = goodEmail && goodPassword ? 'A new account was created.' : '';
-  // TODO: If not invalid, clear the two inputs.
+  const good = goodEmail && goodPassword;
+  // TODO: When JSX is returned, the response code is always 200.
+  // TODO: I think this is a bug in Elysia.
+  // TODO: See https://github.com/elysiajs/elysia/issues/415.
+  set.status = good ? 200 : 400;
+  console.log('/account: set.status =', set.status);
   return (
     <>
       {!goodEmail && (
-        <span hx-swap-oob="true" id="email-error" style="color: red">
+        <span class="error" hx-swap-oob="true" id="email-error">
           email in use
         </span>
       )}
       {!goodPassword && (
-        <span hx-swap-oob="true" id="password-error" style="color: red">
+        <span class="error" hx-swap-oob="true" id="password-error">
           invalid password
         </span>
       )}
-      <span>{message}</span>
+      <span>{good ? 'A new account was created.' : ''}</span>
     </>
   );
 });
