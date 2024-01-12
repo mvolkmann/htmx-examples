@@ -20,6 +20,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
   <html>
     <head>
       <title>htmx email validation</title>
+      <link rel="stylesheet" href="/style.css" />
       <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     </head>
     <body class="p-8">{children}</body>
@@ -44,10 +45,12 @@ app.get('/', () => {
             size="30"
             type="email"
           />
-          <span id="email-error" style="color: red" />
+          <span class="error" id="email-error" />
         </div>
         <div>
-          <label for="password">Password</label>
+          <label class="mr-4" for="password">
+            Password
+          </label>
           <input
             id="password"
             hx-get="/password-validate"
@@ -60,7 +63,7 @@ app.get('/', () => {
             size="20"
             type="password"
           />
-          <span id="password-error" style="color: red" />
+          <span class="error" id="password-error" />
         </div>
         {/* HTML form validation will not work if the hx-post attribute
             is moved from the form to this button. */}
@@ -83,6 +86,7 @@ function validEmail(email: string) {
 }
 
 function validPassword(password: string) {
+  if (!password) return true;
   return password.length >= 8 && !badPasswords.includes(password);
 }
 
@@ -102,14 +106,14 @@ app.post('/account', ({body}: any) => {
   // TODO: If not invalid, clear the two inputs.
   return (
     <>
-      {!validEmail(email) && (
-        <span hx-oob-swap id="email-error" style="color: red">
+      {!goodEmail && (
+        <span hx-swap-oob="true" id="email-error" style="color: red">
           email in use
         </span>
       )}
-      {!validPassword(email) && (
-        <span hx-oob-swap id="password-error" style="color: red">
-          invalid-password
+      {!goodPassword && (
+        <span hx-swap-oob="true" id="password-error" style="color: red">
+          invalid password
         </span>
       )}
       <span>{message}</span>
