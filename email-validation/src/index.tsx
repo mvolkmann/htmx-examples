@@ -36,7 +36,7 @@ app.get('/', () => {
           <input
             id="email"
             hx-get="/email-validate"
-            hx-target="#result"
+            hx-target="#email-error"
             hx-trigger="keyup changed delay:200ms"
             name="email"
             placeholder="email"
@@ -44,13 +44,14 @@ app.get('/', () => {
             size="30"
             type="email"
           />
+          <span id="email-error" style="color: red" />
         </div>
         <div>
           <label for="password">Password</label>
           <input
             id="password"
             hx-get="/password-validate"
-            hx-target="#result"
+            hx-target="#password-error"
             hx-trigger="blur"
             minlength="8"
             name="password"
@@ -59,6 +60,7 @@ app.get('/', () => {
             size="20"
             type="password"
           />
+          <span id="password-error" style="color: red" />
         </div>
         {/* HTML form validation will not work if the hx-post attribute
             is moved from the form to this button. */}
@@ -76,34 +78,43 @@ type Context = {
   };
 };
 
-function emailContent(message: string, isError: boolean) {
-  return isError ? <span style="color: red">{message}</span> : message;
+function validEmail(email: string) {
+  return !existingEmails.includes(email);
+}
+
+function validPassword(password: string) {
+  return password.length >= 8 && !badPasswords.includes(password);
 }
 
 app.get('/email-validate', ({query}: Context) => {
-  const {email} = query;
-  const used = existingEmails.includes(email);
-  return emailContent(used ? 'email in use' : '', used);
+  return validEmail(query.email) ? '' : 'email in use';
 });
 
 app.get('/password-validate', ({query}: Context) => {
-  const {password} = query;
-  const invalid = password.length < 8 || badPasswords.includes(password);
-  return emailContent(invalid ? 'invalid password' : '', invalid);
+  return validPassword(query.password) ? '' : 'invalid password';
 });
 
 app.post('/account', ({body}: any) => {
   const {email, password} = body;
-  const usedEmail = existingEmails.includes(email);
-  const badPassword = password.length < 8;
-  const message = usedEmail
-    ? 'That email is already in use.'
-    : badPassword
-    ? 'That password is invalid.'
-    : 'A new account was created.';
-  const invalid = usedEmail || badPassword;
+  const goodEmail = validEmail(email);
+  const goodPassword = validPassword(password);
+  const message = goodEmail && goodPassword ? 'A new account was created.' : '';
   // TODO: If not invalid, clear the two inputs.
-  return emailContent(message, invalid);
+  return (
+    <>
+      {!validEmail(email) && (
+        <span hx-oob-swap id="email-error" style="color: red">
+          email in use
+        </span>
+      )}
+      {!validPassword(email) && (
+        <span hx-oob-swap id="password-error" style="color: red">
+          invalid-password
+        </span>
+      )}
+      <span>{message}</span>
+    </>
+  );
 });
 
 app.listen(1919);
