@@ -1,0 +1,28 @@
+<html lang="en">
+  <head>
+    <title>Infinite Scroll with HTMX</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  </head>
+  <body>
+    <h1>Infinite Scroll</h1>
+    <table class="container">
+      <tr
+        hx-trigger="revealed"
+        hx-get="/pokemon-rows?page=1"
+        hx-indicator="#spinner"
+        hx-swap="afterend"
+      >
+        <td>ID</td>
+        <td>Name</td>
+        <td>Description</td>
+      </tr>
+    </table>
+    <img
+      alt="loading..."
+      class="htmx-indicator h-8 w-8"
+      id="spinner"
+      src="/spinner.gif"
+    />
+  </body>
+</html>

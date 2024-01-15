@@ -15,20 +15,12 @@ app.use(html()); // enables use of JSX
 app.use(staticPlugin({prefix: ''})); // looks in public directory
 
 function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
-  const attributes = isLast
-    ? {
-        'hx-trigger': 'revealed',
-        'hx-get': '/pokemon-rows?page=' + (page + 1),
-        'hx-indicator': '#spinner',
-        'hx-swap': 'afterend'
-      }
-    : {};
   const {name, url} = pokemon;
   const id = url.split('/')[6];
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   return (
-    <tr {...attributes}>
+    <tr>
       <td>{id}</td>
       <td>{name}</td>
       <td>
