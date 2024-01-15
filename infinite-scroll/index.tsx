@@ -24,7 +24,7 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
       }
     : {};
   const {name, url} = pokemon;
-  const id = url.split('/')[6];
+  const id = url.split('/')[6]; // 7th part of the URL
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   return (

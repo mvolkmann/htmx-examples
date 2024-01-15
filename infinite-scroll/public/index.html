@@ -6,13 +6,13 @@
   </head>
   <body>
     <h1>Infinite Scroll</h1>
-    <table>
-      <tr
-        hx-trigger="load"
-        hx-get="/pokemon-rows?page=1"
-        hx-indicator=".htmx-indicator"
-        hx-swap="afterend"
-      >
+    <table
+      hx-trigger="load"
+      hx-get="/pokemon-rows?page=1"
+      hx-indicator=".htmx-indicator"
+      hx-swap="beforeend"
+    >
+      <tr>
         <td>ID</td>
         <td>Name</td>
         <td>Description</td>
