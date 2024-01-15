@@ -73,7 +73,6 @@ app.get('/pokemon-rows', async ({query}) => {
         hx-indicator="#spinner"
         hx-target="#pokemon-table"
       >
-        {/* TODO: Why doesn't the spinner appear when these are clicked? */}
         <button
           disabled={pageNumber === 1}
           hx-get={`/pokemon-rows?page=${pageNumber - 1}`}

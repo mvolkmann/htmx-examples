@@ -3,7 +3,7 @@ import {html} from '@elysiajs/html';
 import {staticPlugin} from '@elysiajs/static';
 
 const POKEMON_URL_PREFIX = 'https://pokeapi.co/api/v2/pokemon-species';
-const ROWS_PER_PAGE = 20;
+const ROWS_PER_PAGE = 10;
 
 type Pokemon = {
   name: string;
