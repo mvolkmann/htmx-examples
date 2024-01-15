@@ -3,7 +3,7 @@ import {html} from '@elysiajs/html';
 import {staticPlugin} from '@elysiajs/static';
 
 const POKEMON_URL_PREFIX = 'https://pokeapi.co/api/v2/pokemon-species';
-const ROWS_PER_PAGE = 10;
+const ROWS_PER_PAGE = 5;
 
 type Pokemon = {
   name: string;
@@ -42,7 +42,7 @@ app.get('/pokemon-rows', async ({query}) => {
   const {page} = query;
   if (!page) throw new Error('page query parameter is required');
 
-  // Bun.sleepSync(500); // simulates long-running query
+  Bun.sleepSync(500); // simulates long-running query
 
   const pageNumber = Number(page);
   const offset = (pageNumber - 1) * ROWS_PER_PAGE;
@@ -53,10 +53,36 @@ app.get('/pokemon-rows', async ({query}) => {
 
   return (
     <>
-      {pokemonList.map((pokemon, index) => {
-        const isLast = index === ROWS_PER_PAGE - 1;
-        return TableRow(pageNumber, pokemon, isLast);
-      })}
+      <table class="container">
+        <tr>
+          <td>ID</td>
+          <td>Name</td>
+          <td>Description</td>
+        </tr>
+        {pokemonList.map((pokemon, index) => {
+          const isLast = index === ROWS_PER_PAGE - 1;
+          return TableRow(pageNumber, pokemon, isLast);
+        })}
+      </table>
+
+      <div id="pagination" hx-swap-oob="true">
+        {/* TODO: Why doesn't the spinner appear when these are clicked? */}
+        <button
+          disabled={pageNumber === 1}
+          hx-get={`/pokemon-rows?page=${pageNumber - 1}`}
+          hx-indicator="#spinner"
+          hx-target=".container"
+        >
+          Previous
+        </button>
+        <button
+          hx-get={`/pokemon-rows?page=${pageNumber + 1}`}
+          hx-indicator="#spinner"
+          hx-target=".container"
+        >
+          Next
+        </button>
+      </div>
     </>
   );
 });

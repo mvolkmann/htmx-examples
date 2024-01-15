@@ -1,38 +1,23 @@
 <html lang="en">
   <head>
-    <title>Infinite Scroll with HTMX</title>
+    <title>Pagination with HTMX</title>
     <link rel="stylesheet" href="/styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   </head>
   <body>
     <h1>Pagination</h1>
-    <table class="container">
-      <tr
-        hx-trigger="load"
-        hx-get="/pokemon-rows?page=1"
-        hx-indicator="#spinner"
-        hx-swap="afterend"
-      >
-        <td>ID</td>
-        <td>Name</td>
-        <td>Description</td>
-      </tr>
-    </table>
+    <table
+      hx-indicator="#spinner"
+      hx-trigger="load"
+      hx-get="/pokemon-rows?page=1"
+    />
+    <!-- TODO: Why does this appear ABOVE the table? -->
+    <span id="pagination" />
     <img
       alt="loading..."
       class="htmx-indicator h-8 w-8"
       id="spinner"
       src="/spinner.gif"
     />
-    <div>
-      <button>Previous</button>
-      <button
-        hx-get="/pokemon-rows?page=2"
-        hx-indicator="#spinner"
-        hx-target=".container"
-      >
-        Next
-      </button>
-    </div>
   </body>
 </html>
