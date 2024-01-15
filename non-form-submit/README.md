@@ -1,9 +1,14 @@
-# email-validation
+# non-form-submit
 
-This is an example project that uses htmx
-to implement a sign up web UI.
+This is an example project that uses Bun, ElysiaJS, and htmx.
+It demonstrates:
 
-It validates that the provided email address is not already in use.
+- submitting input values that are not wrapped in a `form` element
+  by using the `hx-include` attribute.
+- using the `hx-vals` attribute to submit additional static values
+- using the `hx-push-url` attribute
+  to add the updated page to the browser history
+  so going back clears the inputs and the message
 
 To run this:
 
@@ -11,12 +16,9 @@ To run this:
 - Enter `bun install`
 - Enter `bun run dev`
 - Browse localhost:1919
-- Open DevTools and the Network tab.
-- Enter an email address in the "Email" input.
-- Note that debounced GET requests to
-  http://localhost:1919/email-validate?email={value} are made.
-- See the list of `existingEmails` in `src/index.tsx``.
-- Enter an email address from this list.
-- Note that the message "email in use" is returned from the endpoint
-  when you type the last character in the email address
-  and that this is rendered in red after the "Email" input.
+- Enter a first and last name.
+- Click the "Submit" button.
+- Note that a hello message is displayed below the inputs
+  AND the location bar URL is changed to end with "/greeting".
+- Click the browser back button.
+- Note that the inputs are cleared and the hello message is removed.
