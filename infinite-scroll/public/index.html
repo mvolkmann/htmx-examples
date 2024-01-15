@@ -10,7 +10,7 @@
       <tr
         hx-trigger="load"
         hx-get="/pokemon-rows?page=1"
-        hx-indicator="#spinner"
+        hx-indicator=".htmx-indicator"
         hx-swap="afterend"
       >
         <td>ID</td>
@@ -18,11 +18,6 @@
         <td>Description</td>
       </tr>
     </table>
-    <img
-      alt="loading..."
-      class="htmx-indicator"
-      id="spinner"
-      src="/spinner.gif"
-    />
+    <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
   </body>
 </html>

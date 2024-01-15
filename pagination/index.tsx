@@ -70,7 +70,7 @@ app.get('/pokemon-rows', async ({query}) => {
       <span
         id="pagination-buttons"
         hx-swap-oob="true"
-        hx-indicator="#spinner"
+        hx-indicator=".htmx-indicator"
         hx-target="#pokemon-table"
       >
         <button

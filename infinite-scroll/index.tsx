@@ -19,7 +19,7 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
     ? {
         'hx-trigger': 'revealed',
         'hx-get': '/pokemon-rows?page=' + (page + 1),
-        'hx-indicator': '#spinner',
+        'hx-indicator': '.htmx-indicator',
         'hx-swap': 'afterend'
       }
     : {};

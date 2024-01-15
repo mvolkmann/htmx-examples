@@ -7,18 +7,13 @@
   <body>
     <h1>Pagination</h1>
     <table
-      hx-indicator="#spinner"
+      hx-indicator=".htmx-indicator"
       hx-trigger="load"
       hx-get="/pokemon-rows?page=1"
     ></table>
     <div id="pagination-row">
       <span id="pagination-buttons"></span>
-      <img
-        alt="loading..."
-        class="htmx-indicator"
-        id="spinner"
-        src="/spinner.gif"
-      />
+      <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
     </div>
   </body>
 </html>
