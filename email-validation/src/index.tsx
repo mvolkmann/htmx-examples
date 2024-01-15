@@ -48,7 +48,6 @@ app.get('/', () => {
             required
             size="30"
             type="email"
-            value="old@aol.co"
           />
           <span class="error" id="email-error" />
         </div>
@@ -67,7 +66,6 @@ app.get('/', () => {
             required
             size="20"
             type="password"
-            value="password"
           />
           <span class="error" id="password-error" />
         </div>
