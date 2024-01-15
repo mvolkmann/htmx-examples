@@ -38,13 +38,14 @@ app.get('/', ({set}) => {
   set.redirect = '/index.html';
 });
 
-app.get('/pokemon-rows', async ({query}) => {
+app.get('/pokemon-rows', async ({headers, query}) => {
   const {page} = query;
   if (!page) throw new Error('page query parameter is required');
 
   Bun.sleepSync(500); // simulates long-running query
 
-  const pageNumber = Number(page);
+  const whichPage = headers['hx-prompt'];
+  const pageNumber = Number(whichPage ? whichPage : page);
   const offset = (pageNumber - 1) * ROWS_PER_PAGE;
   const url = POKEMON_URL_PREFIX + `?offset=${offset}&limit=${ROWS_PER_PAGE}`;
   const response = await fetch(url);
@@ -79,7 +80,12 @@ app.get('/pokemon-rows', async ({query}) => {
         >
           Previous
         </button>
-        <button hx-get={`/pokemon-rows?page=${pageNumber + 1}`}>Next</button>
+        <button
+          hx-get={`/pokemon-rows?page=${pageNumber + 1}`}
+          hx-prompt="Which page?"
+        >
+          Next
+        </button>
       </span>
     </>
   );

@@ -132,7 +132,7 @@ app.delete(
       console.error('index.tsx delete: e =', e);
       throw e;
     }
-    set.headers['HX-Trigger'] = 'status-change';
+    set.headers['hx-trigger'] = 'status-change';
     // By not returning any HTML for this todo item,
     // we replace the existing todo item with nothing.
   },
@@ -181,7 +181,7 @@ app.patch(
         throw e;
       }
 
-      set.headers['HX-Trigger'] = 'status-change';
+      set.headers['hx-trigger'] = 'status-change';
       return <TodoItem todo={todo} />;
     } else {
       return new Response('Not found', {status: 404});
@@ -206,7 +206,7 @@ app.post(
 
     Bun.sleepSync(1000); // enables testing hx-indicator spinner
 
-    set.headers['HX-Trigger'] = 'status-change';
+    set.headers['hx-trigger'] = 'status-change';
 
     // TODO: Should this return a new TodoList that is sorted?
     return <TodoItem todo={todo} />;
