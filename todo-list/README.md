@@ -13,7 +13,7 @@ To run this:
 
 - `bun install`
 - `bun run dev`
-- browse localhost:1919/todos
+- browse localhost:1919
 
 ## Creating a BETH Stack App
 
@@ -36,15 +36,15 @@ To run this:
 - modify "index.ts" to contain the following:
 
   ```ts
-  import { Elysia } from "elysia";
+  import {Elysia} from 'elysia';
 
   const app = new Elysia();
 
-  app.get("/", () => "Hello, Elysia!");
+  app.get('/', () => 'Hello, Elysia!');
 
   app.listen(1919);
 
-  console.log("listening on port", app.server?.port);
+  console.log('listening on port', app.server?.port);
   ```
 
 - enter "bun run --watch index.ts"

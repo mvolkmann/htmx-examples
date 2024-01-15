@@ -47,9 +47,7 @@ const Layout = ({children}: Attributes) => (
       <script src="public/hyperscript.min.js"></script>
       <script defer src="public/setup.js"></script>
     </head>
-    <body class="p-8" hx-sse="connect:/update">
-      {children}
-    </body>
+    <body class="p-8">{children}</body>
   </html>
 );
 
@@ -120,20 +118,10 @@ function TodoList({todos}: TodoListProps) {
   );
 }
 
-function TodoStatus() {
-  const todos = getAllTodosQuery.all() as Todo[];
-  const uncompletedCount = todos.filter(todo => !todo.completed).length;
-  return (
-    <p id="todo-status" hx-swap-oob="true">
-      {uncompletedCount} of {todos.length} remaining
-    </p>
-  );
-}
-
 // This deletes a given todo.  It is the D in CRUD.
 app.delete(
   '/todos/:id',
-  ({params}) => {
+  ({params, set}) => {
     try {
       // TODO: How can you determine if this found a todo to delete and
       // TODO: return this if it didn't? new Response('Not found', {status: 404});
@@ -144,9 +132,9 @@ app.delete(
       console.error('index.tsx delete: e =', e);
       throw e;
     }
+    set.headers['HX-Trigger'] = 'status-change';
     // By not returning any HTML for this todo item,
     // we replace the existing todo item with nothing.
-    return <TodoStatus />;
   },
   {
     params: t.Object({
@@ -159,20 +147,10 @@ app.get('/', ({set}) => {
   set.redirect = '/todos';
 });
 
-app.get('/test', () => {
-  return (
-    <html>
-      <head>
-        <title>Test</title>
-        <script src="head.js"></script>
-      </head>
-      <body>
-        <p id="id1">paragraph #1</p>
-        <script src="body.js"></script>
-        <p id="id2">paragraph #2</p>
-      </body>
-    </html>
-  );
+app.get('/todos/status', () => {
+  const todos = getAllTodosQuery.all() as Todo[];
+  const uncompletedCount = todos.filter(todo => !todo.completed).length;
+  return `${uncompletedCount} of ${todos.length} remaining`;
 });
 
 // This renders the todo list UI.  It is the R in CRUD.
@@ -182,12 +160,9 @@ app.get('/todos', () => {
   return (
     <Layout>
       <h1>To Do List</h1>
-      <TodoStatus />
+      <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
       <TodoForm />
       <TodoList todos={todos} />
-      <button hx-get="/test" hx-select="#id1,#id2">
-        Test
-      </button>
     </Layout>
   );
 });
@@ -195,7 +170,7 @@ app.get('/todos', () => {
 // This toggles the completed state of a given todo.  It is the U in CRUD.
 app.patch(
   '/todos/:id/toggle',
-  ({params}) => {
+  ({params, set}) => {
     const todo = getTodoQuery.get(params.id) as Todo;
     if (todo) {
       try {
@@ -205,12 +180,9 @@ app.patch(
         console.error('index.tsx toggle: e =', e);
         throw e;
       }
-      return (
-        <>
-          <TodoStatus />
-          <TodoItem todo={todo} />
-        </>
-      );
+
+      set.headers['HX-Trigger'] = 'status-change';
+      return <TodoItem todo={todo} />;
     } else {
       return new Response('Not found', {status: 404});
     }
@@ -225,7 +197,7 @@ app.patch(
 // This adds a new todo.  It is the C in CRUD.
 app.post(
   '/todos',
-  ({body}: any) => {
+  ({body, set}) => {
     const description = body.description.trim();
     if (description.length === 0) {
       throw new Error('Todo description cannot be empty');
@@ -234,13 +206,10 @@ app.post(
 
     Bun.sleepSync(1000); // enables testing hx-indicator spinner
 
+    set.headers['HX-Trigger'] = 'status-change';
+
     // TODO: Should this return a new TodoList that is sorted?
-    return (
-      <>
-        <TodoStatus />
-        <TodoItem todo={todo} />
-      </>
-    );
+    return <TodoItem todo={todo} />;
   },
   {
     body: t.Object({
