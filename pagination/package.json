@@ -1,5 +1,5 @@
 {
-  "name": "infinite-scroll",
+  "name": "pagination",
   "module": "index.ts",
   "type": "module",
   "scripts": {

@@ -1,17 +1,21 @@
 .htmx-indicator {
-  height: 1.5rem;
-  margin-top: 0.5rem;
-  width: 1.5rem;
+  --size: 1.5rem;
+  height: var(--size);
+  width: var(--size);
 }
 
-#pagination {
+#pagination-buttons > button {
+  margin-right: 1rem;
+}
+
+#pagination-row {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  align-items: center;
 }
 
 table {
   border-collapse: collapse;
+  margin-bottom: 0.5rem;
 }
 
 td,

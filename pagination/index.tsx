@@ -42,7 +42,7 @@ app.get('/pokemon-rows', async ({query}) => {
   const {page} = query;
   if (!page) throw new Error('page query parameter is required');
 
-  Bun.sleepSync(500); // simulates long-running query
+  Bun.sleepSync(1000); // simulates long-running query
 
   const pageNumber = Number(page);
   const offset = (pageNumber - 1) * ROWS_PER_PAGE;
@@ -53,7 +53,7 @@ app.get('/pokemon-rows', async ({query}) => {
 
   return (
     <>
-      <table class="container">
+      <table id="pokemon-table">
         <tr>
           <td>ID</td>
           <td>Name</td>
@@ -65,24 +65,24 @@ app.get('/pokemon-rows', async ({query}) => {
         })}
       </table>
 
-      <div id="pagination" hx-swap-oob="true">
+      <span id="pagination-buttons" hx-swap-oob="true">
         {/* TODO: Why doesn't the spinner appear when these are clicked? */}
         <button
           disabled={pageNumber === 1}
           hx-get={`/pokemon-rows?page=${pageNumber - 1}`}
           hx-indicator="#spinner"
-          hx-target=".container"
+          hx-target="#pokemon-table"
         >
           Previous
         </button>
         <button
           hx-get={`/pokemon-rows?page=${pageNumber + 1}`}
           hx-indicator="#spinner"
-          hx-target=".container"
+          hx-target="#pokemon-table"
         >
           Next
         </button>
-      </div>
+      </span>
     </>
   );
 });
