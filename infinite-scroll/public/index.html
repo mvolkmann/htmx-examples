@@ -8,7 +8,7 @@
     <h1>Infinite Scroll</h1>
     <table>
       <tr
-        hx-trigger="revealed"
+        hx-trigger="load"
         hx-get="/pokemon-rows?page=1"
         hx-indicator="#spinner"
         hx-swap="afterend"
@@ -20,7 +20,7 @@
     </table>
     <img
       alt="loading..."
-      class="htmx-indicator h-8 w-8"
+      class="htmx-indicator"
       id="spinner"
       src="/spinner.gif"
     />
