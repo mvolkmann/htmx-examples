@@ -67,3 +67,16 @@ input {
   opacity: 0;
   transition: opacity 1s ease-out;
 }
+
+// This can be used to demonstrate fading new content into view.
+/*
+.todo-item.warning {
+  color: red;
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.todo-item.warning.htmx-added {
+  opacity: 0;
+}
+*/

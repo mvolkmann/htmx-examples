@@ -125,6 +125,9 @@ app.delete(
     set.headers['hx-trigger'] = 'status-change';
     // By not returning any HTML for this todo item,
     // we replace the existing todo item with nothing.
+
+    // This can be used to demonstrate fading new content into view.
+    // return <div class="todo-item warning">A todo was deleted.</div>;
   },
   {
     params: t.Object({
