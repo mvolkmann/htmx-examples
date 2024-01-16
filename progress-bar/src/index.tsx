@@ -22,11 +22,13 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
 let percentComplete = 0;
 
 function ProgressBar() {
-  const attributes: {[key: string]: string} = {};
+  let attributes = {};
   if (percentComplete < 100) {
-    attributes['hx-get'] = '/progress';
-    attributes['hx-trigger'] = 'load delay:2s';
-    attributes['hx-swap'] = 'outerHTML';
+    attributes = {
+      'hx-get': '/progress',
+      'hx-trigger': 'load delay:1s',
+      'hx-swap': 'outerHTML'
+    };
   }
 
   // The HTML progress element cannot be animated.
