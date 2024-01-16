@@ -25,15 +25,17 @@ let percentComplete = 0;
 function ProgressBar() {
   // The HTML progress element cannot be animated.
   return (
-    // TODO: How can this signal to the /progress endpoint that it is being invoked due to a reset event?
+    // TODO: How can this signal to the /progress endpoint
+    // TODO: that it is being invoked due to a reset event
+    // TODO: so it can reset percentComplete to zero ?
     <div
       class="progress-container"
       hx-get="/progress"
       hx-swap="outerHTML"
       hx-trigger={
         percentComplete < 100
-          ? 'load delay:1s, reset from:body'
-          : 'reset from:body'
+          ? 'load delay:1s, reset from:#reset-btn'
+          : 'reset from:#reset-btn'
       }
       role="progressbar"
       aria-valuenow={percentComplete}
@@ -54,7 +56,16 @@ app.get('/', () => {
     <BaseHtml>
       <h1>Progress Bar</h1>
       <ProgressBar />
-      <button hx-on:click="this.dispatchEvent(new Event('reset', {bubbles: true}))">
+      {/*
+      There are three ways to handle dispatching a reset event.
+      1) dispatch a bubbling event on the button and listen on body
+      2) dispatch a non-bubbling event on the body and listen on body
+      3) dispatch a non-bubbling event on the button and listen on button
+      */}
+      <button
+        id="reset-btn"
+        hx-on:click="this.dispatchEvent(new Event('reset'))"
+      >
         Reset
       </button>
     </BaseHtml>
@@ -63,7 +74,7 @@ app.get('/', () => {
 
 app.get('/progress', ({headers}) => {
   if (percentComplete === 100) percentComplete = 0;
-  const delta = Math.random() * 20;
+  const delta = Math.random() * 30;
   percentComplete = Math.min(100, percentComplete + delta);
   return <ProgressBar />;
 });
