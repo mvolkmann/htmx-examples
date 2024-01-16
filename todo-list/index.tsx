@@ -5,13 +5,17 @@ import {staticPlugin} from '@elysiajs/static';
 import {Attributes} from 'typed-html';
 import WebSocket from 'ws';
 
+// Configure Elysia.
 const app = new Elysia();
+// This enables use of JSX.
 app.use(html());
+// This serves static files from the public directory.
 app.use(staticPlugin({prefix: ''}));
 
+// Prepare to use SQLite to store todos.
 const db = new Database('todos.db', {create: true});
 const deleteTodoPS = db.query('delete from todos where id = ?');
-const getAllTodosQuery = db.query('select * from todos;');
+const getAllTodosQuery = db.query('select * from todos order by description;');
 const getTodoQuery = db.query('select * from todos where id = ?');
 const insertTodoQuery = db.query(
   'insert into todos (description, completed) values (?, 0) returning id'
@@ -29,7 +33,6 @@ function addTodo(description: string) {
     const {id} = insertTodoQuery.get(description) as {id: number};
     return {id, description, completed: 0};
   } catch (e) {
-    console.error('index.tsx post: e =', e);
     const isDuplicate = e.toString().includes('UNIQUE constraint failed');
     throw isDuplicate ? new Error('duplicate todo ' + description) : e;
   }
@@ -43,16 +46,17 @@ const Layout = ({children}: Attributes) => (
       <title>To Do List</title>
       <link rel="stylesheet" href="/styles.css" />
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-      <script defer src="setup.js"></script>
+      <script src="setup.js"></script>
     </head>
     <body class="p-8">{children}</body>
   </html>
 );
 
 function TodoForm() {
-  const reset = {
-    'hx-on:htmx:after-request': 'this.reset()'
-  };
+  // We are using attribute spreading to add this attribute to the form
+  // because VS Code does not recognize hx-on:htmx:after-request
+  // as a valid attribute name.
+  const reset = {'hx-on:htmx:after-request': 'this.reset()'};
   return (
     <form
       hx-post="/todos"
@@ -122,7 +126,6 @@ app.delete(
       // TODO: return this if it didn't? new Response('Not found', {status: 404});
       // TODO: Why does this return undefined?
       const result = deleteTodoPS.get(params.id);
-      console.log('index.tsx delete: result =', result);
     } catch (e) {
       console.error('index.tsx delete: e =', e);
       throw e;
