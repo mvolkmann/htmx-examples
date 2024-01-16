@@ -7,7 +7,7 @@ import WebSocket from 'ws';
 
 const app = new Elysia();
 app.use(html());
-app.use(staticPlugin());
+app.use(staticPlugin({prefix: ''}));
 
 const db = new Database('todos.db', {create: true});
 const deleteTodoPS = db.query('delete from todos where id = ?');
@@ -41,17 +41,18 @@ const Layout = ({children}: Attributes) => (
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>To Do List</title>
-      {/* TODO: Can the staticPlugin default to looking in /public? */}
-      <link rel="stylesheet" href="/public/tailwind.css" />
+      <link rel="stylesheet" href="/styles.css" />
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-      <script src="public/hyperscript.min.js"></script>
-      <script defer src="public/setup.js"></script>
+      <script defer src="setup.js"></script>
     </head>
     <body class="p-8">{children}</body>
   </html>
 );
 
 function TodoForm() {
+  const reset = {
+    'hx-on:htmx:after-request': 'this.reset()'
+  };
   return (
     <form
       class="flex gap-4 items-center my-4"
@@ -59,7 +60,7 @@ function TodoForm() {
       hx-swap="afterend"
       hx-indicator="#spinner"
       hx-disabled-elt="#add-btn"
-      _="on submit target.reset()" // uses _hyperscript
+      {...reset}
     >
       <input
         class="border border-gray-500 p-1 rounded-lg"
@@ -74,7 +75,7 @@ function TodoForm() {
         alt="loading..."
         class="htmx-indicator h-6 w-6"
         id="spinner"
-        src="/public/spinner.gif"
+        src="spinner.gif"
       />
     </form>
   );
@@ -83,7 +84,7 @@ function TodoForm() {
 type TodoItemProps = {todo: Todo};
 function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
   return (
-    <div class="flex gap-4 items-center mb-4">
+    <div class="todo-item">
       <input
         type="checkbox"
         checked={completed === 1}

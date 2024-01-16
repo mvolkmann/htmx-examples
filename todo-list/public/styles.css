@@ -1,0 +1,52 @@
+#add-btn {
+  margin-left: 1rem;
+}
+
+input {
+  border: 1px solid red;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+button {
+  background-color: cornflowerblue;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+button.plain {
+  background-color: unset;
+  border: none;
+  padding: unset;
+}
+button:disabled {
+  opacity: 0.2;
+}
+
+h1 {
+  color: cornflowerblue;
+  /* TODO: Why is this not overridding Tailwind defaults? */
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.htmx-indicator {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+input {
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
