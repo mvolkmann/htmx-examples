@@ -1,14 +1,7 @@
-# non-form-submit
+# lazy-laod
 
 This is an example project that uses Bun, ElysiaJS, and htmx.
-It demonstrates:
-
-- submitting input values that are not wrapped in a `form` element
-  by using the `hx-include` attribute.
-- using the `hx-vals` attribute to submit additional static values
-- using the `hx-push-url` attribute
-  to add the updated page to the browser history
-  so going back clears the inputs and the message
+It demonstrates lazy loading of data when its HTML comes into view.
 
 To run this:
 
@@ -16,9 +9,9 @@ To run this:
 - Enter `bun install`
 - Enter `bun run dev`
 - Browse localhost:1919
-- Enter a first and last name.
-- Click the "Submit" button.
-- Note that a hello message is displayed below the inputs
-  AND the location bar URL is changed to end with "/greeting".
-- Click the browser back button.
-- Note that the inputs are cleared and the hello message is removed.
+- Open DevTools and click the Network tab.
+- Scroll to the bottom of the page.
+- Note that a spinner appears briefly
+  while data for a user table is loaded
+  AND the HTTP request to fetch the user data
+  is not sent until the table comes into view.
