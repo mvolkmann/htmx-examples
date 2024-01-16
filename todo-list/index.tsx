@@ -55,46 +55,40 @@ function TodoForm() {
   };
   return (
     <form
-      class="flex gap-4 items-center my-4"
       hx-post="/todos"
       hx-swap="afterend"
-      hx-indicator="#spinner"
+      hx-indicator=".htmx-indicator"
       hx-disabled-elt="#add-btn"
       {...reset}
     >
       <input
         class="border border-gray-500 p-1 rounded-lg"
+        hx-on:input="document.getElementById('add-btn').disabled = this.value === ''"
         name="description"
         placeholder="enter new todo here"
         size="30"
       />
-      <button id="add-btn" type="submit">
+      <button disabled id="add-btn" type="submit">
         Add
       </button>
-      <img
-        alt="loading..."
-        class="htmx-indicator h-6 w-6"
-        id="spinner"
-        src="spinner.gif"
-      />
+      <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
     </form>
   );
 }
 
 type TodoItemProps = {todo: Todo};
 function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
+  const isCompleted = completed === 1;
   return (
     <div class="todo-item">
       <input
         type="checkbox"
-        checked={completed === 1}
+        checked={isCompleted}
         hx-patch={`/todos/${id}/toggle`}
-        hx-target="closest div" // can also use a CSS selector
+        hx-target="closest div"
         hx-swap="outerHTML"
       />
-      <div class={completed ? 'text-gray-500 line-through' : ''}>
-        {description}
-      </div>
+      <div class={isCompleted ? 'completed' : ''}>{description}</div>
       <button
         class="plain"
         hx-confirm="Are you sure?"
