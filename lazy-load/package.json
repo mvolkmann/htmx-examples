@@ -1,0 +1,22 @@
+{
+  "name": "lazy-load",
+  "version": "1.0.50",
+  "scripts": {
+    "dev": "bun run --watch src/index.tsx"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^0.8.0",
+    "@elysiajs/static": "^0.8.1",
+    "@kitajs/html": "^3.0.10",
+    "elysia": "latest",
+    "htmx.org": "^1.9.10",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}

@@ -23,7 +23,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
       <link rel="stylesheet" href="/style.css" />
       <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     </head>
-    <body class="p-8">{children}</body>
+    <body>{children}</body>
   </html>
 );
 
@@ -52,9 +52,7 @@ app.get('/', () => {
           <span class="error" id="email-error" />
         </div>
         <div>
-          <label class="mr-4" for="password">
-            Password
-          </label>
+          <label for="password">Password</label>
           <input
             id="password"
             hx-get="/password-validate"
@@ -72,8 +70,8 @@ app.get('/', () => {
         {/* HTML form validation will not work if the hx-post attribute
             is moved from the form to this button. */}
         <button>Submit</button>
-        <div id="result" />
       </form>
+      <div id="result" />
     </BaseHtml>
   );
 });

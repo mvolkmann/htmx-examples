@@ -24,3 +24,7 @@ label {
   text-align: end;
   width: 5rem;
 }
+
+#result {
+  margin-top: 1rem;
+}

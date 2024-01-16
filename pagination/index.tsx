@@ -39,6 +39,7 @@ app.get('/', ({set}) => {
 });
 
 app.get('/pokemon-rows', async ({headers, query}) => {
+  console.log('index.tsx : headers =', headers);
   const {page} = query;
   if (!page) throw new Error('page query parameter is required');
 
