@@ -1,5 +1,5 @@
 {
-  "name": "beth",
+  "name": "todo-list",
   "module": "index.ts",
   "type": "module",
   "scripts": {

@@ -1,8 +1,9 @@
 {
-  "name": "email-validation",
+  "name": "progress-bar",
   "version": "1.0.50",
   "scripts": {
-    "dev": "bun run --watch src/index.tsx"
+    "dev": "bun run --watch src/index.tsx",
+    "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
   },
   "dependencies": {
     "@elysiajs/html": "^0.8.0",

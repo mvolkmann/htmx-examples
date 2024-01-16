@@ -1,5 +1,5 @@
 {
-  "name": "lazy-load",
+  "name": "polling",
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch src/index.tsx",
