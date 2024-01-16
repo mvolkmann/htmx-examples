@@ -22,5 +22,5 @@ body {
   background-color: green;
   height: 100%;
   width: 0%;
-  transition: width 0.5s linear;
+  transition: width 2s linear;
 }

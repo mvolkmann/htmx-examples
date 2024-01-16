@@ -25,21 +25,11 @@ function ProgressBar() {
   const attributes: {[key: string]: string} = {};
   if (percentComplete < 100) {
     attributes['hx-get'] = '/progress';
-    attributes['hx-trigger'] = 'load delay:1s, reset';
+    attributes['hx-trigger'] = 'load delay:2s';
     attributes['hx-swap'] = 'outerHTML';
   }
 
-  // This works, but value changes cannot be animated.
-  /*
-  return (
-    <progress
-      id="percent-complete"
-      max="100"
-      value={percentComplete}
-      {...attributes}
-    />
-  );
-  */
+  // The HTML progress element cannot be animated.
   return (
     <div
       class="progress-container"
@@ -48,19 +38,28 @@ function ProgressBar() {
       aria-valuenow={percentComplete}
     >
       <div class="progress-text">{percentComplete.toFixed(1)}%</div>
-      <div class="progress-bar" style={`width: ${percentComplete}%`} />
+      {/* This div MUST have an id in order for the transition to work! */}
+      <div
+        class="progress-bar"
+        id="progress-bar"
+        style={`width: ${percentComplete}%`}
+      />
     </div>
   );
 }
+
+// globalThis.reset = element => {
+//   console.log('reset: element =', element);
+//   percentComplete = 0;
+//   element.dispatchEvent(new Event('reset'));
+// };
 
 app.get('/', () => {
   return (
     <BaseHtml>
       <h1>Progress Bar</h1>
       <ProgressBar />
-      <button hx-on="percentComplete = 0; this.dispatchEvent('reset')">
-        Reset
-      </button>
+      {/* <button hx-on:click="globalThis.reset(this)">Reset</button> */}
     </BaseHtml>
   );
 });
