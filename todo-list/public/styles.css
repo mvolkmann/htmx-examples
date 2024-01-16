@@ -68,7 +68,7 @@ input {
   transition: opacity 1s ease-out;
 }
 
-// This can be used to demonstrate fading new content into view.
+/* This can be used to demonstrate fading new content into view. */
 /*
 .todo-item.warning {
   color: red;
