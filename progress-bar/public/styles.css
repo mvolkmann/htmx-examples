@@ -1,3 +1,26 @@
 body {
   font-family: sans-serif;
 }
+
+.progress-container {
+  background-color: lightgray;
+  border: 2px solid black;
+  height: 2rem;
+  width: 50rem;
+  position: relative;
+}
+
+.progress-text {
+  color: black;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.progress-bar {
+  background-color: green;
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s linear;
+}
