@@ -14,6 +14,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
       <title>Progress Bar</title>
       <link rel="stylesheet" href="/styles.css" />
       <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+      <script defer src="setup.js"></script>
     </head>
     <body>{children}</body>
   </html>
@@ -22,20 +23,17 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
 let percentComplete = 0;
 
 function ProgressBar() {
-  let attributes = {};
-  if (percentComplete < 100) {
-    attributes = {
-      'hx-get': '/progress',
-      'hx-trigger': 'load delay:1s',
-      'hx-swap': 'outerHTML'
-    };
-  }
-
   // The HTML progress element cannot be animated.
   return (
     <div
       class="progress-container"
-      {...attributes}
+      hx-get="/progress"
+      hx-swap="outerHTML"
+      hx-trigger={
+        percentComplete < 100
+          ? 'load delay:1s, my-reset from:body'
+          : 'my-reset from:body'
+      }
       role="progressbar"
       aria-valuenow={percentComplete}
     >
@@ -50,23 +48,20 @@ function ProgressBar() {
   );
 }
 
-// globalThis.reset = element => {
-//   console.log('reset: element =', element);
-//   percentComplete = 0;
-//   element.dispatchEvent(new Event('reset'));
-// };
-
 app.get('/', () => {
   return (
     <BaseHtml>
       <h1>Progress Bar</h1>
       <ProgressBar />
-      {/* <button hx-on:click="globalThis.reset(this)">Reset</button> */}
+      <button hx-on:click="this.dispatchEvent(new Event('my-reset', {bubbles: true}))">
+        Reset
+      </button>
     </BaseHtml>
   );
 });
 
-app.get('/progress', () => {
+app.get('/progress', ({headers}) => {
+  if (percentComplete === 100) percentComplete = 0;
   const delta = Math.random() * 20;
   percentComplete = Math.min(100, percentComplete + delta);
   return <ProgressBar />;
