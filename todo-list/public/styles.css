@@ -27,6 +27,11 @@ button:disabled {
   text-decoration: line-through;
 }
 
+#error {
+  color: red;
+  font-weight: bold;
+}
+
 form {
   display: flex;
   align-items: center;

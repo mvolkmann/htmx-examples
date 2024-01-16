@@ -34,7 +34,7 @@ function addTodo(description: string) {
     return {id, description, completed: 0};
   } catch (e) {
     const isDuplicate = e.toString().includes('UNIQUE constraint failed');
-    throw isDuplicate ? new Error('duplicate todo ' + description) : e;
+    throw isDuplicate ? new Error(`duplicate todo "${description}"`) : e;
   }
 }
 
@@ -121,15 +121,7 @@ function TodoList({todos}: TodoListProps) {
 app.delete(
   '/todos/:id',
   ({params, set}) => {
-    try {
-      // TODO: How can you determine if this found a todo to delete and
-      // TODO: return this if it didn't? new Response('Not found', {status: 404});
-      // TODO: Why does this return undefined?
-      const result = deleteTodoPS.get(params.id);
-    } catch (e) {
-      console.error('index.tsx delete: e =', e);
-      throw e;
-    }
+    deleteTodoPS.get(params.id);
     set.headers['hx-trigger'] = 'status-change';
     // By not returning any HTML for this todo item,
     // we replace the existing todo item with nothing.
@@ -159,6 +151,7 @@ app.get('/todos', () => {
     <Layout>
       <h1>To Do List</h1>
       <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
+      <p id="error" />
       <TodoForm />
       <TodoList todos={todos} />
     </Layout>
@@ -171,14 +164,8 @@ app.patch(
   ({params, set}) => {
     const todo = getTodoQuery.get(params.id) as Todo;
     if (todo) {
-      try {
-        todo.completed = 1 - todo.completed;
-        updateTodoPS.run(todo.completed, todo.id);
-      } catch (e) {
-        console.error('index.tsx toggle: e =', e);
-        throw e;
-      }
-
+      todo.completed = 1 - todo.completed;
+      updateTodoPS.run(todo.completed, todo.id);
       set.headers['hx-trigger'] = 'status-change';
       return <TodoItem todo={todo} />;
     } else {
@@ -200,14 +187,27 @@ app.post(
     if (description.length === 0) {
       throw new Error('Todo description cannot be empty');
     }
-    const todo = addTodo(description);
+    try {
+      const todo = addTodo(description);
 
-    Bun.sleepSync(1000); // enables testing hx-indicator spinner
+      Bun.sleepSync(1000); // enables testing hx-indicator spinner
 
-    set.headers['hx-trigger'] = 'status-change';
+      set.headers['hx-trigger'] = 'status-change';
 
-    // TODO: Should this return a new TodoList that is sorted?
-    return <TodoItem todo={todo} />;
+      return (
+        <>
+          <TodoItem todo={todo} />
+          {/* Clear previous error message. */}
+          <p id="error" hx-swap-oob="true" />
+        </>
+      );
+    } catch (e) {
+      return (
+        <p id="error" hx-swap-oob="true">
+          {e.message}
+        </p>
+      );
+    }
   },
   {
     body: t.Object({
