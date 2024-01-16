@@ -62,12 +62,12 @@ app.get('/', () => {
           aspernatur libero numquam.
         </p>
         <h2>Users</h2>
-        <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
         <div
           hx-get="/users"
           hx-indicator=".htmx-indicator"
           hx-trigger="revealed"
         />
+        <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
       </main>
     </BaseHtml>
   );
