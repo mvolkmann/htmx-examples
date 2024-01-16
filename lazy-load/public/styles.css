@@ -1,0 +1,19 @@
+.htmx-indicator {
+  height: 3rem;
+  width: 3rem;
+}
+
+p {
+  font-size: 2rem;
+  width: 50%;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 0.5rem;
+}
