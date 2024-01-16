@@ -25,14 +25,15 @@ let percentComplete = 0;
 function ProgressBar() {
   // The HTML progress element cannot be animated.
   return (
+    // TODO: How can this signal to the /progress endpoint that it is being invoked due to a reset event?
     <div
       class="progress-container"
       hx-get="/progress"
       hx-swap="outerHTML"
       hx-trigger={
         percentComplete < 100
-          ? 'load delay:1s, my-reset from:body'
-          : 'my-reset from:body'
+          ? 'load delay:1s, reset from:body'
+          : 'reset from:body'
       }
       role="progressbar"
       aria-valuenow={percentComplete}
@@ -53,7 +54,7 @@ app.get('/', () => {
     <BaseHtml>
       <h1>Progress Bar</h1>
       <ProgressBar />
-      <button hx-on:click="this.dispatchEvent(new Event('my-reset', {bubbles: true}))">
+      <button hx-on:click="this.dispatchEvent(new Event('reset', {bubbles: true}))">
         Reset
       </button>
     </BaseHtml>
