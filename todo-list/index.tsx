@@ -97,7 +97,7 @@ function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
         class="plain"
         hx-confirm="Are you sure?"
         hx-delete={`/todos/${id}`}
-        hx-swap="outerHTML"
+        hx-swap="outerHTML swap:1s"
         hx-target="closest div"
       >
         🗑

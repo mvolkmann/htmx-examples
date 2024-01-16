@@ -62,3 +62,8 @@ input {
   gap: 1rem;
   margin-top: 1rem;
 }
+
+.todo-item.htmx-swapping {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
