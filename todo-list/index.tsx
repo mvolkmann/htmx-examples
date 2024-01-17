@@ -46,7 +46,7 @@ const Layout = ({children}: Attributes) => (
       <title>To Do List</title>
       <link rel="stylesheet" href="/styles.css" />
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-      <script src="setup.js"></script>
+      <script defer src="setup.js"></script>
     </head>
     <body class="p-8">{children}</body>
   </html>

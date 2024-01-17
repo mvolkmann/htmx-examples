@@ -10,3 +10,8 @@ ws.addEventListener('close', event => {
     window.location.reload();
   }, 500); // gives the server time to restart
 });
+
+document.body.addEventListener('htmx:load', () => {
+  htmx.logAll();
+  console.log('setup.js: logging enabled');
+});

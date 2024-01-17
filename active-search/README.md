@@ -1,8 +1,10 @@
 # active-search
 
-Enter `bun install` to install dependencies.
-Enter `bun run dev` to start the server.
-Browse localhost:1919.
+To run this:
+
+1. Enter `bun install` to install dependencies.
+1. Enter `bun run dev` to start the server.
+1. Browse localhost:1919.
 
 If modifying styling using Tailwind classes,
 enter `bunx tailwindcss -i ./global.css -o public/tailwind.css --watch`.
