@@ -24,3 +24,7 @@ body {
   width: 0%;
   transition: width 1s linear;
 }
+
+#reset-btn {
+  margin-top: 1rem;
+}
