@@ -44,7 +44,7 @@ app.get('/', (c: Context) => {
       <h1>Sanitizing HTML</h1>
       {/* The timeout for all requests can be specified
           in a meta tag for htmx-config. */}
-      <form hx-post="/render" hx-target="#result" hx-request='\"timeout\":2000'>
+      <form hx-post="/render" hx-target="#result" hx-request='"timeout":2000'>
         <input name="markup" type="text" />
         <div
           id="result"
