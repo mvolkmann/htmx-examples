@@ -49,6 +49,7 @@ app.get('/', (c: Context) => {
         <div
           id="result"
           hx-get="/timeout"
+          hx-request='"timeout":0'
           hx-trigger="htmx:timeout from:form"
         />
         <button>Submit</button>
