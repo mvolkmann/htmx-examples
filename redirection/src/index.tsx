@@ -32,10 +32,10 @@ app.get('/', () => {
   );
 });
 
-app.post('/process', ({body, headers}) => {
+app.post('/process', ({body, set}) => {
   const {value} = body;
   const doubled = value * 2;
-  if (doubled > 10) headers['hx-location'] = '/page2';
+  if (doubled > 10) set.headers['hx-location'] = '/page2';
   return doubled;
 });
 
