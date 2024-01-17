@@ -41,6 +41,7 @@ app.get('/', () => {
           <input
             id="email"
             hx-get="/email-validate"
+            hx-sync="closest form:abort"
             hx-target="#email-error"
             hx-trigger="keyup changed delay:200ms"
             name="email"
@@ -92,8 +93,11 @@ function validPassword(password: string) {
   return password.length >= 8 && !badPasswords.includes(password);
 }
 
-app.get('/email-validate', ({query}: Context) => {
-  return validEmail(query.email) ? '' : 'email in use';
+app.get('/email-validate', ({query, set}: Context) => {
+  const valid = validEmail(query.email);
+  // Setting the status to 400 prevents the message from rendering.
+  // set.status = valid ? 200 : 400;
+  return valid ? '' : 'email in use';
 });
 
 app.get('/password-validate', ({query}: Context) => {
