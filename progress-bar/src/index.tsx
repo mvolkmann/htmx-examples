@@ -14,7 +14,6 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
       <title>Progress Bar</title>
       <link rel="stylesheet" href="/styles.css" />
       <script src="https://unpkg.com/htmx.org@1.9.9"></script>
-      <script defer src="setup.js"></script>
     </head>
     <body>{children}</body>
   </html>
@@ -25,28 +24,22 @@ let percentComplete = 0;
 function ProgressBar() {
   // The HTML progress element cannot be animated.
   return (
-    // TODO: How can this signal to the /progress endpoint
-    // TODO: that it is being invoked due to a reset event
-    // TODO: so it can reset percentComplete to zero ?
+    // hx-trigger={
+    //   percentComplete < 100
+    //     ? 'load delay:1s, reset from:#reset-btn'
+    //     : 'reset from:#reset-btn'
+    // }
     <div
-      class="progress-container"
+      id="progress-container"
       hx-get="/progress"
       hx-swap="outerHTML"
-      hx-trigger={
-        percentComplete < 100
-          ? 'load delay:1s, reset from:#reset-btn'
-          : 'reset from:#reset-btn'
-      }
+      hx-trigger={percentComplete < 100 ? 'load delay:1s' : ''}
       role="progressbar"
       aria-valuenow={percentComplete}
     >
-      <div class="progress-text">{percentComplete.toFixed(1)}%</div>
+      <div id="progress-text">{percentComplete.toFixed(1)}%</div>
       {/* This div MUST have an id in order for the transition to work! */}
-      <div
-        class="progress-bar"
-        id="progress-bar"
-        style={`width: ${percentComplete}%`}
-      />
+      <div id="progress-bar" style={`width: ${percentComplete}%`} />
     </div>
   );
 }
@@ -62,9 +55,12 @@ app.get('/', () => {
       2) dispatch a non-bubbling event on the body and listen on body
       3) dispatch a non-bubbling event on the button and listen on button
       */}
+      {/* hx-on:click="this.dispatchEvent(new Event('reset'))" */}
       <button
         id="reset-btn"
-        hx-on:click="this.dispatchEvent(new Event('reset'))"
+        hx-get="/progress"
+        hx-swap="outerHTML"
+        hx-target="#progress-container"
       >
         Reset
       </button>
@@ -73,9 +69,12 @@ app.get('/', () => {
 });
 
 app.get('/progress', ({headers}) => {
-  if (percentComplete === 100) percentComplete = 0;
-  const delta = Math.random() * 30;
-  percentComplete = Math.min(100, percentComplete + delta);
+  if (headers['hx-trigger'] === 'reset-btn') {
+    percentComplete = 0;
+  } else {
+    const delta = Math.random() * 30;
+    percentComplete = Math.min(100, percentComplete + delta);
+  }
   return <ProgressBar />;
 });
 
