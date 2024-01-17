@@ -1,14 +1,14 @@
-import {Elysia} from 'elysia';
-import {html} from '@elysiajs/html'; // enables use of JSX
-import {staticPlugin} from '@elysiajs/static'; // enables static file serving
-import {Html} from '@kitajs/html';
+import { Hono } from "hono";
+import type { Context } from "hono";
+import { serveStatic } from "hono/bun";
+import type { FC } from "hono/jsx";
 
-const app = new Elysia();
-app.use(html());
-// This causes link and script tags to look for files in the public directory.
-app.use(staticPlugin({prefix: ''}));
+const app = new Hono();
 
-const BaseHtml = ({children}: {children: Html.Children}) => (
+// This serves static files from the public directory.
+app.use("/*", serveStatic({ root: "./public" }));
+
+const BaseHtml: FC = ({ children }) => (
   <html>
     <head>
       <title>Polling</title>
@@ -19,10 +19,10 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
   </html>
 );
 
-app.get('/', () => {
-  return (
+app.get("/", (c: Context) => {
+  return c.html(
     <BaseHtml>
-      <h1>Polling</h1>
+      <h1>Fixed Rate Polling</h1>
       <h2 hx-get="/score" hx-trigger="load, every 5s" />
     </BaseHtml>
   );
@@ -39,15 +39,18 @@ function getPoints() {
   return number >= 8 ? touchdown : number >= 5 ? fieldGoal : 0;
 }
 
-app.get('/score', async () => {
+app.get("/score", async (c: Context) => {
   if (chiefsHaveBall) {
     chiefs += getPoints();
   } else {
     bills += getPoints();
   }
   chiefsHaveBall = !chiefsHaveBall;
-  return `Chiefs: ${chiefs}, Bills: ${bills}`;
+
+  // Returning a status of 286 terminates fixed rate polling.
+  c.status(chiefs > 30 || bills > 30 ? 286 : 200);
+
+  return c.text(`Chiefs: ${chiefs}, Bills: ${bills}`);
 });
 
-app.listen(1919);
-console.log('listening on port', app.server?.port);
+export default app;
