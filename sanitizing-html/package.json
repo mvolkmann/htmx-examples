@@ -4,7 +4,8 @@
     "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
   },
   "dependencies": {
-    "hono": "^3.12.5"
+    "hono": "^3.12.5",
+    "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
     "@types/bun": "^1.0.0"
