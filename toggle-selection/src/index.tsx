@@ -37,7 +37,7 @@ app.get('/', (c: Context) =>
   )
 );
 
-let selectedName = 'Comet';
+let selectedName = '';
 
 type DogProps = {name: string};
 function Dog({name}: DogProps) {
@@ -58,15 +58,15 @@ function Dog({name}: DogProps) {
 
 app.get('/toggle/:name', (c: Context) => {
   const name = c.req.param('name');
-  const previousSelectedName = selectedName;
+  const previousDog = selectedName ? <Dog name={selectedName} /> : null;
+  const thisDog = <Dog name={name} />;
   selectedName = name === selectedName ? '' : name;
-  const html = c.html(
+  return c.html(
     <>
-      <Dog name={name} />
-      <Dog name={previousSelectedName} />
+      {previousDog}
+      {thisDog}
     </>
   );
-  return html;
 });
 
 // The browser code connects to this
