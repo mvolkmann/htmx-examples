@@ -214,6 +214,6 @@ app.post('/todos', async (c: Context) => {
 // The browser code connects to this
 // so it can detect when the server is restarted.
 // On restart, the browser reloads the page.
-new WebSocket.Server({port: 1920});
+new WebSocket.Server({port: 3001});
 
 export default app;

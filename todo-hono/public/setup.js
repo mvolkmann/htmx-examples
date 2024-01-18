@@ -4,7 +4,7 @@
 // This needs to be a .js file, not a .ts file,
 // because it's loaded by the browser.
 
-const ws = new WebSocket('ws://localhost:1920');
+const ws = new WebSocket('ws://localhost:3001');
 ws.addEventListener('close', event => {
   setTimeout(() => {
     window.location.reload();
