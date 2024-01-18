@@ -39,19 +39,17 @@ app.get('/', (c: Context) =>
 
 let selectedName = 'Comet';
 
-type DogProps = {name: string; oob?: boolean};
-function Dog({name, oob}: DogProps) {
-  console.log('index.tsx Dog: oob =', oob);
+type DogProps = {name: string};
+function Dog({name}: DogProps) {
   const classes = 'name' + (name === selectedName ? ' selected' : '');
-  const attrs = oob ? {'hx-swap-oob': 'true'} : {};
   return (
     <div
       class={classes}
       hx-get={`/toggle/${name}`}
-      hx-swap="outerHTML"
+      hx-swap="none"
+      hx-swap-oob="true"
       hx-trigger="click"
       id={name}
-      {...attrs}
     >
       {name}
     </div>
@@ -66,7 +64,7 @@ app.get('/toggle/:name', (c: Context) => {
   const html = c.html(
     <>
       <Dog name={name} />
-      {!isSelected && <Dog name={previousSelectedName} oob={true} />}
+      {!isSelected && <Dog name={previousSelectedName} />}
     </>
   );
   return html;
