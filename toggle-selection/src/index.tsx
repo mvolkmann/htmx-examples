@@ -58,13 +58,12 @@ function Dog({name}: DogProps) {
 
 app.get('/toggle/:name', (c: Context) => {
   const name = c.req.param('name');
-  const isSelected = name === selectedName;
   const previousSelectedName = selectedName;
-  selectedName = isSelected ? '' : name;
+  selectedName = name === selectedName ? '' : name;
   const html = c.html(
     <>
       <Dog name={name} />
-      {!isSelected && <Dog name={previousSelectedName} />}
+      <Dog name={previousSelectedName} />
     </>
   );
   return html;
