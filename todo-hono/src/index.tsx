@@ -170,9 +170,9 @@ app.patch('/todos/:id/toggle', idValidator, (c: Context) => {
     todo.completed = 1 - todo.completed;
     updateTodoPS.run(todo.completed, todo.id);
     c.header('HX-Trigger', 'status-change');
-    return <TodoItem todo={todo} />;
+    return c.html(<TodoItem todo={todo} />);
   } else {
-    return new Response('Not found', {status: 404});
+    return c.notFound();
   }
 });
 
