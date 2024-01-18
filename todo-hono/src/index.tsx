@@ -63,10 +63,10 @@ function TodoForm() {
   const reset = {'hx-on:htmx:after-request': 'this.reset()'};
   return (
     <form
+      hx-disabled-elt="#add-btn"
+      hx-indicator=".htmx-indicator"
       hx-post="/todos"
       hx-swap="afterend"
-      hx-indicator=".htmx-indicator"
-      hx-disabled-elt="#add-btn"
       {...reset}
     >
       <input
@@ -74,7 +74,7 @@ function TodoForm() {
         hx-on:input="document.getElementById('add-btn').disabled = this.value === ''"
         name="description"
         placeholder="enter new todo here"
-        size="30"
+        size={30}
       />
       <button disabled id="add-btn" type="submit">
         Add
@@ -92,11 +92,18 @@ function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
       <input
         type="checkbox"
         checked={isCompleted}
-        hx-patch={`/todos/${id}/toggle`}
+        hx-patch={`/todos/${id}/toggle-complete`}
         hx-target="closest div"
         hx-swap="outerHTML"
       />
-      <div class={isCompleted ? 'completed' : ''}>{description}</div>
+      <div
+        class={isCompleted ? 'completed' : ''}
+        hx-get={`/todos/${id}/toggle-edit`}
+        hx-swap="outerHTML"
+        hx-trigger="click"
+      >
+        {description}
+      </div>
       <button
         class="plain"
         hx-confirm="Are you sure?"
@@ -113,7 +120,7 @@ function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
 type TodoListProps = {todos: Todo[]};
 function TodoList({todos}: TodoListProps) {
   return (
-    <div>
+    <div hx-sync=".todo-item">
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
@@ -162,8 +169,40 @@ app.get('/todos', (c: Context) => {
   );
 });
 
+let editingId = 0;
+
+// This toggles whether a todo is being edited.
+app.get('/todos/:id/toggle-edit', idValidator, (c: Context) => {
+  const id = Number(c.req.param('id'));
+  console.log('toggle-edit: id =', id);
+  console.log('toggle-edit: editingId =', editingId);
+  const todo = getTodoQuery.get(id) as Todo;
+  const {completed, description} = todo;
+  const editing = id === editingId;
+  const jsx = editing ? (
+    <div
+      class={completed === 1 ? 'completed' : ''}
+      hx-get={`/todos/${id}/toggle-edit`}
+      hx-swap="outerHTML"
+      hx-trigger="click"
+    >
+      {description}
+    </div>
+  ) : (
+    <input
+      hx-get={`/todos/${id}/toggle-edit`}
+      hx-swap="outerHTML"
+      hx-trigger="click from:document"
+      type="text"
+      value={description}
+    />
+  );
+  editingId = editing ? 0 : id;
+  return c.html(jsx);
+});
+
 // This toggles the completed state of a given todo.  It is the U in CRUD.
-app.patch('/todos/:id/toggle', idValidator, (c: Context) => {
+app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   const id = c.req.param('id');
   const todo = getTodoQuery.get(id) as Todo;
   if (todo) {

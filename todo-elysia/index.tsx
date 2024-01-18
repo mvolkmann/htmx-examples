@@ -63,10 +63,10 @@ function TodoForm() {
   const reset = {'hx-on:htmx:after-request': 'this.reset()'};
   return (
     <form
+      hx-disabled-elt="#add-btn"
+      hx-indicator=".htmx-indicator"
       hx-post="/todos"
       hx-swap="afterend"
-      hx-indicator=".htmx-indicator"
-      hx-disabled-elt="#add-btn"
       {...reset}
     >
       <input
