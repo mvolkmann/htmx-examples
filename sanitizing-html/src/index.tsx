@@ -55,6 +55,7 @@ app.get('/', (c: Context) => {
         hx-post="/render"
         hx-target="#result"
         hx-request='"timeout":2000'
+        id="my-form"
         {...reset}
       >
         <textarea name="markup" rows={3} cols={40} />

@@ -1,4 +1,7 @@
-document.body.addEventListener('htmx:timeout', () => {
-  const result = document.getElementById('result');
-  if (result) result.textContent = 'The request timed out.';
-});
+const form = document.getElementById('my-form');
+const result = document.getElementById('result');
+if (form && result) {
+  form.addEventListener('htmx:timeout', () => {
+    result.textContent = 'The request timed out.';
+  });
+}
