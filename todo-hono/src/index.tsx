@@ -140,7 +140,8 @@ type TodoListProps = {todos: Todo[]};
 
 function TodoList({todos}: TodoListProps) {
   return (
-    <div hx-sync=".todo-item:queue all">
+    // <div hx-sync=".todo-item:queue all">
+    <div>
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
@@ -201,6 +202,7 @@ app.get('/todos/:id/toggle-edit', idValidator, (c: Context) => {
     <TodoDescription todo={todo} />
   ) : (
     <TodoInput todo={todo} />
+    { editingId !== 0 && <TodoDescription todo={todo} hx-swap-oob={editingId} />}
   );
   editingId = editing ? 0 : id;
   return c.html(jsx);
