@@ -56,6 +56,22 @@ function addTodo(description: string) {
   }
 }
 
+type TodoItemProps = {todo: Todo};
+
+function TodoDescription({todo: {id, description, completed}}: TodoItemProps) {
+  return (
+    <div
+      class={completed === 1 ? 'completed' : ''}
+      id={String(id)}
+      hx-get={`/todos/${id}/toggle-edit`}
+      hx-swap="outerHTML"
+      hx-trigger="click"
+    >
+      {description}
+    </div>
+  );
+}
+
 function TodoForm() {
   // We are using attribute spreading to add this attribute to the form
   // because VS Code does not recognize hx-on:htmx:after-request
@@ -84,30 +100,33 @@ function TodoForm() {
   );
 }
 
-type TodoItemProps = {todo: Todo};
-function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
-  const isCompleted = completed === 1;
+function TodoInput({todo}: TodoItemProps) {
+  return (
+    <input
+      hx-get={`/todos/${todo.id}/toggle-edit`}
+      hx-swap="outerHTML"
+      hx-trigger="click from:document"
+      type="text"
+      value={todo.description}
+    />
+  );
+}
+
+function TodoItem({todo}: TodoItemProps) {
   return (
     <div class="todo-item">
       <input
         type="checkbox"
-        checked={isCompleted}
-        hx-patch={`/todos/${id}/toggle-complete`}
+        checked={todo.completed === 1}
+        hx-patch={`/todos/${todo.id}/toggle-complete`}
         hx-target="closest div"
         hx-swap="outerHTML"
       />
-      <div
-        class={isCompleted ? 'completed' : ''}
-        hx-get={`/todos/${id}/toggle-edit`}
-        hx-swap="outerHTML"
-        hx-trigger="click"
-      >
-        {description}
-      </div>
+      <TodoDescription todo={todo} />
       <button
         class="plain"
         hx-confirm="Are you sure?"
-        hx-delete={`/todos/${id}`}
+        hx-delete={`/todos/${todo.id}`}
         hx-swap="outerHTML swap:1s"
         hx-target="closest div"
       >
@@ -118,9 +137,10 @@ function TodoItem({todo: {id, description, completed}}: TodoItemProps) {
 }
 
 type TodoListProps = {todos: Todo[]};
+
 function TodoList({todos}: TodoListProps) {
   return (
-    <div hx-sync=".todo-item">
+    <div hx-sync=".todo-item:queue all">
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
@@ -174,28 +194,13 @@ let editingId = 0;
 // This toggles whether a todo is being edited.
 app.get('/todos/:id/toggle-edit', idValidator, (c: Context) => {
   const id = Number(c.req.param('id'));
-  console.log('toggle-edit: id =', id);
-  console.log('toggle-edit: editingId =', editingId);
   const todo = getTodoQuery.get(id) as Todo;
-  const {completed, description} = todo;
   const editing = id === editingId;
+  console.log(`/toggle-edit: editing ${todo.description}? ${!editing}`);
   const jsx = editing ? (
-    <div
-      class={completed === 1 ? 'completed' : ''}
-      hx-get={`/todos/${id}/toggle-edit`}
-      hx-swap="outerHTML"
-      hx-trigger="click"
-    >
-      {description}
-    </div>
+    <TodoDescription todo={todo} />
   ) : (
-    <input
-      hx-get={`/todos/${id}/toggle-edit`}
-      hx-swap="outerHTML"
-      hx-trigger="click from:document"
-      type="text"
-      value={description}
-    />
+    <TodoInput todo={todo} />
   );
   editingId = editing ? 0 : id;
   return c.html(jsx);
