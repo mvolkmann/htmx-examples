@@ -39,15 +39,19 @@ app.get('/', (c: Context) =>
 
 let selectedName = 'Comet';
 
-type DogProps = {name: string};
-function Dog({name}: DogProps) {
+type DogProps = {name: string; oob?: boolean};
+function Dog({name, oob}: DogProps) {
+  console.log('index.tsx Dog: oob =', oob);
   const classes = 'name' + (name === selectedName ? ' selected' : '');
+  const attrs = oob ? {'hx-swap-oob': 'true'} : {};
   return (
     <div
       class={classes}
       hx-get={`/toggle/${name}`}
       hx-swap="outerHTML"
       hx-trigger="click"
+      id={name}
+      {...attrs}
     >
       {name}
     </div>
@@ -56,8 +60,16 @@ function Dog({name}: DogProps) {
 
 app.get('/toggle/:name', (c: Context) => {
   const name = c.req.param('name');
-  selectedName = name === selectedName ? '' : name;
-  return c.html(<Dog name={name} />);
+  const isSelected = name === selectedName;
+  const previousSelectedName = selectedName;
+  selectedName = isSelected ? '' : name;
+  const html = c.html(
+    <>
+      <Dog name={name} />
+      {!isSelected && <Dog name={previousSelectedName} oob={true} />}
+    </>
+  );
+  return html;
 });
 
 // The browser code connects to this
