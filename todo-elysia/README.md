@@ -1,21 +1,26 @@
-# To Do App with BETH Stack
+# todo-elysia
 
-## Overview
+This is a todo app implemented with htmx, Bun, and Elysia.
+This is referred to as the BETH stack where the T stands for
+[Turso](https://turso.tech/), but that is not used here.
 
-The BETH stack uses:
+- Enter `bun install`
+- Enter `bun run dev`
+- Browse localhost:1919
 
-- Bun
-- ElysiaJS
-- typed-html
-- HTMX
+## Database Setup
 
-To run this:
+- Create the database with `sqlite3 todos.db`
+- Create a table with `create table todos(id integer primary key autoincrement, description string, completed numeric, unique (description collate nocase));`
+- Verify that the table was created with `.schema`
+- Insert two rows with `insert into todos values('t1', 'cut grass', 0);`
+  and `insert into todos values('t2', 'buy milk', 1);`
+- Verify that the rows were inserted with `select * from todos;`
+- Exit with `.exit`
 
-- `bun install`
-- `bun run dev`
-- browse localhost:1919
+## BETH Stack
 
-## Creating a BETH Stack App
+To create a BETH stack app:
 
 - See the YouTube video at https://www.youtube.com/watch?v=cpzowDDJj24.
 - create directory and cd to it
@@ -57,13 +62,3 @@ To run this:
 
 - rename "index.ts" to "index.tsx"
 - for VS Code users, install the "htmx-tags" extension
-
-## Database Setup
-
-- Create the database with `sqlite3 todos.db`
-- Create a table with `create table todos(id integer primary key autoincrement, description string, completed numeric, unique (description collate nocase));`
-- Verify that the table was created with `.schema`
-- Insert two rows with `insert into todos values('t1', 'cut grass', 0);`
-  and `insert into todos values('t2', 'buy milk', 1);`
-- Verify that the rows were inserted with `select * from todos;`
-- Exit with `.exit`

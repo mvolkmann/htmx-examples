@@ -11,7 +11,9 @@ ws.addEventListener('close', event => {
   }, 500); // gives the server time to restart
 });
 
+/*
 document.body.addEventListener('htmx:load', () => {
   htmx.logAll();
   console.log('setup.js: logging enabled');
 });
+*/
