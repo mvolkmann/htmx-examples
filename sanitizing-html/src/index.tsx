@@ -33,32 +33,38 @@ const BaseHtml: FC = ({children}) => (
       {/* The CSP above blocks getting scripts from other domains,
           so this project includes a local copy of htmx.min.js. */}
       <script src="htmx.min.js"></script>
+      <script defer src="setup.js"></script>
     </head>
     <body>{children}</body>
   </html>
 );
 
 app.get('/', (c: Context) => {
+  // We are using attribute spreading to add this attribute to the form
+  // because VS Code does not recognize hx-on:htmx:after-request
+  // as a valid attribute name.
+  const reset = {'hx-on:htmx:after-request': 'this.reset()'};
+
   return c.html(
     <BaseHtml>
       <h1>Sanitizing HTML</h1>
+
       {/* The timeout for all requests can be specified
           in a meta tag for htmx-config. */}
-      <form hx-post="/render" hx-target="#result" hx-request='"timeout":2000'>
-        <input name="markup" type="text" />
-        <div
-          id="result"
-          hx-get="/timeout"
-          hx-request='"timeout":0'
-          hx-trigger="htmx:timeout from:form"
-        />
+      <form
+        hx-post="/render"
+        hx-target="#result"
+        hx-request='"timeout":2000'
+        {...reset}
+      >
+        <textarea name="markup" rows={3} cols={40} />
+        <br />
         <button>Submit</button>
       </form>
+      <div id="result" />
     </BaseHtml>
   );
 });
-
-app.get('/timeout', (c: Context) => c.text('The request timed out.'));
 
 app.post('/render', async (c: Context) => {
   Bun.sleepSync(5000); // simulates long-running query
