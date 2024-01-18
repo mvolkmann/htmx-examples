@@ -4,6 +4,8 @@ This is a todo app implemented with htmx, Bun, and Elysia.
 This is referred to as the BETH stack where the T stands for
 [Turso](https://turso.tech/), but that is not used here.
 
+To run this:
+
 - Enter `bun install`
 - Enter `bun run dev`
 - Browse localhost:1919

@@ -1,16 +1,34 @@
 import {Database} from 'bun:sqlite';
-import {Elysia, t} from 'elysia';
-import {html} from '@elysiajs/html';
-import {staticPlugin} from '@elysiajs/static';
-import {Attributes} from 'typed-html';
+import {Hono} from 'hono';
+import type {Context} from 'hono';
+import {serveStatic} from 'hono/bun';
+import type {FC} from 'hono/jsx';
 import WebSocket from 'ws';
+import {z} from 'zod';
+import {zValidator} from '@hono/zod-validator';
 
-// Configure Elysia.
-const app = new Elysia();
-// This enables use of JSX.
-app.use(html());
+const app = new Hono();
+
 // This serves static files from the public directory.
-app.use(staticPlugin({prefix: ''}));
+app.use('/*', serveStatic({root: './public'}));
+
+const Layout: FC = ({children}) => (
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>To Do List</title>
+      <link rel="stylesheet" href="/styles.css" />
+      <script
+        src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"
+      ></script>
+      <script defer src="setup.js"></script>
+    </head>
+    <body>{children}</body>
+  </html>
+);
 
 // Prepare to use SQLite to store todos.
 const db = new Database('todos.db', {create: true});
@@ -37,24 +55,6 @@ function addTodo(description: string) {
     throw isDuplicate ? new Error(`duplicate todo "${description}"`) : e;
   }
 }
-
-const Layout = ({children}: Attributes) => (
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>To Do List</title>
-      <link rel="stylesheet" href="/styles.css" />
-      <script
-        src="https://unpkg.com/htmx.org@1.9.10"
-        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-        crossorigin="anonymous"
-      ></script>
-      <script defer src="setup.js"></script>
-    </head>
-    <body>{children}</body>
-  </html>
-);
 
 function TodoForm() {
   // We are using attribute spreading to add this attribute to the form
@@ -121,40 +121,37 @@ function TodoList({todos}: TodoListProps) {
   );
 }
 
+const idSchema = z.object({
+  id: z.coerce.number().positive()
+});
+const idValidator = zValidator('param', idSchema);
+
 // This deletes a given todo.  It is the D in CRUD.
-app.delete(
-  '/todos/:id',
-  ({params, set}) => {
-    deleteTodoPS.get(params.id);
-    set.headers['hx-trigger'] = 'status-change';
-    // By not returning any HTML for this todo item,
-    // we replace the existing todo item with nothing.
+app.delete('/todos/:id', idValidator, (c: Context) => {
+  const id = c.req.param('id');
+  deleteTodoPS.get(id);
+  c.header('HX-Trigger', 'status-change');
+  // By not returning any HTML for this todo item,
+  // we replace the existing todo item with nothing.
 
-    // This can be used to demonstrate fading new content into view.
-    // return <div class="todo-item warning">A todo was deleted.</div>;
-  },
-  {
-    params: t.Object({
-      id: t.Numeric()
-    })
-  }
-);
-
-app.get('/', ({set}) => {
-  set.redirect = '/todos';
+  // This can be used to demonstrate fading new content into view.
+  // return <div class="todo-item warning">A todo was deleted.</div>;
+  return c.text('');
 });
 
-app.get('/todos/status', () => {
+app.get('/', (c: Context) => c.redirect('/todos'));
+
+app.get('/todos/status', (c: Context) => {
   const todos = getAllTodosQuery.all() as Todo[];
   const uncompletedCount = todos.filter(todo => !todo.completed).length;
-  return `${uncompletedCount} of ${todos.length} remaining`;
+  return c.text(`${uncompletedCount} of ${todos.length} remaining`);
 });
 
 // This renders the todo list UI.  It is the R in CRUD.
-app.get('/todos', () => {
+app.get('/todos', (c: Context) => {
   const todos = getAllTodosQuery.all();
 
-  return (
+  return c.html(
     <Layout>
       <h1>To Do List</h1>
       <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
@@ -166,67 +163,59 @@ app.get('/todos', () => {
 });
 
 // This toggles the completed state of a given todo.  It is the U in CRUD.
-app.patch(
-  '/todos/:id/toggle',
-  ({params, set}) => {
-    const todo = getTodoQuery.get(params.id) as Todo;
-    if (todo) {
-      todo.completed = 1 - todo.completed;
-      updateTodoPS.run(todo.completed, todo.id);
-      set.headers['hx-trigger'] = 'status-change';
-      return <TodoItem todo={todo} />;
-    } else {
-      return new Response('Not found', {status: 404});
-    }
-  },
-  {
-    params: t.Object({
-      id: t.Numeric() // converts string param to a number
-    })
+app.patch('/todos/:id/toggle', idValidator, (c: Context) => {
+  const id = c.req.param('id');
+  const todo = getTodoQuery.get(id) as Todo;
+  if (todo) {
+    todo.completed = 1 - todo.completed;
+    updateTodoPS.run(todo.completed, todo.id);
+    c.header('HX-Trigger', 'status-change');
+    return <TodoItem todo={todo} />;
+  } else {
+    return new Response('Not found', {status: 404});
   }
-);
+});
+
+const todoSchema = z
+  .object({
+    description: z.string().min(1)
+  })
+  .strict(); // no extra properties allowed
+const todoValidator = zValidator('json', todoSchema);
 
 // This adds a new todo.  It is the C in CRUD.
-app.post(
-  '/todos',
-  ({body, set}) => {
-    const description = body.description.trim();
-    if (description.length === 0) {
-      throw new Error('Todo description cannot be empty');
-    }
-    try {
-      const todo = addTodo(description);
-
-      Bun.sleepSync(1000); // enables testing hx-indicator spinner
-
-      set.headers['hx-trigger'] = 'status-change';
-
-      return (
-        <>
-          <TodoItem todo={todo} />
-          {/* Clear previous error message. */}
-          <p id="error" hx-swap-oob="true" />
-        </>
-      );
-    } catch (e) {
-      return (
-        <p id="error" hx-swap-oob="true">
-          {e.message}
-        </p>
-      );
-    }
-  },
-  {
-    body: t.Object({
-      description: t.String()
-    })
+app.post('/todos', todoValidator, async (c: Context) => {
+  const object = await c.req.formData();
+  const description = object.description.trim();
+  if (description.length === 0) {
+    throw new Error('Todo description cannot be empty');
   }
-);
+  try {
+    const todo = addTodo(description);
+
+    Bun.sleepSync(1000); // enables testing hx-indicator spinner
+
+    c.header('HX-Trigger', 'status-change');
+
+    return (
+      <>
+        <TodoItem todo={todo} />
+        {/* Clear previous error message. */}
+        <p id="error" hx-swap-oob="true" />
+      </>
+    );
+  } catch (e) {
+    return (
+      <p id="error" hx-swap-oob="true">
+        {e.message}
+      </p>
+    );
+  }
+});
 
 // The browser code connects to this
 // so it can detect when the server is restarted.
 // On restart, the browser reloads the page.
 new WebSocket.Server({port: 1920});
 
-app.listen(1919);
-console.log('listening on port', app.server?.port);
+export default app;
