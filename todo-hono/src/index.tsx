@@ -181,11 +181,10 @@ const todoSchema = z
     description: z.string().min(1)
   })
   .strict(); // no extra properties allowed
-const todoValidator = zValidator('json', todoSchema);
+const todoValidator = zValidator('form', todoSchema);
 
 // This adds a new todo.  It is the C in CRUD.
-// app.post('/todos', todoValidator, async (c: Context) => {
-app.post('/todos', async (c: Context) => {
+app.post('/todos', todoValidator, async (c: Context) => {
   const formData = await c.req.formData();
   const description = formData?.get('description') as string | null;
   if (!description || description.length === 0) {
