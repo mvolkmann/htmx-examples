@@ -184,20 +184,18 @@ const todoSchema = z
 const todoValidator = zValidator('json', todoSchema);
 
 // This adds a new todo.  It is the C in CRUD.
-app.post('/todos', todoValidator, async (c: Context) => {
-  const object = await c.req.formData();
-  const description = object.description.trim();
-  if (description.length === 0) {
+// app.post('/todos', todoValidator, async (c: Context) => {
+app.post('/todos', async (c: Context) => {
+  const formData = await c.req.formData();
+  const description = formData?.get('description') as string | null;
+  if (!description || description.length === 0) {
     throw new Error('Todo description cannot be empty');
   }
   try {
     const todo = addTodo(description);
-
     Bun.sleepSync(1000); // enables testing hx-indicator spinner
-
     c.header('HX-Trigger', 'status-change');
-
-    return (
+    return c.html(
       <>
         <TodoItem todo={todo} />
         {/* Clear previous error message. */}
@@ -205,7 +203,7 @@ app.post('/todos', todoValidator, async (c: Context) => {
       </>
     );
   } catch (e) {
-    return (
+    return c.html(
       <p id="error" hx-swap-oob="true">
         {e.message}
       </p>
