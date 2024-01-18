@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+}
+
+.name {
+  background-color: yellow;
+  border: 2px solid black;
+  border-radius: 1rem;
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 1rem;
+}
+
+.name.selected {
+  background-color: cornflowerblue;
+}
