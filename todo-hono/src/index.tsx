@@ -33,7 +33,8 @@ function addTodo(description: string) {
     const {id} = insertTodoQuery.get(description) as {id: number};
     return {id, description, completed: 0};
   } catch (e) {
-    const isDuplicate = e.toString().includes('UNIQUE constraint failed');
+    const message = e instanceof Error ? e.message : String(e);
+    const isDuplicate = message.includes('UNIQUE constraint failed');
     throw isDuplicate ? new Error(`duplicate todo "${description}"`) : e;
   }
 }
@@ -124,7 +125,8 @@ function updateTodo(c: Context, todo: Todo) {
       </>
     );
   } catch (e) {
-    return c.html(<Err message={e.message} />);
+    const message = e instanceof Error ? e.message : String(e);
+    return c.html(<Err message={message} />);
   }
 }
 
@@ -154,7 +156,8 @@ app.post('/todos', todoValidator, async (c: Context) => {
       </>
     );
   } catch (e) {
-    return c.html(<Err message={e.message} />);
+    const message = e instanceof Error ? e.message : String(e);
+    return c.html(<Err message={message} />);
   }
 });
 
