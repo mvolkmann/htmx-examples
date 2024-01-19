@@ -43,7 +43,10 @@ app.get('/', (c: Context) => {
   // We are using attribute spreading to add this attribute to the form
   // because VS Code does not recognize hx-on:htmx:after-request
   // as a valid attribute name.
-  const reset = {'hx-on:htmx:after-request': 'this.reset()'};
+  const attrs = {
+    'hx-on:htmx:before-request': 'alert("Sending request")',
+    'hx-on:htmx:after-request': 'alert("Got response"); this.reset()'
+  };
 
   return c.html(
     <BaseHtml>
@@ -56,7 +59,7 @@ app.get('/', (c: Context) => {
         hx-target="#result"
         hx-request='"timeout":2000'
         id="my-form"
-        {...reset}
+        {...attrs}
       >
         <textarea name="markup" rows={3} cols={40} />
         <br />
@@ -68,7 +71,9 @@ app.get('/', (c: Context) => {
 });
 
 app.post('/render', async (c: Context) => {
-  Bun.sleepSync(5000); // simulates long-running query
+  // Uncomment this line to cause timeouts to occur.
+  //Bun.sleepSync(5000); // simulates long-running query
+
   const data = await c.req.formData();
   const markup = data.get('markup');
   // const markup = '<p>before</p><script>alert("pwned")</script><p>after</p>';
