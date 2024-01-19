@@ -46,15 +46,20 @@ export function TodoForm() {
       hx-post="/todos"
       hx-swap="afterbegin"
       hx-target="#todo-list"
+      x-data="{text: ''}"
       {...reset}
     >
       <input
-        hx-on:input="document.getElementById('add-btn').disabled = this.value === ''"
         name="description"
         placeholder="enter new todo here"
         size={30}
+        x-model="text"
       />
-      <button disabled id="add-btn" type="submit">
+      <button
+        id="add-btn"
+        type="submit"
+        x-bind:disabled="text.trim().length == 0"
+      >
         Add
       </button>
       <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
