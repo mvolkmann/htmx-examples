@@ -170,12 +170,6 @@ app.delete('/todos/:id', idValidator, (c: Context) => {
 
 app.get('/', (c: Context) => c.redirect('/todos'));
 
-app.get('/todos/status', (c: Context) => {
-  const todos = getAllTodosQuery.all() as Todo[];
-  const uncompletedCount = todos.filter(todo => !todo.completed).length;
-  return c.text(`${uncompletedCount} of ${todos.length} remaining`);
-});
-
 // This renders the todo list UI.  It is the R in CRUD.
 app.get('/todos', (c: Context) => {
   const todos = getAllTodosQuery.all();
@@ -189,6 +183,13 @@ app.get('/todos', (c: Context) => {
       <TodoList todos={todos} />
     </Layout>
   );
+});
+
+// This gets the status text that is displayed at the top of the page.
+app.get('/todos/status', (c: Context) => {
+  const todos = getAllTodosQuery.all() as Todo[];
+  const uncompletedCount = todos.filter(todo => !todo.completed).length;
+  return c.text(`${uncompletedCount} of ${todos.length} remaining`);
 });
 
 // This updates the description of a given todo.  It is the U in CRUD.
@@ -235,13 +236,26 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
 app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   const id = c.req.param('id');
   const todo = getTodoQuery.get(id) as Todo;
-  if (todo) {
-    todo.completed = 1 - todo.completed;
+  if (!todo) return c.notFound();
+
+  todo.completed = 1 - todo.completed;
+
+  try {
     updateTodoStatusPS.run(todo.completed, todo.id);
     c.header('HX-Trigger', 'status-change');
-    return c.html(<TodoItem todo={todo} />);
-  } else {
-    return c.notFound();
+    return c.html(
+      <>
+        <TodoItem todo={todo} />
+        {/* Clear previous error message. */}
+        <p id="error" hx-swap-oob="true" />
+      </>
+    );
+  } catch (e) {
+    return c.html(
+      <p id="error" hx-swap-oob="true">
+        {e.message}
+      </p>
+    );
   }
 });
 
