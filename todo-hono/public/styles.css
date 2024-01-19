@@ -16,17 +16,6 @@ button:disabled {
   opacity: 0.7;
 }
 
-input[type='text'] {
-  border: 1px solid gray;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-input:checked + .description {
-  color: gray;
-  text-decoration: line-through;
-}
-
 #error {
   color: red;
   font-weight: bold;
@@ -49,10 +38,15 @@ h1 {
   width: 1.5rem;
 }
 
-input {
+input[type='text'] {
   border: 1px solid gray;
   border-radius: 0.5rem;
   padding: 0.5rem;
+}
+
+input:checked + .description {
+  color: gray;
+  text-decoration: line-through;
 }
 
 .todo-item {
