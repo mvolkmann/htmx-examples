@@ -61,6 +61,15 @@ function addTodo(description: string) {
   }
 }
 
+type ErrorProps = {message: string};
+function Err({message = ''}) {
+  return (
+    <p id="error" hx-swap-oob="true">
+      {message}
+    </p>
+  );
+}
+
 type TodoItemProps = {todo: Todo};
 function TodoForm() {
   // We are using attribute spreading to add this attribute to the form
@@ -178,7 +187,7 @@ app.get('/todos', (c: Context) => {
     <Layout>
       <h1>To Do List</h1>
       <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
-      <p id="error" />
+      <Err />
       <TodoForm />
       <TodoList todos={todos} />
     </Layout>
@@ -204,32 +213,13 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
     return c.html(
       <>
         <TodoItem todo={todo} />
-        <p id="error" hx-swap-oob="true">
-          Todo description cannot be empty.
-        </p>
+        <Err message="Todo description cannot be empty." />
       </>
     );
   }
 
   todo.description = description;
-
-  try {
-    updateTodoDescriptionPS.run(description, todo.id);
-    c.header('HX-Trigger', 'description-change');
-    return c.html(
-      <>
-        <TodoItem todo={todo} />
-        {/* Clear previous error message. */}
-        <p id="error" hx-swap-oob="true" />
-      </>
-    );
-  } catch (e) {
-    return c.html(
-      <p id="error" hx-swap-oob="true">
-        {e.message}
-      </p>
-    );
-  }
+  return updateTodo(c, todo);
 });
 
 // This toggles the completed state of a given todo.  It is the U in CRUD.
@@ -239,7 +229,10 @@ app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   if (!todo) return c.notFound();
 
   todo.completed = 1 - todo.completed;
+  return updateTodo(c, todo);
+});
 
+function updateTodo(c: Context, todo: Todo) {
   try {
     updateTodoStatusPS.run(todo.completed, todo.id);
     c.header('HX-Trigger', 'status-change');
@@ -247,17 +240,13 @@ app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
       <>
         <TodoItem todo={todo} />
         {/* Clear previous error message. */}
-        <p id="error" hx-swap-oob="true" />
+        <Err />
       </>
     );
   } catch (e) {
-    return c.html(
-      <p id="error" hx-swap-oob="true">
-        {e.message}
-      </p>
-    );
+    return c.html(<Err message={e.message} />);
   }
-});
+}
 
 const todoSchema = z
   .object({
@@ -281,15 +270,11 @@ app.post('/todos', todoValidator, async (c: Context) => {
       <>
         <TodoItem todo={todo} />
         {/* Clear previous error message. */}
-        <p id="error" hx-swap-oob="true" />
+        <Err />
       </>
     );
   } catch (e) {
-    return c.html(
-      <p id="error" hx-swap-oob="true">
-        {e.message}
-      </p>
-    );
+    return c.html(<Err message={e.message} />);
   }
 });
 
