@@ -4,8 +4,7 @@ import {serveStatic} from 'hono/bun';
 import WebSocket from 'ws';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
-import type {Todo} from './components';
-import {Err, Layout, TodoForm, TodoItem, TodoList} from './components';
+import {Err, Layout, Todo, TodoForm, TodoItem, TodoList} from './components';
 
 //-----------------------------------------------------------------------------
 // Browser reload support
