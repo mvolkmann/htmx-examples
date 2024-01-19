@@ -83,11 +83,7 @@ export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
         hx-swap="outerHTML"
         hx-target="closest div"
       />
-      <div
-        class={completed === 1 ? 'completed' : ''}
-        x-show="id !== editingId"
-        {...handleTextClick}
-      >
+      <div class="description" x-show="id !== editingId" {...handleTextClick}>
         {description}
       </div>
       <input
