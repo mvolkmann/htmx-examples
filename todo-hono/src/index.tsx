@@ -1,4 +1,4 @@
-import {Database} from 'bun:sqlite';
+import {Database, Statement} from 'bun:sqlite';
 import {Hono} from 'hono';
 import type {Context} from 'hono';
 import {serveStatic} from 'hono/bun';
@@ -8,12 +8,19 @@ import {zValidator} from '@hono/zod-validator';
 import type {Todo} from './components';
 import {Err, Layout, TodoForm, TodoItem, TodoList} from './components';
 
-const app = new Hono();
+//-----------------------------------------------------------------------------
+// Browser reload support
+//-----------------------------------------------------------------------------
 
-// This serves static files from the public directory.
-app.use('/*', serveStatic({root: './public'}));
+// The browser code connects to this
+// so it can detect when the server is restarted.
+// On restart, the browser reloads the page.
+new WebSocket.Server({port: 3001});
 
+//-----------------------------------------------------------------------------
 // Prepare to use SQLite to store todos.
+//-----------------------------------------------------------------------------
+
 const db = new Database('todos.db', {create: true});
 const deleteTodoPS = db.query('delete from todos where id = ?');
 const getAllTodosQuery = db.query('select * from todos order by description;');
@@ -28,6 +35,10 @@ const updateTodoStatusPS = db.prepare(
   'update todos set completed=? where id = ?'
 );
 
+//-----------------------------------------------------------------------------
+// Utility functions
+//-----------------------------------------------------------------------------
+
 function addTodo(description: string) {
   try {
     const {id} = insertTodoQuery.get(description) as {id: number};
@@ -39,10 +50,53 @@ function addTodo(description: string) {
   }
 }
 
+function updateTodo(
+  c: Context,
+  statement: Statement,
+  todo: Todo,
+  property: string
+) {
+  try {
+    // @ts-ignore
+    const value = todo[property];
+    statement.run(value, todo.id);
+    return c.html(
+      <>
+        <TodoItem todo={todo} />
+        {/* Clear previous error message. */}
+        <Err />
+      </>
+    );
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    return c.html(<Err message={message} />);
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Zod schema validation
+//-----------------------------------------------------------------------------
+
 const idSchema = z.object({
   id: z.coerce.number().positive()
 });
 const idValidator = zValidator('param', idSchema);
+
+const todoSchema = z
+  .object({
+    description: z.string().min(1)
+  })
+  .strict(); // no extra properties allowed
+const todoValidator = zValidator('form', todoSchema);
+
+//-----------------------------------------------------------------------------
+// Endpoint definitions
+//-----------------------------------------------------------------------------
+
+const app = new Hono();
+
+// This serves static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
 
 // This deletes a given todo.  It is the D in CRUD.
 app.delete('/todos/:id', idValidator, (c: Context) => {
@@ -100,7 +154,7 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
 
   todo.description = description;
   c.header('HX-Trigger', 'description-change');
-  return updateTodo(c, todo);
+  return updateTodo(c, updateTodoDescriptionPS, todo, 'description');
 });
 
 // This toggles the completed state of a given todo.  It is the U in CRUD.
@@ -111,31 +165,8 @@ app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
 
   todo.completed = 1 - todo.completed;
   c.header('HX-Trigger', 'status-change');
-  return updateTodo(c, todo);
+  return updateTodo(c, updateTodoStatusPS, todo, 'completed');
 });
-
-function updateTodo(c: Context, todo: Todo) {
-  try {
-    updateTodoStatusPS.run(todo.completed, todo.id);
-    return c.html(
-      <>
-        <TodoItem todo={todo} />
-        {/* Clear previous error message. */}
-        <Err />
-      </>
-    );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return c.html(<Err message={message} />);
-  }
-}
-
-const todoSchema = z
-  .object({
-    description: z.string().min(1)
-  })
-  .strict(); // no extra properties allowed
-const todoValidator = zValidator('form', todoSchema);
 
 // This adds a new todo.  It is the C in CRUD.
 app.post('/todos', todoValidator, async (c: Context) => {
@@ -160,10 +191,5 @@ app.post('/todos', todoValidator, async (c: Context) => {
     return c.html(<Err message={message} />);
   }
 });
-
-// The browser code connects to this
-// so it can detect when the server is restarted.
-// On restart, the browser reloads the page.
-new WebSocket.Server({port: 3001});
 
 export default app;
