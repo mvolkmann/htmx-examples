@@ -6,6 +6,7 @@ import type {FC} from 'hono/jsx';
 import WebSocket from 'ws';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
+import {handle} from 'hono/cloudflare-pages';
 
 const app = new Hono();
 
@@ -84,6 +85,7 @@ function TodoForm() {
 }
 
 function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
+  const handleClick = {'x-on:click.capture': 'editingId = id'};
   return (
     <div class="todo-item" x-data={`{id: ${id}}`}>
       <input
@@ -95,18 +97,12 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
       />
       <div
         class={completed === 1 ? 'completed' : ''}
-        id={`todo-${id}`}
-        x-on:click="editingId = id"
+        {...handleClick}
         x-show="id !== editingId"
       >
         {description}
       </div>
-      <input
-        id={`todo-input-${id}`}
-        type="text"
-        value={description}
-        x-show="id === editingId"
-      />
+      <input type="text" value={description} x-show="id === editingId" />
       <button
         class="plain"
         hx-confirm="Are you sure?"
@@ -126,6 +122,9 @@ function TodoList({todos}: TodoListProps) {
   console.log('index.tsx : todos =', todos);
   return (
     <div id="todo-list" x-data="{editingId: 0}">
+      {/* <div>
+        editingId = <span x-text="editingId" />
+      </div> */}
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
