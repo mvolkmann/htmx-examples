@@ -36,14 +36,25 @@ const updateTodoStatusPS = db.prepare(
 // Utility functions
 //-----------------------------------------------------------------------------
 
-function addTodo(description: string) {
+function addTodo(c: Context, description: string) {
+  Bun.sleepSync(500); // enables testing hx-indicator spinner
+
   try {
     const {id} = insertTodoQuery.get(description) as {id: number};
-    return {id, description, completed: 0};
+    const todo = {id, description, completed: 0};
+    c.header('HX-Trigger', 'status-change');
+    return c.html(
+      <>
+        <TodoItem todo={todo} />
+        {/* Clear previous error message. */}
+        <Err />
+      </>
+    );
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
+    let message = e instanceof Error ? e.message : String(e);
     const isDuplicate = message.includes('UNIQUE constraint failed');
-    throw isDuplicate ? new Error(`duplicate todo "${description}"`) : e;
+    if (isDuplicate) message = `duplicate todo "${description}"`;
+    return c.html(<Err message={message} />);
   }
 }
 
@@ -172,21 +183,7 @@ app.post('/todos', todoValidator, async (c: Context) => {
   if (!description || description.length === 0) {
     throw new Error('Todo description cannot be empty');
   }
-  try {
-    const todo = addTodo(description);
-    Bun.sleepSync(500); // enables testing hx-indicator spinner
-    c.header('HX-Trigger', 'status-change');
-    return c.html(
-      <>
-        <TodoItem todo={todo} />
-        {/* Clear previous error message. */}
-        <Err />
-      </>
-    );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return c.html(<Err message={message} />);
-  }
+  return addTodo(c, description);
 });
 
 export default app;
