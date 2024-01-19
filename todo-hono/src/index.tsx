@@ -6,7 +6,6 @@ import type {FC} from 'hono/jsx';
 import WebSocket from 'ws';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
-import {handle} from 'hono/cloudflare-pages';
 
 const app = new Hono();
 
@@ -24,7 +23,7 @@ const Layout: FC = ({children}) => (
       <script src="alpine.min.js"></script>
       <script defer src="setup.js"></script>
     </head>
-    <body>{children}</body>
+    <body x-on:click="console.log('got click')">{children}</body>
   </html>
 );
 
@@ -36,7 +35,12 @@ const getTodoQuery = db.query('select * from todos where id = ?');
 const insertTodoQuery = db.query(
   'insert into todos (description, completed) values (?, 0) returning id'
 );
-const updateTodoPS = db.prepare('update todos set completed=? where id = ?');
+const updateTodoDescriptionPS = db.prepare(
+  'update todos set description=? where id = ?'
+);
+const updateTodoStatusPS = db.prepare(
+  'update todos set completed=? where id = ?'
+);
 
 type Todo = {
   id: number;
@@ -85,8 +89,11 @@ function TodoForm() {
 }
 
 function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
+  // TODO: The .capture modifier may not be needed.
   const handleClick = {'x-on:click.capture': 'editingId = id'};
   return (
+    // TODO: Is x-data the best way to associate a constant id with an element ?
+    // TODO: Maybe you should use an HTML id attribute instead.
     <div class="todo-item" x-data={`{id: ${id}}`}>
       <input
         type="checkbox"
@@ -102,11 +109,11 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
       >
         {description}
       </div>
-      {/* TODO: After the PUT completes, you need set editingId back to 0. */}
       <input
-        hx-put={`/todos/${id}`}
-        hx-swap="none"
-        hx-trigger="keyup changed delay:200ms"
+        hx-on:description-change="editingId = 0"
+        hx-patch={`/todos/${id}/description`}
+        hx-swap="closest div"
+        hx-trigger="blur keyup[enterKey]"
         type="text"
         value={description}
         x-show="id === editingId"
@@ -129,13 +136,14 @@ type TodoListProps = {todos: Todo[]};
 function TodoList({todos}: TodoListProps) {
   console.log('index.tsx : todos =', todos);
   return (
+    // editingId is a great example of state that only belongs on the client.
     <div id="todo-list" x-data="{editingId: 0}">
-      {/* <div>
-        editingId = <span x-text="editingId" />
-      </div> */}
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
+      <div>
+        editingId = <span x-text="editingId" />
+      </div>
     </div>
   );
 }
@@ -181,13 +189,46 @@ app.get('/todos', (c: Context) => {
   );
 });
 
+// This updates the description of a given todo.  It is the U in CRUD.
+app.patch('/todos/:id/description', idValidator, async (c: Context) => {
+  const id = c.req.param('id');
+  const todo = getTodoQuery.get(id) as Todo;
+  if (!todo) return c.notFound();
+
+  const formData = await c.req.formData();
+  const description = formData?.get('description') as string | null;
+  if (!description || description.length === 0) {
+    throw new Error('Todo description cannot be empty');
+  }
+
+  todo.description = description;
+
+  try {
+    updateTodoDescriptionPS.run(description, todo.id);
+    c.header('HX-Trigger', 'description-change');
+    return c.html(
+      <>
+        <TodoItem todo={todo} />
+        {/* Clear previous error message. */}
+        <p id="error" hx-swap-oob="true" />
+      </>
+    );
+  } catch (e) {
+    return c.html(
+      <p id="error" hx-swap-oob="true">
+        {e.message}
+      </p>
+    );
+  }
+});
+
 // This toggles the completed state of a given todo.  It is the U in CRUD.
 app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   const id = c.req.param('id');
   const todo = getTodoQuery.get(id) as Todo;
   if (todo) {
     todo.completed = 1 - todo.completed;
-    updateTodoPS.run(todo.completed, todo.id);
+    updateTodoStatusPS.run(todo.completed, todo.id);
     c.header('HX-Trigger', 'status-change');
     return c.html(<TodoItem todo={todo} />);
   } else {

@@ -1,6 +1,7 @@
 import {Hono} from 'hono';
 import type {Context} from 'hono';
 import type {FC} from 'hono/jsx';
+import {Html} from '@kitajs/html';
 
 const app = new Hono();
 
