@@ -2,7 +2,7 @@ body {
   font-family: sans-serif;
 }
 
-.name {
+.dog {
   background-color: yellow;
   border: 2px solid black;
   border-radius: 1rem;
@@ -11,6 +11,6 @@ body {
   padding: 1rem;
 }
 
-.name.selected {
+.dog.selected {
   background-color: cornflowerblue;
 }

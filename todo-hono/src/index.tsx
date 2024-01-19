@@ -19,11 +19,8 @@ const Layout: FC = ({children}) => (
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>To Do List</title>
       <link rel="stylesheet" href="/styles.css" />
-      <script
-        src="https://unpkg.com/htmx.org@1.9.10"
-        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-        crossorigin="anonymous"
-      ></script>
+      <script src="htmx.min.js"></script>
+      <script src="alpine.min.js"></script>
       <script defer src="setup.js"></script>
     </head>
     <body>{children}</body>
@@ -57,21 +54,6 @@ function addTodo(description: string) {
 }
 
 type TodoItemProps = {todo: Todo};
-
-function TodoDescription({todo: {id, description, completed}}: TodoItemProps) {
-  return (
-    <div
-      class={completed === 1 ? 'completed' : ''}
-      id={String(id)}
-      hx-get={`/todos/${id}/toggle-edit`}
-      hx-swap="outerHTML"
-      hx-trigger="click"
-    >
-      {description}
-    </div>
-  );
-}
-
 function TodoForm() {
   // We are using attribute spreading to add this attribute to the form
   // because VS Code does not recognize hx-on:htmx:after-request
@@ -82,7 +64,8 @@ function TodoForm() {
       hx-disabled-elt="#add-btn"
       hx-indicator=".htmx-indicator"
       hx-post="/todos"
-      hx-swap="afterend"
+      hx-swap="afterbegin"
+      hx-target="#todo-list"
       {...reset}
     >
       <input
@@ -100,33 +83,34 @@ function TodoForm() {
   );
 }
 
-function TodoInput({todo}: TodoItemProps) {
+function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
   return (
-    <input
-      hx-get={`/todos/${todo.id}/toggle-edit`}
-      hx-swap="outerHTML"
-      hx-trigger="click from:document"
-      type="text"
-      value={todo.description}
-    />
-  );
-}
-
-function TodoItem({todo}: TodoItemProps) {
-  return (
-    <div class="todo-item">
+    <div class="todo-item" x-data={`{id: ${id}}`}>
       <input
         type="checkbox"
-        checked={todo.completed === 1}
-        hx-patch={`/todos/${todo.id}/toggle-complete`}
+        checked={completed === 1}
+        hx-patch={`/todos/${id}/toggle-complete`}
         hx-target="closest div"
         hx-swap="outerHTML"
       />
-      <TodoDescription todo={todo} />
+      <div
+        class={completed === 1 ? 'completed' : ''}
+        id={`todo-${id}`}
+        x-on:click="editingId = id"
+        x-show="id !== editingId"
+      >
+        {description}
+      </div>
+      <input
+        id={`todo-input-${id}`}
+        type="text"
+        value={description}
+        x-show="id === editingId"
+      />
       <button
         class="plain"
         hx-confirm="Are you sure?"
-        hx-delete={`/todos/${todo.id}`}
+        hx-delete={`/todos/${id}`}
         hx-swap="outerHTML swap:1s"
         hx-target="closest div"
       >
@@ -139,9 +123,9 @@ function TodoItem({todo}: TodoItemProps) {
 type TodoListProps = {todos: Todo[]};
 
 function TodoList({todos}: TodoListProps) {
+  console.log('index.tsx : todos =', todos);
   return (
-    // <div hx-sync=".todo-item:queue all">
-    <div>
+    <div id="todo-list" x-data="{editingId: 0}">
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
@@ -188,24 +172,6 @@ app.get('/todos', (c: Context) => {
       <TodoList todos={todos} />
     </Layout>
   );
-});
-
-let editingId = 0;
-
-// This toggles whether a todo is being edited.
-app.get('/todos/:id/toggle-edit', idValidator, (c: Context) => {
-  const id = Number(c.req.param('id'));
-  const todo = getTodoQuery.get(id) as Todo;
-  const editing = id === editingId;
-  console.log(`/toggle-edit: editing ${todo.description}? ${!editing}`);
-  const jsx = editing ? (
-    <TodoDescription todo={todo} />
-  ) : (
-    <TodoInput todo={todo} />
-    { editingId !== 0 && <TodoDescription todo={todo} hx-swap-oob={editingId} />}
-  );
-  editingId = editing ? 0 : id;
-  return c.html(jsx);
 });
 
 // This toggles the completed state of a given todo.  It is the U in CRUD.

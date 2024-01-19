@@ -31,17 +31,23 @@ app.get('/', (c: Context) =>
   c.html(
     <Layout>
       {dogs.map(dog => (
+        // The Dog component is defined below.
         <Dog name={dog} />
       ))}
     </Layout>
   )
 );
 
+// This holds the name of the one selected dog.
 let selectedName = '';
 
 type DogProps = {name: string};
 function Dog({name}: DogProps) {
-  const classes = 'name' + (name === selectedName ? ' selected' : '');
+  // It changes the background color to cornflowerblue.
+  const classes = 'dog' + (name === selectedName ? ' selected' : '');
+
+  // All swaps for these divs are performed out-of-band.
+  // This is why hx-swap is set to none.
   return (
     <div
       class={classes}
@@ -61,6 +67,10 @@ app.get('/toggle/:name', (c: Context) => {
   const previousDog = selectedName ? <Dog name={selectedName} /> : null;
   const thisDog = <Dog name={name} />;
   selectedName = name === selectedName ? '' : name;
+
+  // If a dog was previously selected, two Dog components are returned.
+  // Otherwise only one is returned.
+  // Both will have hx-swap-oob set to true.
   return c.html(
     <>
       {previousDog}
