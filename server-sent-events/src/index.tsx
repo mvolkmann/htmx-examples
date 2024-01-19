@@ -33,6 +33,7 @@ app.get('/', (c: Context) => {
   );
 });
 
+// TODO: Get this to work!
 app.get('/scores', (c: Context) => {
   return c.text('test message');
 });
