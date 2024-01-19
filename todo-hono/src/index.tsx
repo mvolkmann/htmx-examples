@@ -20,7 +20,7 @@ const Layout: FC = ({children}) => (
       <title>To Do List</title>
       <link rel="stylesheet" href="/styles.css" />
       <script src="htmx.min.js"></script>
-      <script src="alpine.min.js"></script>
+      <script defer src="alpine.min.js"></script>
       <script defer src="setup.js"></script>
     </head>
     {/* editingId is a great example of state that only belongs on the client. */}
@@ -92,7 +92,8 @@ function TodoForm() {
 }
 
 function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
-  const handleClick = {'x-on:click.stop': 'editingId = id'};
+  const handleInputClick = {'x-on:click.stop': ''};
+  const handleTextClick = {'x-on:click.stop': 'editingId = id'};
   return (
     // TODO: Is x-data the best way to associate a constant id with an element ?
     // TODO: Maybe you should use an HTML id attribute instead.
@@ -101,24 +102,27 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
         type="checkbox"
         checked={completed === 1}
         hx-patch={`/todos/${id}/toggle-complete`}
-        hx-target="closest div"
         hx-swap="outerHTML"
+        hx-target="closest div"
       />
       <div
         class={completed === 1 ? 'completed' : ''}
-        {...handleClick}
         x-show="id !== editingId"
+        {...handleTextClick}
       >
         {description}
       </div>
       <input
-        hx-on:description-change="editingId = 0"
+        hx-include="this"
         hx-patch={`/todos/${id}/description`}
-        hx-swap="closest div"
-        hx-trigger="blur keyup[enterKey]"
+        hx-swap="outerHTML"
+        hx-target="closest div"
+        hx-trigger="blur, keyup[keyCode == 13]"
+        name="description"
         type="text"
         value={description}
         x-show="id === editingId"
+        {...handleInputClick}
       />
       <button
         class="plain"
@@ -136,9 +140,8 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
 type TodoListProps = {todos: Todo[]};
 
 function TodoList({todos}: TodoListProps) {
-  console.log('index.tsx : todos =', todos);
   return (
-    <div id="todo-list">
+    <div x-on:description-change="editingId = 0" id="todo-list">
       {todos.map(todo => (
         <TodoItem todo={todo} />
       ))}
