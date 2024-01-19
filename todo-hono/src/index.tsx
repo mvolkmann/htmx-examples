@@ -103,25 +103,27 @@ const todoValidator = zValidator('form', todoSchema);
 
 const app = new Hono();
 
-// This serves static files from the public directory.
+// Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-// This deletes a given todo.  It is the D in CRUD.
+// Delete a given todo ... the D in CRUD.
 app.delete('/todos/:id', idValidator, (c: Context) => {
   const id = c.req.param('id');
   deleteTodoQuery.get(id);
   c.header('HX-Trigger', 'status-change');
-  // By not returning any HTML for this todo item,
-  // we replace the existing todo item with nothing.
 
   // This can be used to demonstrate fading new content into view.
   // return <div class="todo-item warning">A todo was deleted.</div>;
+
+  // By not returning any HTML for this todo item,
+  // we replace the existing todo item with nothing.
   return c.text('');
 });
 
+// Redirect root URL to todo list.
 app.get('/', (c: Context) => c.redirect('/todos'));
 
-// This renders the todo list UI.  It is the R in CRUD.
+// Render the todo list UI ... the R in CRUD.
 app.get('/todos', (c: Context) => {
   const todos = getAllTodosQuery.all() as Todo[];
 
@@ -136,14 +138,14 @@ app.get('/todos', (c: Context) => {
   );
 });
 
-// This gets the status text that is displayed at the top of the page.
+// Get the status text that is displayed at the top of the page.
 app.get('/todos/status', (c: Context) => {
   const todos = getAllTodosQuery.all() as Todo[];
   const uncompletedCount = todos.filter(todo => !todo.completed).length;
   return c.text(`${uncompletedCount} of ${todos.length} remaining`);
 });
 
-// This updates the description of a given todo.  It is the U in CRUD.
+// Update the description of a given todo ... the U in CRUD.
 app.patch('/todos/:id/description', idValidator, async (c: Context) => {
   const id = c.req.param('id');
   const todo = getTodoQuery.get(id) as Todo;
@@ -165,7 +167,7 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
   return updateTodo(c, updateTodoDescriptionPS, todo, 'description');
 });
 
-// This toggles the completed state of a given todo.  It is the U in CRUD.
+// Toggle the completed state of a given todo ... the U in CRUD.
 app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   const id = c.req.param('id');
   const todo = getTodoQuery.get(id) as Todo;
@@ -176,7 +178,7 @@ app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   return updateTodo(c, updateTodoStatusPS, todo, 'completed');
 });
 
-// This adds a new todo.  It is the C in CRUD.
+// Add a new todo ... the C in CRUD.
 app.post('/todos', todoValidator, async (c: Context) => {
   const formData = await c.req.formData();
   const description = formData?.get('description') as string | null;
