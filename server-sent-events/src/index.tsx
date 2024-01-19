@@ -34,6 +34,7 @@ app.get('/', (c: Context) => {
 });
 
 // TODO: Get this to work!
+// See https://htmx.org/extensions/server-sent-events/.
 app.get('/scores', (c: Context) => {
   return c.text('test message');
 });
