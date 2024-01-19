@@ -1,6 +1,5 @@
 import {Database, Statement} from 'bun:sqlite';
-import {Hono} from 'hono';
-import type {Context} from 'hono';
+import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import WebSocket from 'ws';
 import {z} from 'zod';
