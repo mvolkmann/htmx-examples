@@ -219,6 +219,7 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
   }
 
   todo.description = description;
+  c.header('HX-Trigger', 'description-change');
   return updateTodo(c, todo);
 });
 
@@ -229,13 +230,13 @@ app.patch('/todos/:id/toggle-complete', idValidator, (c: Context) => {
   if (!todo) return c.notFound();
 
   todo.completed = 1 - todo.completed;
+  c.header('HX-Trigger', 'status-change');
   return updateTodo(c, todo);
 });
 
 function updateTodo(c: Context, todo: Todo) {
   try {
     updateTodoStatusPS.run(todo.completed, todo.id);
-    c.header('HX-Trigger', 'status-change');
     return c.html(
       <>
         <TodoItem todo={todo} />
