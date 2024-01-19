@@ -95,8 +95,6 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
   const handleInputClick = {'x-on:click.stop': ''};
   const handleTextClick = {'x-on:click.stop': 'editingId = id'};
   return (
-    // TODO: Is x-data the best way to associate a constant id with an element ?
-    // TODO: Maybe you should use an HTML id attribute instead.
     <div class="todo-item" x-data={`{id: ${id}}`}>
       <input
         type="checkbox"
@@ -202,7 +200,14 @@ app.patch('/todos/:id/description', idValidator, async (c: Context) => {
   const formData = await c.req.formData();
   const description = formData?.get('description') as string | null;
   if (!description || description.length === 0) {
-    throw new Error('Todo description cannot be empty');
+    return c.html(
+      <>
+        <TodoItem todo={todo} />
+        <p id="error" hx-swap-oob="true">
+          Todo description cannot be empty.
+        </p>
+      </>
+    );
   }
 
   todo.description = description;
