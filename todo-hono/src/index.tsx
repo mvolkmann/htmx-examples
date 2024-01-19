@@ -102,7 +102,15 @@ function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
       >
         {description}
       </div>
-      <input type="text" value={description} x-show="id === editingId" />
+      {/* TODO: After the PUT completes, you need set editingId back to 0. */}
+      <input
+        hx-put={`/todos/${id}`}
+        hx-swap="none"
+        hx-trigger="keyup changed delay:200ms"
+        type="text"
+        value={description}
+        x-show="id === editingId"
+      />
       <button
         class="plain"
         hx-confirm="Are you sure?"
