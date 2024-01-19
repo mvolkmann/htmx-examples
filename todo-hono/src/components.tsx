@@ -1,5 +1,4 @@
 import type {FC} from 'hono/jsx';
-
 export type Todo = {
   id: number;
   description: string;
@@ -26,16 +25,17 @@ export const Layout: FC = ({children}) => (
       <script defer src="alpine.min.js"></script>
       <script defer src="setup.js"></script>
     </head>
-    {/* editingId is a great example of state that only belongs on the client. */}
+    {/* editingId is state that only belongs on the client.
+        If the user clicks outside of any todo description,
+        deselect the currently selected todo. */}
     <body x-data="{editingId: 0}" x-on:click="editingId = 0">
       {children}
     </body>
   </html>
 );
 
-type TodoItemProps = {todo: Todo};
 export function TodoForm() {
-  // We are using attribute spreading to add this attribute to the form
+  // Attribute spreading is used to add this attribute to the form
   // because VS Code does not recognize hx-on:htmx:after-request
   // as a valid attribute name.
   const reset = {'hx-on:htmx:after-request': 'this.reset()'};
@@ -49,7 +49,6 @@ export function TodoForm() {
       {...reset}
     >
       <input
-        class="border border-gray-500 p-1 rounded-lg"
         hx-on:input="document.getElementById('add-btn').disabled = this.value === ''"
         name="description"
         placeholder="enter new todo here"
@@ -63,6 +62,7 @@ export function TodoForm() {
   );
 }
 
+type TodoItemProps = {todo: Todo};
 export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
   const handleInputClick = {'x-on:click.stop': ''};
   const handleTextClick = {'x-on:click.stop': 'editingId = id'};
