@@ -6,13 +6,11 @@ export type Todo = {
 };
 
 type ErrProps = {message?: string};
-export function Err({message = ''}: ErrProps) {
-  return (
-    <p id="error" hx-swap-oob="true">
-      {message}
-    </p>
-  );
-}
+export const Err: FC<ErrProps> = ({message = ''}) => (
+  <p id="error" hx-swap-oob="true">
+    {message}
+  </p>
+);
 
 export const Layout: FC = ({children}) => (
   <html lang="en">
@@ -34,7 +32,7 @@ export const Layout: FC = ({children}) => (
   </html>
 );
 
-export function TodoForm() {
+export const TodoForm: FC = () => {
   // Attribute spreading is used here because VS Code
   // does not like attributes containing colons.
   const reset = {'hx-on:htmx:after-request': 'this.reset()'};
@@ -66,10 +64,12 @@ export function TodoForm() {
       <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
     </form>
   );
-}
+};
 
 type TodoItemProps = {todo: Todo};
-export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
+export const TodoItem: FC<TodoItemProps> = ({
+  todo: {completed, description, id}
+}: TodoItemProps) => {
   // Attribute spreading is used here because VS Code
   // does not like attributes containing colons.
   const handleInputClick = {'x-on:click.stop': ''};
@@ -99,6 +99,9 @@ export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
         x-show="id === editingId"
         {...handleInputClick}
       />
+      {/* The swap modifier is set to 1 second
+          to give a CSS transition time to complete.
+          See ".todo-item.htmx-swapping" in styles.css. */}
       <button
         class="plain"
         hx-confirm={`Really delete "${description}"?`}
@@ -110,18 +113,13 @@ export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
       </button>
     </div>
   );
-}
+};
 
 type TodoListProps = {todos: Todo[]};
-export function TodoList({todos}: TodoListProps) {
-  return (
-    <div x-on:description-change="editingId = 0" id="todo-list">
-      {todos.map(todo => (
-        <TodoItem todo={todo} />
-      ))}
-      {/* <div>
-        editingId = <span x-text="editingId" />
-      </div> */}
-    </div>
-  );
-}
+export const TodoList: FC<TodoListProps> = ({todos}) => (
+  <div id="todo-list" x-on:description-change="editingId = 0">
+    {todos.map(todo => (
+      <TodoItem todo={todo} />
+    ))}
+  </div>
+);
