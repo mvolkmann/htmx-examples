@@ -35,10 +35,10 @@ export const Layout: FC = ({children}) => (
 );
 
 export function TodoForm() {
-  // Attribute spreading is used to add this attribute to the form
-  // because VS Code does not recognize hx-on:htmx:after-request
-  // as a valid attribute name.
+  // Attribute spreading is used here because VS Code
+  // does not like attributes containing colons.
   const reset = {'hx-on:htmx:after-request': 'this.reset()'};
+
   return (
     <form
       hx-disabled-elt="#add-btn"
@@ -69,8 +69,11 @@ export function TodoForm() {
 
 type TodoItemProps = {todo: Todo};
 export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
+  // Attribute spreading is used here because VS Code
+  // does not like attributes containing colons.
   const handleInputClick = {'x-on:click.stop': ''};
   const handleTextClick = {'x-on:click.stop': 'editingId = id'};
+
   return (
     <div class="todo-item" x-data={`{id: ${id}}`}>
       <input
