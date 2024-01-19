@@ -96,7 +96,7 @@ export function TodoItem({todo: {completed, description, id}}: TodoItemProps) {
       />
       <button
         class="plain"
-        hx-confirm="Are you sure?"
+        hx-confirm={`Really delete "${description}"?`}
         hx-delete={`/todos/${id}`}
         hx-swap="outerHTML swap:1s"
         hx-target="closest div"

@@ -10,17 +10,16 @@ import {Err, Layout, Todo, TodoForm, TodoItem, TodoList} from './components';
 // Browser reload support
 //-----------------------------------------------------------------------------
 
-// The browser code connects to this
-// so it can detect when the server is restarted.
+// Browser code connects to this so it can detect when the server is restarted.
 // On restart, the browser reloads the page.
 new WebSocket.Server({port: 3001});
 
 //-----------------------------------------------------------------------------
-// Prepare to use SQLite to store todos.
+// SQLite preparation
 //-----------------------------------------------------------------------------
 
 const db = new Database('todos.db', {create: true});
-const deleteTodoPS = db.query('delete from todos where id = ?');
+const deleteTodoQuery = db.query('delete from todos where id = ?');
 const getAllTodosQuery = db.query('select * from todos order by description;');
 const getTodoQuery = db.query('select * from todos where id = ?');
 const insertTodoQuery = db.query(
@@ -99,7 +98,7 @@ app.use('/*', serveStatic({root: './public'}));
 // This deletes a given todo.  It is the D in CRUD.
 app.delete('/todos/:id', idValidator, (c: Context) => {
   const id = c.req.param('id');
-  deleteTodoPS.get(id);
+  deleteTodoQuery.get(id);
   c.header('HX-Trigger', 'status-change');
   // By not returning any HTML for this todo item,
   // we replace the existing todo item with nothing.
@@ -175,7 +174,7 @@ app.post('/todos', todoValidator, async (c: Context) => {
   }
   try {
     const todo = addTodo(description);
-    Bun.sleepSync(1000); // enables testing hx-indicator spinner
+    Bun.sleepSync(500); // enables testing hx-indicator spinner
     c.header('HX-Trigger', 'status-change');
     return c.html(
       <>
