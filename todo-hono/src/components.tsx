@@ -53,6 +53,7 @@ export function TodoForm() {
         name="description"
         placeholder="enter new todo here"
         size={30}
+        type="text"
         x-model="text"
       />
       <button
