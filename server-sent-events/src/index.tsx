@@ -25,23 +25,32 @@ app.get('/', (c: Context) => {
   return c.html(
     <BaseHtml>
       <h1>Server-Sent Events</h1>
-      <div hx-ext="sse" sse-connect="/sse" sse-swap="current-time">
-        The time will go here.
-      </div>
+      <div hx-ext="sse" sse-connect="/sse" sse-swap="time" />
+      <div hx-ext="sse" sse-connect="/sse" sse-swap="color" />
     </BaseHtml>
   );
 });
 
 // See https://htmx.org/extensions/server-sent-events/.
-let id = 0;
+
+const colors = ['red', 'green', 'blue', 'yellow', 'blue', 'purple'];
+let index = 0;
+
 app.get('/sse', (c: Context) => {
   return streamSSE(c, async stream => {
     while (true) {
       await stream.writeSSE({
-        data: `time: ${new Date().toISOString()}`,
-        event: 'current-time',
-        id: String(id++)
+        data: new Date().toLocaleTimeString(),
+        event: 'time'
       });
+      await stream.writeSSE({
+        data: colors[index],
+        event: 'color'
+      });
+      // TODO: Why does the index change twice per iteration?
+      index = (index + 1) % colors.length;
+      console.log('index.tsx : index =', index);
+
       await stream.sleep(1000);
     }
   });
