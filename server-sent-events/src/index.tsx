@@ -2,6 +2,7 @@ import {Hono} from 'hono';
 import type {Context} from 'hono';
 import {serveStatic} from 'hono/bun';
 import type {FC} from 'hono/jsx';
+import {streamSSE} from 'hono/streaming';
 
 const app = new Hono();
 
@@ -25,18 +26,26 @@ app.get('/', (c: Context) => {
   return c.html(
     <BaseHtml>
       <h1>Server-Sent Events</h1>
-      <div hx-ext="sse" sse-connect="/scores" sse-swap="score">
-        Contents of this box will be updated in real time with every SSE message
-        received from the chatroom.
+      <div hx-ext="sse" sse-connect="/sse" sse-swap="current-time">
+        The time will go here.
       </div>
     </BaseHtml>
   );
 });
 
-// TODO: Get this to work!
 // See https://htmx.org/extensions/server-sent-events/.
-app.get('/scores', (c: Context) => {
-  return c.text('test message');
+let id = 0;
+app.get('/sse', (c: Context) => {
+  return streamSSE(c, async stream => {
+    while (true) {
+      await stream.writeSSE({
+        data: `time: ${new Date().toISOString()}`,
+        event: 'current-time',
+        id: String(id++)
+      });
+      await stream.sleep(1000);
+    }
+  });
 });
 
 export default app;
