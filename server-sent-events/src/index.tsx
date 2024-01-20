@@ -1,5 +1,4 @@
-import {Hono} from 'hono';
-import type {Context} from 'hono';
+import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import type {FC} from 'hono/jsx';
 import {streamSSE} from 'hono/streaming';
