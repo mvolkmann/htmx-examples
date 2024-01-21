@@ -28,16 +28,17 @@ app.get('/', (c: Context) => {
       <div hx-ext="sse" sse-connect="/sse" sse-swap="color" /> */}
       {/* sse-swap specifies the type of the events to process.
           This defaults to "message". */}
-      <div
-        hx-ext="sse"
-        hx-target="#count"
-        sse-connect="/sse"
-        sse-swap="count"
-      />
-      <div>
-        count = <span id="count" />
+      <div hx-ext="sse" hx-target="#count" sse-connect="/sse" sse-swap="count">
+        <div>
+          count = <span id="count" />
+        </div>
       </div>
 
+      {/* hx:trigger with "sse:*" can only be used in descendant elements
+          of an element that has the sse-connect attribute.
+          But the events won't be triggered if that element
+          uses the sse-swap attribute, supposedly because
+          that already processes the events. */}
       <div hx-ext="sse" sse-connect="/sse">
         <div>
           count from event = <span hx-get="/count" hx-trigger="sse:count" />
