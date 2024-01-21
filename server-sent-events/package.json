@@ -1,7 +1,7 @@
 {
   "name": "server-sent-events",
   "scripts": {
-    "dev": "bun run --hot src/index.tsx",
+    "dev": "bun run --watch src/index.tsx",
     "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
   },
   "dependencies": {
