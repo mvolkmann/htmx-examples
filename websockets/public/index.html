@@ -7,13 +7,32 @@
   </head>
   <body>
     <h1>WebSockets</h1>
+    <!--
+    The WebSocket-related events dispatched by htmx include:
+    - htmx:wsConnecting
+    - htmx:wsOpen
+    - htmx:wsClose
+    - htmx:wsError
+    - htmx:wsBeforeMessage
+    - htmx:wsAfterMessage
+    - htmx:wsConfigSend
+    - htmx:wsBeforeSend
+    - htmx:wsAfterSend
+
+    To listen for this events with hx-on, change from camelCase to kebab-case.
+    We listen for the htmx:wsAfterSend event here
+    in order to reset the form which clears the input.
+    -->
     <div
       hx-ext="ws"
       ws-connect="ws://localhost:3001"
-      hx-on:htmx:ws-after-message="document.querySelector('form').reset()"
+      hx-on:htmx:ws-after-send="document.querySelector('form').reset()"
     >
       <form ws-send>
-        <label> Start: <input name="start" type="number" /> </label>
+        <label>
+          Start:
+          <input name="start" type="number" />
+        </label>
         <button>Submit</button>
       </form>
       <div id="countdown"></div>
