@@ -19,6 +19,9 @@ new WebSocket.Server({port: 3001});
 //-----------------------------------------------------------------------------
 
 const db = new Database('todos.db', {create: true});
+// Alternative way to access database in src directory:
+// import {Statement} from 'bun:sqlite';
+// import db from "./todos.db" with {"type": "sqlite"};
 const deleteTodoQuery = db.query('delete from todos where id = ?');
 const getAllTodosQuery = db.query('select * from todos order by description;');
 const getTodoQuery = db.query('select * from todos where id = ?');
