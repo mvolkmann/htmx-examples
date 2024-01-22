@@ -29,7 +29,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
 
 app.get('/', () => {
   const reset = {
-    'hx-on:htmx:after-request': `console.log(event); if (event.detail.pathInfo.requestPath === '/account' && event.detail.successful) this.reset()`
+    'hx-on:htmx:after-request': `if (event.detail.pathInfo.requestPath === '/account' && event.detail.successful) this.reset()`
   };
 
   return (
