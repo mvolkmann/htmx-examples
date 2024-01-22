@@ -6,8 +6,6 @@ const app = new Hono();
 // This serves static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-let start = 0;
-
 const wsServer = Bun.serve({
   // The WebSocket port defaults to 3000 which conflicts with the HTTP server.
   port: 3001,
@@ -18,22 +16,12 @@ const wsServer = Bun.serve({
   },
   websocket: {
     open(ws) {
-      console.log('got WebSocket open');
+      console.log('WebSocket opened');
     },
     message(ws, json: string) {
       const data = JSON.parse(json);
-      // console.log('index.tsx message: data =', data);
       // "start" is a form input name.
-      let number = parseInt(data.start);
-      while (number >= 0) {
-        const html = (
-          <div id="countdown" hx-swap-oob="beforeend">
-            <div>{number}</div>
-          </div>
-        );
-        ws.send(html.toString());
-        number--;
-      }
+      countdown(ws, parseInt(data.start));
     },
     close(ws, code) {
       // For code values, see
@@ -44,6 +32,21 @@ const wsServer = Bun.serve({
     }
   }
 });
+
+async function countdown(ws, start: number) {
+  let n = start;
+  while (n >= 0) {
+    const swap = n === start ? 'innerHTML' : 'beforeend';
+    const html = (
+      <div id="countdown" hx-swap-oob={swap}>
+        <div>{n}</div>
+      </div>
+    );
+    ws.send(html.toString());
+    await Bun.sleep(1000);
+    n--;
+  }
+}
 
 console.log('WebSocket server is listening on port', wsServer.port);
 
