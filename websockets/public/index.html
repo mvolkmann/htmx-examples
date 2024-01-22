@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Server-Sent Events</title>
+    <title>WebSockets</title>
     <link rel="stylesheet" href="/styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
@@ -12,11 +12,11 @@
       ws-connect="ws://localhost:3001"
       hx-on:htmx:ws-after-message="document.querySelector('form').reset()"
     >
-      <div id="countdown"></div>
       <form ws-send>
         <label> Start: <input name="start" type="number" /> </label>
         <button>Submit</button>
       </form>
+      <div id="countdown"></div>
     </div>
   </body>
 </html>

@@ -22,21 +22,25 @@ const wsServer = Bun.serve({
     },
     message(ws, json: string) {
       const data = JSON.parse(json);
-      console.log('index.tsx message: data =', data);
+      // console.log('index.tsx message: data =', data);
+      // "start" is a form input name.
       let number = parseInt(data.start);
-      console.log('index.tsx message: number =', number);
-      while (number > 0) {
-        const html = `<div id="countdown" hx-swap-oob="beforeend">${number}</div>`;
-        ws.send(html);
+      while (number >= 0) {
+        const html = (
+          <div id="countdown" hx-swap-oob="beforeend">
+            <div>{number}</div>
+          </div>
+        );
+        ws.send(html.toString());
         number--;
       }
     },
-    // error(ws, error) {
-    //   console.error('WebSocket error:', error);
-    // },
-    close(ws, code, json) {
+    close(ws, code) {
+      // For code values, see
+      // https://datatracker.ietf.org/doc/html/rfc6455#section-7.4.1
+      // 1000 = Normal Closure
+      // 1001 = Going Away (browser navigated away or server shut down)
       console.log('WebSocket closed with code', code);
-      if (json) console.log(`WebSocket closed with json "${json}"`);
     }
   }
 });
