@@ -20,6 +20,7 @@ const wsServer = Bun.serve({
     },
     message(ws, json: string) {
       const data = JSON.parse(json);
+      console.log('index.tsx message: data =', data);
       // "start" is a form input name.
       countdown(ws, parseInt(data.start));
     },
