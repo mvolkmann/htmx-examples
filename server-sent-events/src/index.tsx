@@ -24,25 +24,25 @@ app.get('/', (c: Context) => {
   return c.html(
     <BaseHtml>
       <h1>Server-Sent Events</h1>
-      {/* <div hx-ext="sse" sse-connect="/sse" sse-swap="time" />
-      <div hx-ext="sse" sse-connect="/sse" sse-swap="color" /> */}
-      {/* sse-swap specifies the type of the events to process.
-          This defaults to "message". */}
-      <div hx-ext="sse" hx-target="#count" sse-connect="/sse" sse-swap="count">
-        <div>
-          count = <span id="count" />
-        </div>
+
+      {/* This listens for SSE "count" events and
+          replaces the contents of a target element with their data.
+          If hx-target is omitted, the results will
+          replace the contents of the current element. */}
+      <div
+        hx-ext="sse"
+        hx-target="#count"
+        sse-connect="/sse"
+        sse-swap="count"
+      />
+      <div>
+        count = <span id="count" />
       </div>
 
-      {/* hx:trigger with "sse:*" can only be used in descendant elements
-          of an element that has the sse-connect attribute.
-          But the events won't be triggered if that element
-          uses the sse-swap attribute, supposedly because
-          that already processes the events. */}
+      {/* This listens for SSE "count" events and
+          sends an HTTP request to get other data when they occur. */}
       <div hx-ext="sse" sse-connect="/sse">
-        <div>
-          count from event = <span hx-get="/count" hx-trigger="sse:count" />
-        </div>
+        <div hx-get="/count" hx-trigger="sse:count" />
       </div>
     </BaseHtml>
   );
@@ -87,6 +87,7 @@ app.get('/count', (c: Context) => {
   return c.text(String(count));
 });
 
+// This streams count values using server-sent events.
 app.get('/sse', (c: Context) => {
   count = 0;
   return streamSSE(c, async stream => {
