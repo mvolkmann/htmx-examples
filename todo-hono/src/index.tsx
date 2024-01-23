@@ -126,9 +126,21 @@ app.delete('/todos/:id', idValidator, (c: Context) => {
 // Redirect root URL to todo list.
 app.get('/', (c: Context) => c.redirect('/todos'));
 
+// This is used by the endpoints that return JSON and HTML.
+function getAllTodos(): Todo[] {
+  return getAllTodosQuery.all() as Todo[];
+}
+
 // Render the todo list UI ... the R in CRUD.
 app.get('/todos', (c: Context) => {
-  const todos = getAllTodosQuery.all() as Todo[];
+  const todos = getAllTodos();
+
+  // We could choose between returning JSON and HTML
+  // based on the value of the Accept header.
+  const accept = c.req.header('accept');
+  if (accept?.includes('application/json')) {
+    return c.json(todos);
+  }
 
   return c.html(
     <Layout>
@@ -139,6 +151,12 @@ app.get('/todos', (c: Context) => {
       <TodoList todos={todos} />
     </Layout>
   );
+});
+
+// This endpoint returns all the todos as JSON.
+app.get('/todos/json', (c: Context) => {
+  const todos = getAllTodos();
+  return c.json(todos);
 });
 
 // Get the status text that is displayed at the top of the page.
