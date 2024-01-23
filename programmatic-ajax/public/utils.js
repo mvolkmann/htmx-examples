@@ -1,11 +1,11 @@
-let count = 0;
+let quota = 3;
 
 function maybeSend() {
-  count++;
-  if (count % 3 === 0) {
+  if (quota > 0) {
+    quota--;
     htmx.ajax('GET', '/result', '#result');
   } else {
     const result = document.getElementById('result');
-    result.innerText = 'not called';
+    result.innerText = 'The call quota has been reached.';
   }
 }

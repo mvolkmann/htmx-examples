@@ -7,8 +7,10 @@ const app = new Hono();
 // This serves static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
+let count = 0;
 app.get('/result', async (c: Context) => {
-  return c.text('some result');
+  count++;
+  return c.text(`result #${count}`);
 });
 
 export default app;
