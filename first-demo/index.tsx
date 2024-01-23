@@ -9,6 +9,10 @@ const Layout: FC = ({ children }) => (
     <head>
       <title>htmx First Demo</title>
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+      <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      ></script>
     </head>
     <body>{children}</body>
   </html>
@@ -21,6 +25,16 @@ app.get("/", (c: Context) => {
         Get Data
       </button>
       <div id="date"></div>
+
+      {/* Alpine demo */}
+      <br />
+      <div style="display: flex; gap: 1rem" x-data="{ count: 0 }">
+        <button x-bind:disabled="count <= 0" x-on:click="count--">
+          -
+        </button>
+        <div x-text="count"></div>
+        <button x-on:click="count++">+</button>
+      </div>
     </Layout>
   );
 });
