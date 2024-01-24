@@ -6,10 +6,7 @@
     "dev": "bun run --watch src/index.tsx"
   },
   "dependencies": {
-    "@elysiajs/html": "^0.7.3",
-    "@elysiajs/static": "^0.7.1",
-    "@kitajs/ts-html-plugin": "^1.3.3",
-    "elysia": "^0.7.30"
+    "hono": "^3.12.6"
   },
   "devDependencies": {
     "@kitajs/html": "^3.0.10",

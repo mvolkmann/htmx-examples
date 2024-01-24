@@ -1,7 +1,6 @@
-import {Elysia} from 'elysia';
-import {html} from '@elysiajs/html'; // enables use of JSX
-import {staticPlugin} from '@elysiajs/static'; // enables static file serving
-import {Html} from '@kitajs/html';
+import {Context, Hono} from 'hono';
+import {serveStatic} from 'hono/bun';
+import type {FC} from 'hono/jsx';
 
 const badPasswords = ['password', '12345678'];
 
@@ -11,12 +10,12 @@ const existingEmails = [
   'test@hotmail.com'
 ];
 
-const app = new Elysia();
-app.use(html());
-// This causes link and script tags to look for files in the public directory.
-app.use(staticPlugin({prefix: ''}));
+const app = new Hono();
 
-const BaseHtml = ({children}: {children: Html.Children}) => (
+// Serve static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
+
+const Layout: FC = ({children}) => (
   <html>
     <head>
       <title>htmx email validation</title>
@@ -27,13 +26,13 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
   </html>
 );
 
-app.get('/', () => {
+app.get('/', (c: Context) => {
   const reset = {
     'hx-on:htmx:after-request': `if (event.detail.pathInfo.requestPath === '/account' && event.detail.successful) this.reset()`
   };
 
-  return (
-    <BaseHtml>
+  return c.html(
+    <Layout>
       <h2>Sign Up</h2>
       <form hx-post="/account" hx-target="#result" {...reset}>
         <div>
@@ -47,7 +46,7 @@ app.get('/', () => {
             name="email"
             placeholder="email"
             required
-            size="30"
+            size={30}
             type="email"
           />
           <span class="error" id="email-error" />
@@ -59,11 +58,11 @@ app.get('/', () => {
             hx-get="/password-validate"
             hx-target="#password-error"
             hx-trigger="blur"
-            minlength="8"
+            minlength={8}
             name="password"
             placeholder="password"
             required
-            size="20"
+            size={20}
             type="password"
           />
           <span class="error" id="password-error" />
@@ -73,16 +72,9 @@ app.get('/', () => {
         <button>Submit</button>
       </form>
       <div id="result" />
-    </BaseHtml>
+    </Layout>
   );
 });
-
-type Context = {
-  query: {
-    email: string;
-    password: string;
-  };
-};
 
 function validEmail(email: string) {
   return !existingEmails.includes(email);
@@ -93,28 +85,31 @@ function validPassword(password: string) {
   return password.length >= 8 && !badPasswords.includes(password);
 }
 
-app.get('/email-validate', ({query, set}: Context) => {
-  const valid = validEmail(query.email);
+app.get('/email-validate', (c: Context) => {
+  const email = c.req.query('email') || '';
+  const valid = validEmail(email);
   // Setting the status to 400 prevents the message from rendering.
   // set.status = valid ? 200 : 400;
-  return valid ? '' : 'email in use';
+  return c.text(valid ? '' : 'email in use');
 });
 
-app.get('/password-validate', ({query}: Context) => {
-  return validPassword(query.password) ? '' : 'invalid password';
+app.get('/password-validate', (c: Context) => {
+  const password = c.req.query('password') || '';
+  return c.text(validPassword(password) ? '' : 'invalid password');
 });
 
-app.post('/account', ({body, set}: any) => {
-  const {email, password} = body;
+app.post('/account', async (c: Context) => {
+  const data = await c.req.formData();
+  const email = (data.get('email') as string) || '';
+  const password = (data.get('password') as string) || '';
   const goodEmail = validEmail(email);
   const goodPassword = validPassword(password);
   const good = goodEmail && goodPassword;
   // TODO: When JSX is returned, the response code is always 200.
   // TODO: I think this is a bug in Elysia.
   // TODO: See https://github.com/elysiajs/elysia/issues/415.
-  set.status = good ? 200 : 400;
-  console.log('/account: set.status =', set.status);
-  return (
+  c.status(good ? 200 : 400);
+  return c.html(
     <>
       {!goodEmail && (
         <span class="error" hx-swap-oob="true" id="email-error">
@@ -131,5 +126,4 @@ app.post('/account', ({body, set}: any) => {
   );
 });
 
-app.listen(1919);
-console.log('listening on port', app.server?.port);
+export default app;
