@@ -13,7 +13,6 @@
     "moduleDetection": "force",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "plugins": [{"name": "@kitajs/ts-html-plugin"}],
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",

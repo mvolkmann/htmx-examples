@@ -1,6 +1,6 @@
-import {Elysia} from 'elysia';
-import {html} from '@elysiajs/html';
-import {staticPlugin} from '@elysiajs/static';
+import {Context, Hono} from 'hono';
+import {serveStatic} from 'hono/bun';
+import type {FC} from 'hono/jsx';
 
 const POKEMON_URL_PREFIX = 'https://pokeapi.co/api/v2/pokemon-species';
 const ROWS_PER_PAGE = 10;
@@ -10,9 +10,10 @@ type Pokemon = {
   url: string;
 };
 
-const app = new Elysia();
-app.use(html()); // enables use of JSX
-app.use(staticPlugin({prefix: ''})); // looks in public directory
+const app = new Hono();
+
+// Serve static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
 
 function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
   const attributes = isLast
@@ -42,12 +43,12 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
 // Instead, the following error will be displayed:
 // "MacOS does not support sending non-regular files"
 // This redirect fixes it.
-app.get('/', ({set}) => {
-  set.redirect = '/index.html';
+app.get('/', (c: Context) => {
+  return c.redirect('/index.html');
 });
 
-app.get('/pokemon-rows', async ({query}) => {
-  const {page} = query;
+app.get('/pokemon-rows', async (c: Context) => {
+  const page = c.req.query('page');
   if (!page) throw new Error('page query parameter is required');
 
   // Bun.sleepSync(500); // simulates long-running query
@@ -59,7 +60,7 @@ app.get('/pokemon-rows', async ({query}) => {
   const json = await response.json();
   const pokemonList = json.results as Pokemon[];
 
-  return (
+  return c.html(
     <>
       {pokemonList.map((pokemon, index) => {
         const isLast = index === ROWS_PER_PAGE - 1;
@@ -69,5 +70,4 @@ app.get('/pokemon-rows', async ({query}) => {
   );
 });
 
-app.listen(1919);
-console.log('listening on port', app.server?.port);
+export default app;

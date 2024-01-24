@@ -1,22 +1,14 @@
 {
   "name": "infinite-scroll",
-  "module": "index.ts",
   "type": "module",
   "scripts": {
     "dev": "bun run --watch index.tsx",
-    "format": "prettier --write '**/*.{css,html,js,ts}'",
-    "tw": "bunx tailwindcss -i ./global.css -o public/tailwind.css --watch"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "typed-html": "^3.0.1"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
   },
   "dependencies": {
-    "@elysiajs/html": "^0.7.3",
-    "@elysiajs/static": "^0.7.1",
-    "elysia": "^0.7.30"
+    "hono": "^3.12.5"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0"
   }
 }
