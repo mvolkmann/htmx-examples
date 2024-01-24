@@ -39,14 +39,6 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
   );
 }
 
-// Elysia does not serve index.html by default.
-// Instead, the following error will be displayed:
-// "MacOS does not support sending non-regular files"
-// This redirect fixes it.
-app.get('/', (c: Context) => {
-  return c.redirect('/index.html');
-});
-
 app.get('/pokemon-rows', async (c: Context) => {
   const page = c.req.query('page');
   if (!page) throw new Error('page query parameter is required');
