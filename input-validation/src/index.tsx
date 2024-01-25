@@ -1,6 +1,7 @@
 import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import type {FC} from 'hono/jsx';
+import {enhance} from './honox.ts';
 
 const badPasswords = ['password', '12345678'];
 
@@ -11,6 +12,7 @@ const existingEmails = [
 ];
 
 const app = new Hono();
+enhance(app);
 
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
@@ -31,7 +33,7 @@ app.get('/', (c: Context) => {
     'hx-on:htmx:after-request': `if (event.detail.pathInfo.requestPath === '/account' && event.detail.successful) this.reset()`
   };
 
-  return c.html(
+  return (
     <Layout>
       <h2>Sign Up</h2>
       <form hx-post="/account" hx-target="#result" {...reset}>
@@ -90,12 +92,12 @@ app.get('/email-validate', (c: Context) => {
   const valid = validEmail(email);
   // Setting the status to 400 prevents the message from rendering.
   // set.status = valid ? 200 : 400;
-  return c.text(valid ? '' : 'email in use');
+  return valid ? '' : 'email in use';
 });
 
 app.get('/password-validate', (c: Context) => {
   const password = c.req.query('password') || '';
-  return c.text(validPassword(password) ? '' : 'invalid password');
+  return validPassword(password) ? '' : 'invalid password';
 });
 
 app.post('/account', async (c: Context) => {
@@ -109,7 +111,7 @@ app.post('/account', async (c: Context) => {
   // TODO: I think this is a bug in Elysia.
   // TODO: See https://github.com/elysiajs/elysia/issues/415.
   c.status(good ? 200 : 400);
-  return c.html(
+  return (
     <>
       {!goodEmail && (
         <span class="error" hx-swap-oob="true" id="email-error">
