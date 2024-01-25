@@ -1,0 +1,38 @@
+<html lang="en">
+  <head>
+    <title>Custom Confirm Dialog</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+    <script>
+      document.addEventListener('htmx:confirm', event => {
+        event.preventDefault(); // prevents use of browser confirm dialog
+        Swal.fire({
+          icon: 'question',
+          title: 'Confirm Action',
+          text: 'Are you sure you want to do this?',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, do it!',
+          cancelButtonText: 'No way!'
+        }).then(result => {
+          if (result.isConfirmed) {
+            event.detail.issueRequest(true);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Custom Confirm Dialog</h1>
+    <button
+      hx-confirm="Are you sure you want to do this?"
+      hx-get="/pokemon"
+      hx-indicator=".htmx-indicator"
+      hx-target="#pokemon-list"
+    >
+      Load Pokemon
+    </button>
+    <div id="pokemon-list"></div>
+    <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
+  </body>
+</html>

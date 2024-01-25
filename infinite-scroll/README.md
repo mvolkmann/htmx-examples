@@ -1,6 +1,6 @@
 # infinite-scroll
 
-This app demonstrates using HTMX to implement infinite scroll.
+This app demonstrates using htmx to implement infinite scroll.
 
 To run this:
 

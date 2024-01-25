@@ -22,7 +22,7 @@ const names: string[] = [
 const Layout: FC = ({children}) => (
   <html>
     <head>
-      <title>HTMX Active Search</title>
+      <title>htmx Active Search</title>
       <link href="/tailwind.css" rel="stylesheet" />
       <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     </head>

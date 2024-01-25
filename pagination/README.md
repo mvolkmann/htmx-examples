@@ -1,6 +1,6 @@
 # pagination
 
-This app demonstrates using HTMX to implement pagination.
+This app demonstrates using htmx to implement pagination.
 
 To run this:
 
