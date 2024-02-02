@@ -13,15 +13,20 @@
         Alpine.data("myData", () => data);
       });
 
-      window.onload = () => {
-        document.body.addEventListener("htmx:configRequest", (event) => {
-          event.detail.path = `/time/${data.count}`;
-        });
-      };
+      function setPath(event) {
+        event.detail.path = `/time/${data.count}`;
+      }
     </script>
   </head>
   <body x-data="myData">
-    <button id="time-btn" hx-get="" hx-target="#time">Get Time</button>
+    <button
+      id="time-btn"
+      hx-get=""
+      hx-on:htmx-config-request="setPath(event)"
+      hx-target="#time"
+    >
+      Get Time
+    </button>
     <div id="time"></div>
     <div class="counter">
       <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
