@@ -1,0 +1,22 @@
+body {
+  font-family: sans-serif;
+  font-size: 2rem;
+}
+
+button {
+  background-color: orange;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+  padding: 0.5rem;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#time {
+  height: 2.5rem;
+}

@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>htmx First Demo</title>
+    <link rel="stylesheet" href="styles.css" />
     <!--script src="https://unpkg.com/htmx.org@1.9.10"></script-->
     <script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script>
     <script
@@ -9,14 +10,12 @@
     ></script>
   </head>
   <body>
-    <button hx-get="/date" hx-target="#date">Get Data</button>
-    <div id="date"></div>
-
-    <br />
-    <div style="display: flex; gap: 1rem" x-data="{ count: 0 }">
-      <button x-bind:disabled="count <= 0" x-on:click="count--">-</button>
+    <button hx-get="/time" hx-target="#time">Get Time</button>
+    <div id="time"></div>
+    <div class="counter" x-data="{ count: 0 }">
+      <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
       <div x-text="count"></div>
-      <button x-on:click="count++">+</button>
+      <button x-on:click="count++">More</button>
     </div>
   </body>
 </html>
