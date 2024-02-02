@@ -8,6 +8,5 @@ ws.addEventListener("close", (event) => {
 });
 
 ws.addEventListener("message", (event) => {
-  console.log("reload.js message: event =", event);
   if (event.data === "reload") location.reload();
 });
