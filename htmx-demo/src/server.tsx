@@ -26,6 +26,14 @@ app.get("/version", async (c: Context) => {
   // Return a Response whose body contains
   // the version of Bun running on the server.
   return c.text("v" + Bun.version);
+  /*
+  return c.html(
+    <img
+      alt="htmx logo"
+      src="https://mvolkmann.github.io/blog/assets/htmx-logo.png"
+    />
+  );
+  */
 });
 
 export default app;
