@@ -1,5 +1,4 @@
 import { type Context, Hono } from "hono";
-// import type { Context } from "hono";
 import { serveStatic } from "hono/bun";
 
 const app = new Hono();
