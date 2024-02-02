@@ -9,13 +9,24 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
-  <body>
-    <button hx-get="/time" hx-target="#time">Get Time</button>
+  <body x-data="{ count: 1 }" x-init="$watch('count', captureCount)">
+    <button id="time-btn" hx-get="/time/1" hx-target="#time">Get Time</button>
     <div id="time"></div>
-    <div class="counter" x-data="{ count: 0 }">
+    <div class="counter">
       <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
-      <div x-text="count"></div>
+      <div id="count" x-text="count"></div>
       <button x-on:click="count++">More</button>
     </div>
+    <script>
+      let count = 1;
+      function captureCount(value) {
+        count = value;
+      }
+
+      document.body.addEventListener("htmx:configRequest", function (event) {
+        console.log("Alpine =", Alpine);
+        event.detail.path = `/time/${count}`;
+      });
+    </script>
   </body>
 </html>
