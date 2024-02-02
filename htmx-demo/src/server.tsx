@@ -6,10 +6,8 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use("/*", serveStatic({ root: "./public" }));
 
-app.get("/time/:count", async (c: Context) => {
-  const count = c.req.param("count");
-  const time = new Date().toLocaleTimeString();
-  return c.text(`The count at ${time} was ${count}.`);
+app.get("/version", async (c: Context) => {
+  return c.text(Bun.version);
 });
 
 export default app;
