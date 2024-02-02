@@ -2,8 +2,6 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "esModuleInterop": true,
-    "types": ["bun-types"]
+    "jsxImportSource": "hono/jsx"
   }
 }
