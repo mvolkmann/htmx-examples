@@ -8,33 +8,26 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
-      let data = { count: 1 };
-      /*
       function setPath(event) {
-        event.detail.path = `/time/${data.count}`;
-      }
-      */
-      function setPath(event) {
-        event.detail.path = `/time/${this.count.textContent}`;
+        const count = this.count.textContent;
+        event.detail.path = "/time/" + count;
       }
     </script>
   </head>
-  <body x-init="Alpine.data('myData', () => data)">
-    <div x-data="myData">
-      <button
-        id="time-btn"
-        hx-get=""
-        hx-on:htmx-config-request="setPath(event)"
-        hx-target="#time"
-      >
-        Get Time
-      </button>
-      <div id="time"></div>
-      <div class="counter">
-        <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
-        <div id="count" x-text="count"></div>
-        <button x-on:click="count++">More</button>
-      </div>
+  <body x-data="{count: 0}">
+    <button
+      id="time-btn"
+      hx-get=""
+      hx-on:htmx-config-request="setPath(event)"
+      hx-target="#time"
+    >
+      Get Time
+    </button>
+    <div id="time"></div>
+    <div class="counter">
+      <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
+      <div id="count" x-text="count"></div>
+      <button x-on:click="count++">More</button>
     </div>
   </body>
 </html>
