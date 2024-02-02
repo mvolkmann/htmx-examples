@@ -1,31 +1,32 @@
 <html>
   <head>
-    <title>htmx First Demo</title>
+    <title>htmx Demo</title>
     <link rel="stylesheet" href="styles.css" />
-    <!--script src="https://unpkg.com/htmx.org@1.9.10"></script-->
     <script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-  </head>
-  <body x-data="myData">
-    <button id="time-btn" hx-get="/time/1" hx-target="#time">Get Time</button>
-    <div id="time"></div>
-    <div class="counter">
-      <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
-      <div id="count" x-text="count"></div>
-      <button x-on:click="count++">More</button>
-    </div>
     <script>
       let data = { count: 1 };
       document.addEventListener("alpine:init", () => {
         Alpine.data("myData", () => data);
       });
 
-      document.body.addEventListener("htmx:configRequest", function (event) {
-        event.detail.path = `/time/${data.count}`;
-      });
+      window.onload = () => {
+        document.body.addEventListener("htmx:configRequest", (event) => {
+          event.detail.path = `/time/${data.count}`;
+        });
+      };
     </script>
+  </head>
+  <body x-data="myData">
+    <button id="time-btn" hx-get="" hx-target="#time">Get Time</button>
+    <div id="time"></div>
+    <div class="counter">
+      <button x-bind:disabled="count <= 0" x-on:click="count--">Less</button>
+      <div id="count" x-text="count"></div>
+      <button x-on:click="count++">More</button>
+    </div>
   </body>
 </html>
