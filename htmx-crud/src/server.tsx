@@ -31,11 +31,6 @@ function addDog(name: string, breed: string): Dog {
 addDog('Comet', 'Whippet');
 addDog('Oscar', 'German Shorthaired Pointer');
 
-const app = new Hono();
-
-// Serve static files from the public directory.
-app.use('/*', serveStatic({root: './public'}));
-
 function DogRow(dog: Dog) {
   return (
     <tr class="on-hover">
@@ -55,6 +50,11 @@ function DogRow(dog: Dog) {
     </tr>
   );
 }
+
+const app = new Hono();
+
+// Serve static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
 
 app.get('/dog', async (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
