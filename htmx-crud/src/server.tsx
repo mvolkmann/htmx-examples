@@ -22,7 +22,7 @@ type Dog = {id: string; name: string; breed: string};
 const dogs = new Map<string, Dog>();
 
 function addDog(name: string, breed: string): Dog {
-  const id = crypto.randomUUID();
+  const id = crypto.randomUUID(); // standard web API
   const dog = {id, name, breed};
   dogs.set(id, dog);
   return dog;
