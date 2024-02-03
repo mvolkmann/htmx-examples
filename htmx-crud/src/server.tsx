@@ -76,14 +76,6 @@ app.delete('/dog/:id', async (c: Context) => {
   const id = c.req.param('id');
   dogs.delete(id);
   return c.html('');
-  /*
-  return c.html(
-    <tr>
-      <td>foo</td>
-      <td>bar</td>
-    </tr>
-  );
-  */
 });
 
 export default app;
