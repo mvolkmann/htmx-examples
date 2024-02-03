@@ -46,8 +46,8 @@ function DogRow(dog: Dog) {
           class="show-on-hover"
           hx-confirm="Are you sure?"
           hx-delete={`/dog/${dog.id}`}
+          hx-swap="outerHTML"
           hx-target="closest tr"
-          hx-swap="delete"
         >
           🗑
         </button>
@@ -60,7 +60,6 @@ app.get('/dog', async (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
-  console.log('server.tsx : sortedDogs =', sortedDogs);
   return c.html(<>{sortedDogs.map(DogRow)}</>);
 });
 
