@@ -1,5 +1,8 @@
+// This version of server.tsx uses the FC type.
+
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
+import type {FC} from 'hono/jsx'; // Function Component
 import {watch} from 'fs';
 import WebSocket from 'ws';
 
@@ -31,25 +34,24 @@ function addDog(name: string, breed: string): Dog {
 addDog('Comet', 'Whippet');
 addDog('Oscar', 'German Shorthaired Pointer');
 
-function dogRow(dog: Dog) {
-  return (
-    <tr class="on-hover">
-      <td>{dog.name}</td>
-      <td>{dog.breed}</td>
-      <td class="plain">
-        <button
-          class="show-on-hover"
-          hx-confirm="Are you sure?"
-          hx-delete={`/dog/${dog.id}`}
-          hx-swap="outerHTML"
-          hx-target="closest tr"
-        >
-          ✕
-        </button>
-      </td>
-    </tr>
-  );
-}
+type DogRowProps = {dog: Dog};
+const DogRow: FC<DogRowProps> = ({dog}) => (
+  <tr class="on-hover">
+    <td>{dog.name}</td>
+    <td>{dog.breed}</td>
+    <td class="plain">
+      <button
+        class="show-on-hover"
+        hx-confirm="Are you sure?"
+        hx-delete={`/dog/${dog.id}`}
+        hx-swap="outerHTML"
+        hx-target="closest tr"
+      >
+        ✕
+      </button>
+    </td>
+  </tr>
+);
 
 const app = new Hono();
 
@@ -60,7 +62,13 @@ app.get('/dog', async (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
-  return c.html(<>{sortedDogs.map(dogRow)}</>);
+  return c.html(
+    <>
+      {sortedDogs.map(dog => (
+        <DogRow dog={dog} />
+      ))}
+    </>
+  );
 });
 
 app.post('/dog', async (c: Context) => {
@@ -68,7 +76,7 @@ app.post('/dog', async (c: Context) => {
   const name = (formData.get('name') as string) || '';
   const breed = (formData.get('breed') as string) || '';
   const dog = addDog(name, breed);
-  return c.html(dogRow(dog), 201);
+  return c.html(<DogRow dog={dog} />, 201);
 });
 
 app.delete('/dog/:id', async (c: Context) => {
