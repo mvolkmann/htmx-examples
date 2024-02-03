@@ -1,0 +1,43 @@
+body {
+  background-color: cornflowerblue;
+  font-family: sans-serif;
+}
+
+button {
+  background-color: yellow;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+input {
+  background-color: white;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+
+  & button {
+    background-color: transparent;
+  }
+}
+
+td,
+th {
+  border: 1px solid cornflowerblue;
+  padding: 0.5rem;
+}
+
+td {
+  background-color: white;
+}
+
+th {
+  background-color: orange;
+}
