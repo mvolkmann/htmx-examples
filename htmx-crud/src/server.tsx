@@ -41,7 +41,7 @@ function DogRow(dog: Dog) {
     <tr class="on-hover">
       <td>{dog.name}</td>
       <td>{dog.breed}</td>
-      <td>
+      <td class="plain">
         <button
           class="show-on-hover"
           hx-confirm="Are you sure?"
@@ -49,7 +49,7 @@ function DogRow(dog: Dog) {
           hx-swap="outerHTML"
           hx-target="closest tr"
         >
-          🗑
+          ✕
         </button>
       </td>
     </tr>

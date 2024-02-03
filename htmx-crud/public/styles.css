@@ -23,7 +23,14 @@ input {
   padding: 0.5rem;
 }
 
+td.plain {
+  background-color: transparent;
+  border: none;
+}
+
 .show-on-hover {
+  color: white;
+  transform: scale(2.5) translate(0, 0.2rem);
   visibility: hidden;
 }
 
