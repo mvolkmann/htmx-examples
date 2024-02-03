@@ -38,11 +38,13 @@ app.use('/*', serveStatic({root: './public'}));
 
 function DogRow(dog: Dog) {
   return (
-    <tr>
+    <tr class="on-hover">
       <td>{dog.name}</td>
       <td>{dog.breed}</td>
       <td>
         <button
+          class="show-on-hover"
+          hx-confirm="Are you sure?"
           hx-delete={`/dog/${dog.id}`}
           hx-target="closest tr"
           hx-swap="delete"
@@ -63,6 +65,7 @@ app.get('/dog', async (c: Context) => {
 });
 
 app.post('/dog', async (c: Context) => {
+  Bun.sleepSync(1000);
   const formData = await c.req.formData();
   const name = (formData.get('name') as string) || '';
   const breed = (formData.get('breed') as string) || '';

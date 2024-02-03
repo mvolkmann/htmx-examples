@@ -4,11 +4,15 @@ body {
 }
 
 button {
-  background-color: yellow;
+  background-color: lightgreen;
   border: none;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   padding: 0.5rem;
+
+  &:disabled {
+    background-color: gray;
+  }
 }
 
 input {
@@ -17,6 +21,14 @@ input {
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   padding: 0.5rem;
+}
+
+.show-on-hover {
+  visibility: hidden;
+}
+
+.on-hover:hover .show-on-hover {
+  visibility: visible;
 }
 
 table {
