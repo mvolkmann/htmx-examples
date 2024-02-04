@@ -27,6 +27,13 @@ input {
   padding: 0.5rem;
 }
 
+label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
+}
+
 .show-on-hover {
   color: white;
   transform: scale(2.5) translate(0, 0.2rem);
