@@ -8,25 +8,7 @@
   </head>
   <body>
     <h1>Dogs</h1>
-
-    <form
-      hx-disabled-elt="#add-btn"
-      hx-post="/dog"
-      hx-swap="afterbegin"
-      hx-target="table tbody"
-      hx-on:htmx:after-request="this.reset()"
-    >
-      <div>
-        <label for="name">Name</label>
-        <input name="name" required size="30" type="text" />
-      </div>
-      <div>
-        <label for="breed">Breed</label>
-        <input name="breed" required size="30" type="text" />
-      </div>
-      <button id="add-btn">Add</button>
-    </form>
-
+    <div hx-get="/dog-form" hx-trigger="revealed" id="dog-form"></div>
     <table hx-get="/dog" hx-target="tbody" hx-trigger="revealed">
       <thead>
         <tr>

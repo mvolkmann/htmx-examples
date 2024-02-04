@@ -27,7 +27,17 @@ input {
   padding: 0.5rem;
 }
 
-td.plain {
+label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
+}
+
+td.buttons {
+  display: flex;
+  gap: 1rem;
+
   background-color: transparent;
   border: none;
 }
