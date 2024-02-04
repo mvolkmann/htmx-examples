@@ -82,6 +82,7 @@ app.post('/dog', async (c: Context) => {
   return c.html(dogRow(dog), 201);
 });
 
+// TODO: This really should use put instead of post.
 app.post('/dog/:id', async (c: Context) => {
   const id = c.req.param('id');
   const formData = await c.req.formData();
