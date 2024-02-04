@@ -31,9 +31,11 @@ function addDog(name: string, breed: string): Dog {
 addDog('Comet', 'Whippet');
 addDog('Oscar', 'German Shorthaired Pointer');
 
-function dogRow(dog: Dog) {
+function dogRow(dog: Dog, swap = false) {
+  const attrs: {[key: string]: string} = {};
+  if (swap) attrs['hx-swap-oob'] = 'true';
   return (
-    <tr class="on-hover">
+    <tr class="on-hover" id={`row-${dog.id}`} {...attrs}>
       <td>{dog.name}</td>
       <td>{dog.breed}</td>
       <td class="buttons">
@@ -48,8 +50,7 @@ function dogRow(dog: Dog) {
         </button>
         <button
           class="show-on-hover"
-          hx-get={`/dog-form/${dog.id}`}
-          hx-swap="none"
+          x-on:click={`selectedDog = ${JSON.stringify(dog)}`}
         >
           ✎
         </button>
@@ -67,7 +68,7 @@ app.get('/dog', (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
-  return c.html(<>{sortedDogs.map(dogRow)}</>);
+  return c.html(<>{sortedDogs.map(dog => dogRow(dog))}</>);
 });
 
 app.post('/dog', async (c: Context) => {
@@ -76,6 +77,17 @@ app.post('/dog', async (c: Context) => {
   const breed = (formData.get('breed') as string) || '';
   const dog = addDog(name, breed);
   return c.html(dogRow(dog), 201);
+});
+
+app.post('/dog/:id', async (c: Context) => {
+  const id = c.req.param('id');
+  const formData = await c.req.formData();
+  const name = (formData.get('name') as string) || '';
+  const breed = (formData.get('breed') as string) || '';
+  const updatedDog = {id, name, breed};
+  dogs.set(id, updatedDog);
+  return c.html(dogRow(updatedDog, true), 201);
+  // TODO: Set Alpine selectedDog back to null.
 });
 
 app.delete('/dog/:id', (c: Context) => {

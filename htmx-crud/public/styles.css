@@ -27,11 +27,6 @@ input {
   padding: 0.5rem;
 }
 
-td.plain {
-  background-color: transparent;
-  border: none;
-}
-
 .show-on-hover {
   color: white;
   transform: scale(2.5) translate(0, 0.2rem);
@@ -63,4 +58,12 @@ td {
 
 th {
   background-color: orange;
+}
+
+td.buttons {
+  display: flex;
+  gap: 1rem;
+
+  background-color: transparent;
+  border: none;
 }
