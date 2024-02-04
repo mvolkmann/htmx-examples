@@ -12,6 +12,7 @@
   <body x-data="{selectedDog: null}">
     <h1>Dogs</h1>
 
+    <!-- TODO: This uses post for both create and update! -->
     <form
       hx-disabled-elt="#add-btn"
       :hx-post="selectedDog ? `/dog/${selectedDog.id}` : '/dog'"
