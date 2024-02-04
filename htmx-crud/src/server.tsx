@@ -33,7 +33,10 @@ addDog('Oscar', 'German Shorthaired Pointer');
 
 function dogRow(dog: Dog, swap = false) {
   const attrs: {[key: string]: string} = {};
-  if (swap) attrs['hx-swap-oob'] = 'true';
+  if (swap) {
+    attrs['hx-swap-oob'] = 'true';
+    attrs['x-init'] = 'selectedDog = null';
+  }
   return (
     <tr class="on-hover" id={`row-${dog.id}`} {...attrs}>
       <td>{dog.name}</td>
