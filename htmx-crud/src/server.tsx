@@ -36,7 +36,7 @@ function dogRow(dog: Dog) {
     <tr class="on-hover">
       <td>{dog.name}</td>
       <td>{dog.breed}</td>
-      <td class="plain">
+      <td class="buttons">
         <button
           class="show-on-hover"
           hx-confirm="Are you sure?"
@@ -45,6 +45,13 @@ function dogRow(dog: Dog) {
           hx-target="closest tr"
         >
           ✕
+        </button>
+        <button
+          class="show-on-hover"
+          hx-get={`/dog-form/${dog.id}`}
+          hx-swap="none"
+        >
+          ✎
         </button>
       </td>
     </tr>
