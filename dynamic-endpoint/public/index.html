@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body x-data="{count: 0}">
+    <button
+      :hx-get="`/time/${count}`"
+      x-effect="count; htmx.process($el)"
+      hx-target="#time"
+    >
+      Get Time
+    </button>
+    <div id="time"></div>
+    <div class="counter">
+      <button :disabled="count <= 0" x-on:click="count--">Less</button>
+      <div id="count" x-text="count"></div>
+      <button x-on:click="count++">More</button>
+    </div>
+  </body>
+</html>
