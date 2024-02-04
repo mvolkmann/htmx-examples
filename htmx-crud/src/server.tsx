@@ -142,11 +142,10 @@ app.put('/dog/:id', async (c: Context) => {
   dog.breed = (formData.get('breed') as string) || '';
   return c.html(
     <>
-      {dogForm()}
       {dogRow(dog, true)}
+      {dogForm()}
     </>
   );
-  // return c.html(dogForm());
   // return c.html(dogRow(dog, true));
 });
 
