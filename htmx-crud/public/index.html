@@ -3,12 +3,17 @@
     <title>htmx Demo</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- <script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script> -->
+    <script src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>
     <script src="reload.js"></script>
   </head>
-  <body>
+  <body hx-ext="multi-swap">
     <h1>Dogs</h1>
-    <div hx-get="/dog-form" hx-trigger="revealed" id="dog-form"></div>
+    <form
+      hx-get="/dog-form"
+      hx-swap="outerHTML"
+      hx-trigger="revealed"
+      id="dog-form"
+    ></form>
     <table hx-get="/dog" hx-target="tbody" hx-trigger="revealed">
       <thead>
         <tr>

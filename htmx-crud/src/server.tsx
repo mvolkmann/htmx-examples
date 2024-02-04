@@ -36,32 +36,36 @@ function dogForm(id: string = '') {
   const name = dog?.name || '';
   const breed = dog?.breed || '';
 
-  const attr = dog ? 'hx-put' : 'hx-post';
-  const url = dog ? `/dog/${dog.id}` : '/dog';
+  const hxRequest = dog ? 'hx-put' : 'hx-post';
   const attrs: {[key: string]: string} = {
     'hx-on:htmx:after-request': 'this.reset()',
-    [attr]: url
+    'hx-swap': id ? 'outerHTML' : 'afterbegin',
+    [hxRequest]: dog ? `/dog/${dog.id}` : '/dog'
   };
+  if (id) {
+    attrs['hx-swap-oob'] = 'true';
+  } else {
+    attrs['hx-target'] = 'table tbody';
+  }
+  console.log('server.tsx dogForm: attrs =', attrs);
 
   return (
-    <div hx-swap-oob="true" id="dog-form">
-      <form
-        hx-disabled-elt="#add-btn"
-        hx-swap="afterbegin"
-        hx-target="table tbody"
-        {...attrs}
-      >
-        <div>
-          <label for="name">Name</label>
-          <input name="name" required size={30} type="text" value={name} />
-        </div>
-        <div>
-          <label for="breed">Breed</label>
-          <input name="breed" required size={30} type="text" value={breed} />
-        </div>
-        <button id="add-btn">{id ? 'Update' : 'Add'}</button>
-      </form>
-    </div>
+    <form
+      hx-disabled-elt="#add-btn"
+      hx-swap="outerHTML"
+      id="dog-form"
+      {...attrs}
+    >
+      <div>
+        <label for="name">Name</label>
+        <input name="name" required size={30} type="text" value={name} />
+      </div>
+      <div>
+        <label for="breed">Breed</label>
+        <input name="breed" required size={30} type="text" value={breed} />
+      </div>
+      <button id="add-btn">{id ? 'Update' : 'Add'}</button>
+    </form>
   );
 }
 
@@ -103,18 +107,22 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/dog-form', async (c: Context) => c.html(dogForm()));
+app.delete('/dog/:id', (c: Context) => {
+  const id = c.req.param('id');
+  dogs.delete(id);
+  return c.html('');
+});
 
-app.get('/dog-form/:id', async (c: Context) =>
-  c.html(dogForm(c.req.param('id')))
-);
-
-app.get('/dog', async (c: Context) => {
+app.get('/dog', (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
   return c.html(<>{sortedDogs.map(dog => dogRow(dog))}</>);
 });
+
+app.get('/dog-form', (c: Context) => c.html(dogForm()));
+
+app.get('/dog-form/:id', (c: Context) => c.html(dogForm(c.req.param('id'))));
 
 app.post('/dog', async (c: Context) => {
   const formData = await c.req.formData();
@@ -132,13 +140,14 @@ app.put('/dog/:id', async (c: Context) => {
   const formData = await c.req.formData();
   dog.name = (formData.get('name') as string) || '';
   dog.breed = (formData.get('breed') as string) || '';
-  return c.html(dogRow(dog, true));
-});
-
-app.delete('/dog/:id', async (c: Context) => {
-  const id = c.req.param('id');
-  dogs.delete(id);
-  return c.html('');
+  return c.html(
+    <>
+      {dogForm()}
+      {dogRow(dog, true)}
+    </>
+  );
+  // return c.html(dogForm());
+  // return c.html(dogRow(dog, true));
 });
 
 export default app;
