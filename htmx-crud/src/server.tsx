@@ -58,11 +58,25 @@ function dogForm(id: string = '') {
     >
       <div>
         <label for="name">Name</label>
-        <input name="name" required size={30} type="text" value={name} />
+        <input
+          id="name"
+          name="name"
+          required
+          size={30}
+          type="text"
+          value={name}
+        />
       </div>
       <div>
         <label for="breed">Breed</label>
-        <input name="breed" required size={30} type="text" value={breed} />
+        <input
+          id="breed"
+          name="breed"
+          required
+          size={30}
+          type="text"
+          value={breed}
+        />
       </div>
       <button id="add-btn">{id ? 'Update' : 'Add'}</button>
     </form>
