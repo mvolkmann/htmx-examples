@@ -102,7 +102,7 @@ app.get('/form', (c: Context) => {
   } else {
     // Add a new row.
     attrs['hx-post'] = '/dog';
-    attrs['hx-target'] = 'table tbody';
+    attrs['hx-target'] = 'tbody';
     attrs['hx-swap'] = 'afterbegin';
   }
   console.log('GET /form: attrs =', attrs);
