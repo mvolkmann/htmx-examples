@@ -87,25 +87,19 @@ app.delete('/dog/:id', (c: Context) => {
 
 // Gets the proper for for either adding or updating a dog.
 app.get('/form', (c: Context) => {
-  console.log('GET /form: selectedId =', selectedId);
   const selectedDog = dogs.get(selectedId);
-  console.log('GET /form: selectedDog =', selectedDog);
 
   const attrs: {[key: string]: string} = {
     'hx-on:htmx:after-request': 'this.reset()'
   };
   if (selectedId) {
     attrs['hx-put'] = '/dog/' + selectedId;
-    // Replace an existing row.
-    attrs['hx-target'] = '#row-' + selectedId;
-    attrs['hx-swap'] = 'outerHTML';
   } else {
     // Add a new row.
     attrs['hx-post'] = '/dog';
     attrs['hx-target'] = 'tbody';
     attrs['hx-swap'] = 'afterbegin';
   }
-  console.log('GET /form: attrs =', attrs);
 
   return c.html(
     <form hx-disabled-elt="#submit-btn" {...attrs}>
@@ -177,36 +171,6 @@ app.put('/dog/:id', async (c: Context) => {
   selectedId = '';
   c.header('HX-Trigger', 'selection-change');
   return c.html(dogRow(updatedDog, true));
-});
-
-app.get('/test', (c: Context) => {
-  const dog = Array.from(dogs.values())[0];
-  return c.html(
-    <tr class="on-hover" id={'row-' + dog.id} hx-swap-oob="true">
-      <td>New Name</td>
-      <td>New Breed</td>
-      <td class="buttons">
-        <button
-          class="show-on-hover"
-          hx-confirm="Are you sure?"
-          hx-delete="/dog/6a966a75-2e70-483c-b053-ed2b263c4d18"
-          hx-target="closest tr"
-          hx-swap="outerHTML"
-          type="button"
-        >
-          ✕
-        </button>
-        <button
-          class="show-on-hover"
-          hx-get="/select/6a966a75-2e70-483c-b053-ed2b263c4d18"
-          hx-swap="none"
-          type="button"
-        >
-          ✎
-        </button>
-      </td>
-    </tr>
-  );
 });
 
 export default app;
