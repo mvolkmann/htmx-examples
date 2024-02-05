@@ -90,9 +90,9 @@ app.delete('/dog/:id', (c: Context) => {
 
 // Gets the proper for for either adding or updating a dog.
 app.get('/form', (c: Context) => {
-  console.log('GET /dog-form: selectedId =', selectedId);
+  console.log('GET /form: selectedId =', selectedId);
   const selectedDog = dogs.get(selectedId);
-  console.log('GET /dog-form: selectedDog =', selectedDog);
+  console.log('GET /form: selectedDog =', selectedDog);
 
   const attrs: {[key: string]: string} = {
     'hx-on:htmx:after-request': 'this.reset()'
@@ -108,7 +108,7 @@ app.get('/form', (c: Context) => {
     attrs['hx-target'] = 'table tbody';
     attrs['hx-swap'] = 'afterbegin';
   }
-  console.log('GET /dog-form: attrs =', attrs);
+  console.log('GET /form: attrs =', attrs);
 
   return c.html(
     <form hx-disabled-elt="#submit-btn" {...attrs}>

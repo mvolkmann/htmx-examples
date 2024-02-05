@@ -9,14 +9,10 @@
     ></script>
     <script src="reload.js"></script>
   </head>
-  <body x-data="{selectedDog: null}">
+  <body>
     <h1>Dogs</h1>
 
-    <div
-      hx-trigger="load, selection-changed from:body"
-      hx-get="/form"
-      hx-swap="outerHTML"
-    ></div>
+    <div hx-trigger="revealed, selection-change from:body" hx-get="/form"></div>
 
     <table hx-get="/rows" hx-target="tbody" hx-trigger="revealed">
       <thead>
