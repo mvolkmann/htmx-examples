@@ -10,9 +10,3 @@ ws.addEventListener('close', event => {
 ws.addEventListener('message', event => {
   if (event.data === 'reload') location.reload();
 });
-
-// TODO: Do you need this? It doesn't make the htmx:swapError go away.
-window.onload = () => {
-  htmx.config.useTemplateFragments = true;
-  console.log('reload.js onload: htmx.config =', htmx.config);
-};

@@ -179,4 +179,34 @@ app.put('/dog/:id', async (c: Context) => {
   return c.html(dogRow(updatedDog, true));
 });
 
+app.get('/test', (c: Context) => {
+  const dog = Array.from(dogs.values())[0];
+  return c.html(
+    <tr class="on-hover" id={'row-' + dog.id} hx-swap-oob="true">
+      <td>New Name</td>
+      <td>New Breed</td>
+      <td class="buttons">
+        <button
+          class="show-on-hover"
+          hx-confirm="Are you sure?"
+          hx-delete="/dog/6a966a75-2e70-483c-b053-ed2b263c4d18"
+          hx-target="closest tr"
+          hx-swap="outerHTML"
+          type="button"
+        >
+          ✕
+        </button>
+        <button
+          class="show-on-hover"
+          hx-get="/select/6a966a75-2e70-483c-b053-ed2b263c4d18"
+          hx-swap="none"
+          type="button"
+        >
+          ✎
+        </button>
+      </td>
+    </tr>
+  );
+});
+
 export default app;
