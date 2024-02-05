@@ -35,10 +35,7 @@ addDog('Oscar', 'German Shorthaired Pointer');
 
 function dogRow(dog: Dog, updating = false) {
   const attrs: {[key: string]: string} = {};
-  if (updating) {
-    attrs['hx-swap-oob'] = 'true';
-    attrs['x-init'] = 'selectedDog = null';
-  }
+  if (updating) attrs['hx-swap-oob'] = 'true';
   return (
     <tr class="on-hover" id={`row-${dog.id}`} {...attrs}>
       <td>{dog.name}</td>
@@ -48,8 +45,8 @@ function dogRow(dog: Dog, updating = false) {
           class="show-on-hover"
           hx-confirm="Are you sure?"
           hx-delete={`/dog/${dog.id}`}
-          hx-swap="outerHTML"
           hx-target="closest tr"
+          hx-swap="outerHTML"
           type="button"
         >
           ✕
@@ -178,7 +175,8 @@ app.put('/dog/:id', async (c: Context) => {
   dogs.set(id, updatedDog);
 
   selectedId = '';
-  c.header('HX-Trigger', 'selection-change');
+  // TODO: Uncomment this when the htmx:swapError is fixed.
+  // c.header('HX-Trigger', 'selection-change');
   return c.html(dogRow(updatedDog, true));
 });
 
