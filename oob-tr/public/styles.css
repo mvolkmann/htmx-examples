@@ -1,0 +1,22 @@
+body {
+  font-family: sans-serif;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border: 1px solid cornflowerblue;
+  padding: 0.5rem;
+}
+
+th {
+  background-color: orange;
+}

@@ -175,8 +175,7 @@ app.put('/dog/:id', async (c: Context) => {
   dogs.set(id, updatedDog);
 
   selectedId = '';
-  // TODO: Uncomment this when the htmx:swapError is fixed.
-  // c.header('HX-Trigger', 'selection-change');
+  c.header('HX-Trigger', 'selection-change');
   return c.html(dogRow(updatedDog, true));
 });
 
