@@ -12,46 +12,13 @@
   <body x-data="{selectedDog: null}">
     <h1>Dogs</h1>
 
-    <!-- TODO: This uses post for both create and update! -->
-    <form
-      hx-disabled-elt="#add-btn"
-      :hx-post="selectedDog ? `/dog/${selectedDog.id}` : '/dog'"
-      hx-swap="afterbegin"
-      hx-target="table tbody"
-      hx-on:htmx:after-request="this.reset()"
-      x-effect="selectedDog; htmx.process($el)"
-    >
-      <div>
-        <label for="name">Name</label>
-        <input
-          name="name"
-          required
-          size="30"
-          type="text"
-          :value="selectedDog?.name ?? ''"
-        />
-      </div>
-      <div>
-        <label for="breed">Breed</label>
-        <input
-          name="breed"
-          required
-          size="30"
-          type="text"
-          :value="selectedDog?.breed ?? ''"
-        />
-      </div>
-      <button id="add-btn" x-text="selectedDog ? 'Update' : 'Add'"></button>
-      <button
-        @click="selectedDog = null"
-        :style="`display: ${selectedDog ? 'inline-block' : 'none'}`"
-        type="button"
-      >
-        Cancel
-      </button>
-    </form>
+    <div
+      hx-trigger="load, selection-changed from:body"
+      hx-get="/form"
+      hx-swap="outerHTML"
+    ></div>
 
-    <table hx-get="/dog" hx-target="tbody" hx-trigger="revealed">
+    <table hx-get="/rows" hx-target="tbody" hx-trigger="revealed">
       <thead>
         <tr>
           <th>Name</th>
