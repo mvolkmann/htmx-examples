@@ -135,7 +135,7 @@ app.get('/form', (c: Context) => {
 
       <button id="submit-btn">{selectedId ? 'Update' : 'Add'}</button>
       {selectedId && (
-        <button hx-get="/deselect" type="button">
+        <button hx-get="/deselect" hx-swap="none" type="button">
           Cancel
         </button>
       )}
