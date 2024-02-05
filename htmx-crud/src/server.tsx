@@ -93,6 +93,7 @@ app.get('/form', (c: Context) => {
     'hx-on:htmx:after-request': 'this.reset()'
   };
   if (selectedId) {
+    // Update an existing row.
     attrs['hx-put'] = '/dog/' + selectedId;
   } else {
     // Add a new row.
@@ -124,12 +125,14 @@ app.get('/form', (c: Context) => {
         />
       </div>
 
-      <button id="submit-btn">{selectedId ? 'Update' : 'Add'}</button>
-      {selectedId && (
-        <button hx-get="/deselect" hx-swap="none" type="button">
-          Cancel
-        </button>
-      )}
+      <div class="buttons">
+        <button id="submit-btn">{selectedId ? 'Update' : 'Add'}</button>
+        {selectedId && (
+          <button hx-get="/deselect" hx-swap="none" type="button">
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 });
