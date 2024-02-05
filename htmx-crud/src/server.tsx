@@ -107,6 +107,7 @@ app.get('/form', (c: Context) => {
       <div>
         <label for="name">Name</label>
         <input
+          id="name"
           name="name"
           required
           size={30}
@@ -117,6 +118,7 @@ app.get('/form', (c: Context) => {
       <div>
         <label for="breed">Breed</label>
         <input
+          id="breed"
           name="breed"
           required
           size={30}
