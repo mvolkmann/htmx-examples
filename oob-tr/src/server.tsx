@@ -24,10 +24,16 @@ app.use('/*', serveStatic({root: './public'}));
 
 app.get('/swap', async (c: Context) => {
   return c.html(
-    <tr id="row-123-456" hx-swap-oob="true">
-      <td>Fireball</td>
-      <td>Whipster</td>
-    </tr>
+    <>
+      <tr id="row-123-456" hx-swap-oob="true">
+        <td>Fireball</td>
+        <td>Italian Greyhound</td>
+      </tr>
+      <tr id="row-012-345" hx-swap-oob="true">
+        <td>Oscar Wilde</td>
+        <td>German Shorthaired Pointer</td>
+      </tr>
+    </>
   );
 });
 
