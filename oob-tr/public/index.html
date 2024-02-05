@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>hx-swap-oob Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload.js"></script>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Breed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="dog">
+          <td>Comet</td>
+          <td>Whippet</td>
+        </tr>
+      </tbody>
+    </table>
+    <button hx-get="/swap" hx-swap="none">Swap</button>
+  </body>
+</html>

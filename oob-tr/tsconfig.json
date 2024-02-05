@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "module": "nodeNext",
+    "moduleResolution": "nodeNext",
+    "target": "esnext",
+    "types": ["bun-types"]
+  }
+}
