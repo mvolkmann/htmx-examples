@@ -85,7 +85,7 @@ app.delete('/dog/:id', (c: Context) => {
   return c.text('');
 });
 
-// Gets the proper for for either adding or updating a dog.
+// Gets the proper form for either adding or updating a dog.
 app.get('/form', (c: Context) => {
   const selectedDog = dogs.get(selectedId);
 
