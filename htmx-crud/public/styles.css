@@ -41,8 +41,7 @@ label {
 }
 
 .show-on-hover {
-  color: white;
-  transform: scale(2.5) translate(0, 0.2rem);
+  transform: scale(2.5) translate(0.2rem, 0.2rem);
   visibility: hidden;
 }
 
@@ -66,6 +65,7 @@ td {
 
   & button {
     background-color: transparent;
+    color: white;
   }
 }
 
@@ -74,9 +74,5 @@ th {
 }
 
 td.buttons {
-  display: flex;
-  gap: 1rem;
-
   background-color: transparent;
-  border: none;
 }
