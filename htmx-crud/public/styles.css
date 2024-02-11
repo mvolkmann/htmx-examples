@@ -34,6 +34,7 @@ input {
 
 label {
   display: inline-block;
+  font-weight: bold;
   margin-right: 0.5rem;
   text-align: right;
   width: 3rem;
@@ -52,10 +53,6 @@ label {
 table {
   border-collapse: collapse;
   margin-bottom: 0.5rem;
-
-  & button {
-    background-color: transparent;
-  }
 }
 
 td,
@@ -66,6 +63,10 @@ th {
 
 td {
   background-color: white;
+
+  & button {
+    background-color: transparent;
+  }
 }
 
 th {
