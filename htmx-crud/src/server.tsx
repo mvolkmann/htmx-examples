@@ -71,17 +71,17 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-// Deselects the currently selected dog.
-app.get('/deselect', (c: Context) => {
-  selectedId = '';
-  c.header('HX-Trigger', 'selection-change');
-  return c.text('');
-});
-
 // Deletes the dog with a given id.
 app.delete('/dog/:id', (c: Context) => {
   const id = c.req.param('id');
   dogs.delete(id);
+  return c.text('');
+});
+
+// Deselects the currently selected dog.
+app.get('/deselect', (c: Context) => {
+  selectedId = '';
+  c.header('HX-Trigger', 'selection-change');
   return c.text('');
 });
 
@@ -160,7 +160,6 @@ app.post('/dog', async (c: Context) => {
   const name = (formData.get('name') as string) || '';
   const breed = (formData.get('breed') as string) || '';
   const dog = addDog(name, breed);
-  console.log('server.tsx post: dog =', dog);
   return c.html(dogRow(dog), 201);
 });
 
