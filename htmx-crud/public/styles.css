@@ -18,6 +18,8 @@ button {
 .buttons {
   display: flex;
   gap: 1rem;
+
+  background-color: transparent;
 }
 
 h1 {
@@ -71,8 +73,4 @@ td {
 
 th {
   background-color: orange;
-}
-
-td.buttons {
-  background-color: transparent;
 }
