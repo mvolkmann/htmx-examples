@@ -43,7 +43,6 @@ app.get('/', (c: Context) => {
           hx-trigger="keyup changed delay:200ms"
           hx-post="/search"
           hx-target="#matches"
-          hx-swap="innerHTML"
           name="name"
           size={10}
         />
