@@ -19,11 +19,13 @@ watch('./public', {recursive: true}, (event, filename) => {
 
 const app = new Hono();
 
+/*
 // Serve Shoelace files from node_modules.
 app.use(
   '/shoelace/*',
-  serveStatic({root: './node_modules/@shoelace-style/shoelace/dist'})
+  serveStatic({root: './node_modules/@shoelace-style/shoelace'})
 );
+*/
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
