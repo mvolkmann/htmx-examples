@@ -25,22 +25,26 @@ app.use('/*', serveStatic({root: './public'}));
 let darkMode = false;
 
 app.get('/switch', async (c: Context) => {
+  // This could conditionally determine which Shoelace component to return
+  // and its attributes.
+  // Here we are adding htmx attributes.
   return c.html(
     <sl-switch
       size="large"
       hx-trigger="sl-change"
-      hx-post="/dark-mode"
-      hx-target="#mode"
+      hx-post="/busy"
+      hx-vals="js:{busy: event.target.checked}"
+      hx-target="#busy"
     >
-      Dark Mode
+      Busy
     </sl-switch>
   );
 });
 
-app.post('/dark-mode', async (c: Context) => {
-  console.log('server.tsx /dark-mode: entered');
-  darkMode = !darkMode;
-  return c.text(String(darkMode));
+app.post('/busy', async (c: Context) => {
+  const formData = await c.req.formData();
+  const busy = formData.get('busy') === 'true';
+  return c.text(busy ? 'busy' : 'free');
 });
 
 app.get('/version', async (c: Context) => {

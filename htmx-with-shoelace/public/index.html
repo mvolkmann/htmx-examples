@@ -10,10 +10,14 @@
       src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/shoelace-autoloader.js"
       type="module"
     ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="reload.js"></script>
   </head>
-  <body>
+  <body x-data="{happy: false}">
     <!-- When this button is clicked,
          an HTTP GET request is sent to /version.
          The text it returns replaces the innerHTML
@@ -21,8 +25,17 @@
     <button hx-get="/version" hx-target="#version">Get Bun Version</button>
     <div id="version"></div>
 
-    <div hx-get="/switch" hx-trigger="load"></div>
-    <div id="mode"></div>
-    <sl-switch size="large">Test</sl-switch>
+    <!-- This demonstrates using a Shoelace component with Alpine. -->
+    <sl-switch @sl-change="happy = $event.target.checked" size="large">
+      Happy
+    </sl-switch>
+    <div x-text="happy ? '😊' : '😢'"></div>
+
+    <br />
+
+    <!-- This demonstrates using a Shoelace component with htmx. -->
+    <!-- This gets a Shoelace switch component from the server. -->
+    <div hx-get="/switch" hx-trigger="load" hx-swap="outerHTML"></div>
+    <div id="busy">free</div>
   </body>
 </html>
