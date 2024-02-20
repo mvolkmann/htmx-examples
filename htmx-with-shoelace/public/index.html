@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>htmx with Shoelace</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.14.0/cdn/themes/light.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/shoelace-autoloader.js"
+      type="module"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload.js"></script>
+  </head>
+  <body>
+    <!-- When this button is clicked,
+         an HTTP GET request is sent to /version.
+         The text it returns replaces the innerHTML
+         of the element with id "version". -->
+    <button hx-get="/version" hx-target="#version">Get Bun Version</button>
+    <div id="version"></div>
+
+    <div hx-get="/switch" hx-trigger="load"></div>
+    <div id="mode"></div>
+    <sl-switch size="large">Test</sl-switch>
+  </body>
+</html>
