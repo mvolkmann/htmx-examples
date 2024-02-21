@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>htmx Active Search</title>
+    <link href="/tailwind.css" rel="stylesheet" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body class="p-8">
+    <label class="font-bold mr-4" for="name">Name</label>
+    <input
+      autofocus
+      class="border border-gray-500 p-1 rounded-lg"
+      hx-trigger="keyup changed delay:200ms"
+      hx-post="/search"
+      hx-target="#matches"
+      name="name"
+      size="{10}"
+    />
+    <ul id="matches" />
+  </body>
+</html>
