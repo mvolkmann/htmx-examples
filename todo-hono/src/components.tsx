@@ -21,7 +21,7 @@ export const Layout: FC = ({children}) => (
       <link rel="stylesheet" href="/styles.css" />
       <script src="htmx.min.js"></script>
       <script defer src="alpine.min.js"></script>
-      <script defer src="setup.js"></script>
+      <script src="reload-client.js" type="module"></script>
     </head>
     {/* editingId is state that only belongs on the client.
         If the user clicks outside of any todo description,
