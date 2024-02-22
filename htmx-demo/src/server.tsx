@@ -1,5 +1,7 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
+// import elements from 'js2htmlstr';
+// const {img} = elements;
 import './reload-server.js';
 
 const app = new Hono();
@@ -19,6 +21,14 @@ app.get('/version', async (c: Context) => {
       alt="htmx logo"
       src="https://mvolkmann.github.io/blog/assets/htmx-logo.png"
     />
+  );
+  */
+  /*
+  return c.html(
+    img({
+      alt: 'htmx logo',
+      src: 'https://mvolkmann.github.io/blog/assets/htmx-logo.png'
+    })
   );
   */
 });
