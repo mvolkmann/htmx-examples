@@ -1,7 +1,8 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-// import elements from 'js2htmlstr';
-// const {img} = elements;
+import {HtmlValidate} from 'html-validate';
+import elements from 'js2htmlstr';
+const {img} = elements;
 import './reload-server.js';
 
 const app = new Hono();
@@ -13,6 +14,7 @@ app.get('/version', async (c: Context) => {
   // Return a Response whose body contains
   // the version of Bun running on the server.
   return c.text('v' + Bun.version);
+
   /*
   // This demonstrates using JSX to generate HTML.
   return c.html(
@@ -22,14 +24,23 @@ app.get('/version', async (c: Context) => {
     />
   );
   */
+
   /*
   // This demonstrates using js2htmlstr to generate HTML.
-  return c.html(
-    img({
-      alt: 'htmx logo',
-      src: 'https://mvolkmann.github.io/blog/assets/htmx-logo.png'
-    })
-  );
+  const html = img({
+    alt: 'htmx logo',
+    src: 'https://mvolkmann.github.io/blog/assets/htmx-logo.png'
+  });
+  // const html = '<input type="bad">';
+  const htmlValidate = new HtmlValidate();
+  const report = await htmlValidate.validateString(html);
+  if (report.valid) {
+    return c.html(html);
+  } else {
+    console.log('report =', report);
+    const message = report.results[0].messages[0].message;
+    return c.text('error: ' + message);
+  }
   */
 });
 
