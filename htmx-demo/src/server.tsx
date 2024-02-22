@@ -1,8 +1,8 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import {HtmlValidate} from 'html-validate';
-import elements from 'js2htmlstr';
-const {img} = elements;
+// import tagMap from 'js2htmlstr';
+// const {img} = tagMap;
 import './reload-server.js';
 
 const app = new Hono();

@@ -5,7 +5,7 @@
   "dependencies": {
     "hono": "^3.12.8",
     "html-validate": "^8.10.0",
-    "js2htmlstr": "^1.5.0"
+    "js2htmlstr": "^1.6.1"
   },
   "devDependencies": {
     "@types/bun": "latest"
