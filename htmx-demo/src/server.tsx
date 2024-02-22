@@ -13,9 +13,8 @@ app.get('/version', async (c: Context) => {
   // Return a Response whose body contains
   // the version of Bun running on the server.
   return c.text('v' + Bun.version);
-
-  // This demonstrates returning HTML instead of text.
   /*
+  // This demonstrates using JSX to generate HTML.
   return c.html(
     <img
       alt="htmx logo"
@@ -24,6 +23,7 @@ app.get('/version', async (c: Context) => {
   );
   */
   /*
+  // This demonstrates using js2htmlstr to generate HTML.
   return c.html(
     img({
       alt: 'htmx logo',
