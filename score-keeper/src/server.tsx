@@ -27,17 +27,26 @@ function teamHtml(number: string): JSX.Element {
   return (
     <section class="column team" style={`border-color: ${borderColor}`}>
       <label>
-        Team <input type="text" name={'team' + number} value={team.name} />
+        Team{' '}
+        <input type="text" name={'team' + number} required value={team.name} />
       </label>
       <label>
-        Score <input type="number" name={'score' + number} value={team.score} />
+        Score{' '}
+        <input
+          type="number"
+          name={'score' + number}
+          required
+          value={team.score}
+        />
       </label>
       <input
         type="checkbox"
-        name={'like' + number}
+        id={'like' + number}
         checked={team.like}
+        required
         hx-get={'/toggle-like/' + number}
       />
+      <label for={'like' + number}>&hearts;</label>
     </section>
   );
 }
@@ -65,12 +74,10 @@ app.get('/toggle-like/:number', async (c: Context) => {
 
 app.post('/update', async (c: Context) => {
   const formData = await c.req.formData();
-  team1.name = (formData.get('team1') as string) || '';
-  team2.name = (formData.get('team2') as string) || '';
+  team1.name = formData.get('team1') as string;
+  team2.name = formData.get('team2') as string;
   team1.score = Number(formData.get('score1'));
   team2.score = Number(formData.get('score2'));
-  team1.like = Boolean(formData.get('like1'));
-  team2.like = Boolean(formData.get('like2'));
   return c.text(report());
 });
 
