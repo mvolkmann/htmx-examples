@@ -27,11 +27,11 @@ function teamHtml(number: string): JSX.Element {
   return (
     <section class="column team" style={`border-color: ${borderColor}`}>
       <label>
-        Team{' '}
+        <div>Team</div>
         <input type="text" name={'team' + number} required value={team.name} />
       </label>
       <label>
-        Score{' '}
+        <div>Score</div>
         <input
           type="number"
           name={'score' + number}
@@ -43,7 +43,6 @@ function teamHtml(number: string): JSX.Element {
         type="checkbox"
         id={'like' + number}
         checked={team.like}
-        required
         hx-get={'/toggle-like/' + number}
       />
       <label for={'like' + number}>&hearts;</label>
@@ -58,14 +57,14 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/team/:number', async (c: Context) => {
+app.get('/team/:number', (c: Context) => {
   const number = c.req.param('number');
   return c.html(teamHtml(number));
 });
 
-app.get('/report', async (c: Context) => c.text(report()));
+app.get('/report', (c: Context) => c.text(report()));
 
-app.get('/toggle-like/:number', async (c: Context) => {
+app.get('/toggle-like/:number', (c: Context) => {
   const number = c.req.param('number');
   const team = number === '1' ? team1 : team2;
   team.like = !team.like;

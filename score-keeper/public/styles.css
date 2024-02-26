@@ -6,7 +6,6 @@ body {
 }
 
 button {
-  /* background-color: transparent; */
   background-color: white;
   border: none;
   border-radius: 0.5rem;
@@ -39,8 +38,12 @@ input[type='checkbox']:checked + label {
   color: red;
 }
 
-label {
+label > div {
+  display: inline-block;
   font-weight: bold;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
 }
 
 #report {
