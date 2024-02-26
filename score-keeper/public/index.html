@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body>
+    <div hx-trigger="load" hx-get="/report" id="report"></div>
+    <form class="column" hx-post="/update" hx-target="#report">
+      <div hx-trigger="load" hx-get="/team/1" hx-target="this"></div>
+      <div hx-trigger="load" hx-get="/team/2" hx-target="this"></div>
+      <button>Submit</button>
+    </form>
+  </body>
+</html>
