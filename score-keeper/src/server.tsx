@@ -68,6 +68,7 @@ app.get('/toggle-like/:number', (c: Context) => {
   const number = c.req.param('number');
   const team = number === '1' ? team1 : team2;
   team.like = !team.like;
+  // hx-target defaults to team ancestor div element.
   return c.html(teamHtml(number));
 });
 
