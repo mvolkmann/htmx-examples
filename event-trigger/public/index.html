@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>HX-Trigger Demo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      let totalSpan;
+      let mealDiv;
+      document.addEventListener('DOMContentLoaded', () => {
+        totalSpan = document.getElementById('total');
+        mealDiv = document.getElementById('meal');
+      });
+
+      function clear() {
+        totalSpan.textContent = '0';
+        mealDiv.innerHTML = '';
+      }
+
+      function handleMeal(event) {
+        const meal = event.detail.value;
+        console.log('meal =', meal);
+      }
+
+      function handleOrder(event) {
+        // We could have computed the total price on the server,
+        // but this demonstrates getting an object from an event
+        // and processing it in the client.
+        const prices = Object.values(event.detail.value);
+        const total = prices.reduce((a, b) => a + b, 0);
+        totalSpan.textContent = total;
+      }
+    </script>
+  </head>
+  <body hx-on:meal="handleMeal(event)" hx-on:order="handleOrder(event)">
+    <button hx-get="/meal" hx-swap="none">Meal</button>
+    <button hx-get="/alt-order" hx-swap="none">Alt Order</button>
+    <div>Total: $<span id="total">0</span></div>
+    <button
+      hx-trigger="click, alt-order from:body"
+      hx-get="/order"
+      hx-target="#meal"
+    >
+      Order Meal
+    </button>
+    <div id="meal"></div>
+    <button hx-on:click="clear()">Clear</button>
+  </body>
+</html>
