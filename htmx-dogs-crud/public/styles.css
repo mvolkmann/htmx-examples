@@ -1,0 +1,76 @@
+body {
+  background-color: cornflowerblue;
+  font-family: sans-serif;
+}
+
+button {
+  background-color: lightgreen;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+
+  &:disabled {
+    background-color: gray;
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+
+  background-color: transparent;
+}
+
+h1 {
+  color: orange;
+}
+
+input {
+  background-color: white;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+label {
+  display: inline-block;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
+}
+
+.show-on-hover {
+  transform: scale(2.5) translate(0.2rem, 0.2rem);
+  visibility: hidden;
+}
+
+.on-hover:hover .show-on-hover {
+  visibility: visible;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+}
+
+td,
+th {
+  border: 1px solid cornflowerblue;
+  padding: 0.5rem;
+}
+
+td {
+  background-color: white;
+
+  & button {
+    background-color: transparent;
+    color: white;
+  }
+}
+
+th {
+  background-color: orange;
+}
