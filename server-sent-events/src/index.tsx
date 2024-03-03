@@ -91,9 +91,19 @@ app.get('/count', (c: Context) => {
 app.get('/sse', (c: Context) => {
   count = 0;
   return streamSSE(c, async stream => {
+    let isOpen = true;
+
+    // This should be invoked when the client calls close on the EventSource,
+    // but it is not.  See https://github.com/honojs/hono/issues/1770.
+    c.req.raw.signal.addEventListener('abort', () => {
+      console.log('got abort event');
+      isOpen = false;
+    });
+
     await stream.writeSSE({data: 'starting'});
 
-    while (count < 10) {
+    while (isOpen && count < 10) {
+      if (c.req.raw.signal.aborted) break;
       count++;
       await stream.writeSSE({
         event: 'count',
@@ -102,6 +112,7 @@ app.get('/sse', (c: Context) => {
       });
       await stream.sleep(1000);
     }
+
     stream.close();
   });
 });

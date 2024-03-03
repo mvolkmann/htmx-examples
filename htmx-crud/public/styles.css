@@ -15,6 +15,13 @@ button {
   }
 }
 
+.buttons {
+  display: flex;
+  gap: 1rem;
+
+  background-color: transparent;
+}
+
 h1 {
   color: orange;
 }
@@ -27,14 +34,16 @@ input {
   padding: 0.5rem;
 }
 
-td.plain {
-  background-color: transparent;
-  border: none;
+label {
+  display: inline-block;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
 }
 
 .show-on-hover {
-  color: white;
-  transform: scale(2.5) translate(0, 0.2rem);
+  transform: scale(2.5) translate(0.2rem, 0.2rem);
   visibility: hidden;
 }
 
@@ -45,10 +54,6 @@ td.plain {
 table {
   border-collapse: collapse;
   margin-bottom: 0.5rem;
-
-  & button {
-    background-color: transparent;
-  }
 }
 
 td,
@@ -59,6 +64,11 @@ th {
 
 td {
   background-color: white;
+
+  & button {
+    background-color: transparent;
+    color: white;
+  }
 }
 
 th {

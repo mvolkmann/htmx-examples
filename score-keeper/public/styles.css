@@ -1,0 +1,60 @@
+body {
+  background-color: cornflowerblue;
+  font-family: sans-serif;
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+button {
+  background-color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+}
+
+input {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+input[type='checkbox'] {
+  display: none;
+}
+
+input[type='checkbox'] + label {
+  color: white;
+  font-size: 1.5rem;
+}
+
+input[type='checkbox']:checked + label {
+  color: red;
+}
+
+label > div {
+  display: inline-block;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  text-align: right;
+  width: 3rem;
+}
+
+#report {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.team {
+  background-color: orange;
+  border: 3px solid white;
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 13.5rem;
+}

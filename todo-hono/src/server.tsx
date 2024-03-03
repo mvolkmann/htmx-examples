@@ -1,18 +1,10 @@
 import {Database, Statement} from 'bun:sqlite';
 import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import WebSocket from 'ws';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
 import {Err, Layout, Todo, TodoForm, TodoItem, TodoList} from './components';
-
-//-----------------------------------------------------------------------------
-// Browser reload support
-//-----------------------------------------------------------------------------
-
-// Browser code connects to this so it can detect when the server is restarted.
-// On restart, the browser reloads the page.
-new WebSocket.Server({port: 3001});
+import './reload-server.js';
 
 //-----------------------------------------------------------------------------
 // SQLite preparation

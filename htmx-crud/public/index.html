@@ -3,31 +3,14 @@
     <title>htmx Demo</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- <script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.min.js"></script> -->
     <script src="reload-client.js" type="module"></script>
   </head>
   <body>
     <h1>Dogs</h1>
 
-    <form
-      hx-disabled-elt="#add-btn"
-      hx-post="/dog"
-      hx-swap="afterbegin"
-      hx-target="table tbody"
-      hx-on:htmx:after-request="this.reset()"
-    >
-      <div>
-        <label for="name">Name</label>
-        <input id="name" name="name" required size="30" type="text" />
-      </div>
-      <div>
-        <label for="breed">Breed</label>
-        <input id="breed" name="breed" required size="30" type="text" />
-      </div>
-      <button id="add-btn">Add</button>
-    </form>
+    <div hx-trigger="revealed, selection-change from:body" hx-get="/form"></div>
 
-    <table hx-get="/dog" hx-target="tbody" hx-trigger="revealed">
+    <table hx-get="/rows" hx-target="tbody" hx-trigger="revealed">
       <thead>
         <tr>
           <th>Name</th>
