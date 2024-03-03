@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>Out-of-Band Demo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body>
+    <button hx-get="/demo" hx-target="#target1">Send</button>
+    <div id="target1">original 1</div>
+    <div id="target2">original 2</div>
+    <div id="target3">original 3</div>
+  </body>
+</html>
