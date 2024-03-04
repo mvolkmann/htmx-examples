@@ -12,11 +12,21 @@
   </head>
   <body>
     <h2>This demonstrates the Google font "Kode Mono".</h2>
-    <!-- When this button is clicked,
-         an HTTP GET request is sent to /version.
-         The text it returns replaces the innerHTML
-         of the element with id "version". -->
-    <button hx-get="/version" hx-target="#version">Get Bun Version</button>
-    <div id="version"></div>
+
+    <div>
+      <!-- When this button is clicked,
+           an HTTP GET request is sent to /version.
+           The text it returns replaces the innerHTML
+           of the element with id "version". -->
+      <button hx-get="/version" hx-target="#version">Get Bun Version</button>
+      <span id="version"></span>
+    </div>
+
+    <form hx-post="login" hx-target="#status">
+      <label>Email:<input type="email" name="email" value="" /></label>
+      <label>Password:<input type="password" name="password" value="" /></label>
+      <button>Login</button>
+    </form>
+    <div id="status"></div>
   </body>
 </html>

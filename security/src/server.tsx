@@ -50,4 +50,19 @@ app.post('/csp-report', async (c: Context) => {
   return c.text('CSP violation');
 });
 
+const auth = {
+  'foo@bar.com': 'password'
+};
+
+app.post('/login', async (c: Context) => {
+  const formData = await c.req.formData();
+  const email = formData.get('email');
+  const password = formData.get('password');
+  console.log('server.tsx /login: email =', email);
+  console.log('server.tsx /login: password =', password);
+  const success = auth[email] === password;
+  if (!success) c.status(401);
+  return c.text(success ? 'Authorized' : 'Unauthorized');
+});
+
 export default app;
