@@ -47,6 +47,14 @@ app.use('/*', (c: Context, next: Next) => {
   return fn(c, next);
 });
 
+app.get('/reflective-xss', (c: Context) => {
+  // If the script tag returned here is used as the
+  // innerHTML of an element, it will be executed.
+  // The CSP specified above blocks this unless the
+  // "script-src-elem" directive includes "'unsafe-inline'".
+  return c.html("<script>alert('A reflective XSS occurred!');</script>");
+});
+
 app.get('/version', (c: Context) => {
   // Return a Response whose body contains
   // the version of Bun running on the server.
