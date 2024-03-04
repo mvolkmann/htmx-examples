@@ -29,7 +29,7 @@ const policies = [
   'report-uri /csp-report',
 
   // This allows downloading the htmx library from a CDN.
-  "script-src-elem 'self' https://unpkg.com",
+  "script-src-elem 'self' 'report-sample' https://unpkg.com",
 
   // This allows htmx.min.js to insert style elements.
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
