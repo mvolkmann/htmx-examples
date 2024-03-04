@@ -17,6 +17,10 @@ form {
   gap: 1rem;
 }
 
+img {
+  margin-bottom: 1rem;
+}
+
 input {
   border: none;
   border-radius: 0.5rem;

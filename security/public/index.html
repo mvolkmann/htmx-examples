@@ -13,6 +13,12 @@
   <body>
     <h2>This demonstrates the Google font "Kode Mono".</h2>
 
+    <img
+      alt="Grand Prismatic Spring"
+      src="https://images.unsplash.com/photo-1629985692757-48648f4f1fc1"
+      width="300"
+    />
+
     <div>
       <!-- When this button is clicked,
            an HTTP GET request is sent to /version.
@@ -22,11 +28,15 @@
       <span id="version"></span>
     </div>
 
-    <form hx-post="login" hx-target="#status">
-      <label>Email:<input type="email" name="email" value="" /></label>
-      <label>Password:<input type="password" name="password" value="" /></label>
-      <button>Login</button>
+    <!-- <form method="post" action="https://jsonplaceholder.typicode.com/todos"> -->
+    <form
+      hx-post="https://jsonplaceholder.typicode.com/todos"
+      hx-target="#todo"
+    >
+      <label>Title:<input type="text" name="title" value="" /></label>
+      <label>Body:<input type="text" name="body" value="" /></label>
+      <button>Submit</button>
     </form>
-    <div id="status"></div>
+    <div id="todo"></div>
   </body>
 </html>
