@@ -10,7 +10,7 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/version', async (c: Context) => {
+app.get('/version', (c: Context) => {
   // Return a Response whose body contains
   // the version of Bun running on the server.
   return c.text('v' + Bun.version);

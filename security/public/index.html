@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- <script src="https://unpkg.com/htmx.org@1.9.10"></script> -->
+    <script src="htmx.min.js"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body>
+    <!-- When this button is clicked,
+         an HTTP GET request is sent to /version.
+         The text it returns replaces the innerHTML
+         of the element with id "version". -->
+    <button hx-get="/version" hx-target="#version">Get Bun Version</button>
+    <div id="version"></div>
+  </body>
+</html>
