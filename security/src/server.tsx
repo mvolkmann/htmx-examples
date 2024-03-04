@@ -24,7 +24,7 @@ const policies = [
   // This allows getting videos from googleapis.
   "media-src 'self' http://commondatastorage.googleapis.com",
 
-  // This allows downloading htmx from a CDN.
+  // This allows downloading the htmx library from a CDN.
   "script-src-elem 'self' https://unpkg.com",
 
   // This allows htmx.min.js to insert style elements.
