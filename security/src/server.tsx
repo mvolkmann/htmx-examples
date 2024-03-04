@@ -24,10 +24,12 @@ const policies = [
   // This allows getting videos from googleapis.
   "media-src 'self' http://commondatastorage.googleapis.com",
 
+  // This specifies where POST requests for violation reports will be sent.
+  // In the future, "report-uri" will be replaced by "report-to".
+  'report-uri /csp-report',
+
   // This allows downloading the htmx library from a CDN.
-  "script-src 'unsafe-eval'",
-  // "script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com",
-  "script-src-elem 'self' 'unsafe-eval' https://unpkg.com",
+  "script-src-elem 'self' https://unpkg.com",
 
   // This allows htmx.min.js to insert style elements.
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
@@ -41,10 +43,6 @@ const app = new Hono();
 // app.use('/*', serveStatic({root: './public'}));
 app.use('/*', (c: Context, next: Next) => {
   c.header('Content-Security-Policy', csp);
-  c.header(
-    'Content-Security-Policy-Report-Only',
-    csp + '; report-uri /csp-report'
-  );
   const fn = serveStatic({root: './public'});
   return fn(c, next);
 });
