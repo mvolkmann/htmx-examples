@@ -24,6 +24,9 @@ const policies = [
   // This allows getting videos from googleapis.
   "media-src 'self' http://commondatastorage.googleapis.com",
 
+  // This allows downloading htmx from a CDN.
+  "script-src-elem 'self' https://unpkg.com",
+
   // This allows htmx.min.js to insert style elements.
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
 ];
@@ -52,7 +55,7 @@ app.get('/version', (c: Context) => {
 
 app.post('/csp-report', async (c: Context) => {
   const report = await c.req.json();
-  console.log('server.tsx /csp-report: report =', report);
+  console.log(report);
   c.status(403);
   return c.text('CSP violation');
 });
