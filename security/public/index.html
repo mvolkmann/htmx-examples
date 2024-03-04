@@ -19,6 +19,12 @@
       width="300"
     />
 
+    <video
+      src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      autoplay
+      width="300"
+    ></video>
+
     <div>
       <!-- When this button is clicked,
            an HTTP GET request is sent to /version.
@@ -28,6 +34,7 @@
       <span id="version"></span>
     </div>
 
+    <!-- This should require the form-action CSP directive, but it doesn't. -->
     <!-- <form method="post" action="https://jsonplaceholder.typicode.com/todos"> -->
     <form
       hx-post="https://jsonplaceholder.typicode.com/todos"

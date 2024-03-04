@@ -26,3 +26,8 @@ input {
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
+
+video {
+  display: block;
+  margin-bottom: 1rem;
+}

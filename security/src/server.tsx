@@ -21,6 +21,9 @@ const policies = [
   // This allows getting images from Unsplash.
   "img-src 'self' https://images.unsplash.com",
 
+  // This allows getting videos from googleapis.
+  "media-src 'self' http://commondatastorage.googleapis.com",
+
   // This allows htmx.min.js to insert style elements.
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
 ];
