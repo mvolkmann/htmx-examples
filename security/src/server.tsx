@@ -43,6 +43,11 @@ const app = new Hono();
 // app.use('/*', serveStatic({root: './public'}));
 app.use('/*', (c: Context, next: Next) => {
   c.header('Content-Security-Policy', csp);
+  const yearSeconds = 31536000;
+  c.header(
+    'Strict-Transport-Security',
+    `max-age=${yearSeconds}; includeSubDomains`
+  );
   const fn = serveStatic({root: './public'});
   return fn(c, next);
 });
