@@ -21,6 +21,15 @@
     <!-- <script src="htmx.min.js"></script> -->
 
     <script src="reload-client.js" type="module"></script>
+
+    <!-- <script>
+      async function domXSS() {
+        const res = await fetch('/dom-xss');
+        const text = await res.text();
+        eval(text);
+      }
+      window.onload = domXSS;
+    </script> -->
   </head>
   <body>
     <h2>This demonstrates the Google font "Kode Mono".</h2>

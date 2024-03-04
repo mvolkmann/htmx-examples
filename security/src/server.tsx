@@ -25,7 +25,9 @@ const policies = [
   "media-src 'self' http://commondatastorage.googleapis.com",
 
   // This allows downloading the htmx library from a CDN.
-  "script-src-elem 'self' https://unpkg.com",
+  "script-src 'unsafe-eval'",
+  // "script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com",
+  "script-src-elem 'self' 'unsafe-eval' https://unpkg.com",
 
   // This allows htmx.min.js to insert style elements.
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
@@ -47,11 +49,11 @@ app.use('/*', (c: Context, next: Next) => {
   return fn(c, next);
 });
 
+app.get('/dom-xss', (c: Context) => {
+  return c.text("alert('A DOM XSS occurred!')");
+});
+
 app.get('/reflective-xss', (c: Context) => {
-  // If the script tag returned here is used as the
-  // innerHTML of an element, it will be executed.
-  // The CSP specified above blocks this unless the
-  // "script-src-elem" directive includes "'unsafe-inline'".
   return c.html("<script>alert('A reflective XSS occurred!');</script>");
 });
 
