@@ -2,23 +2,36 @@ import {type Context, Hono, type Next} from 'hono';
 import {serveStatic} from 'hono/bun';
 import './reload-server.js';
 
+const policies = [
+  // Only resources from this domain are allowed
+  // unless overridden by a more specific directive.
+  "default-src 'self'",
+
+  // This allows reload-client.js to create a WebSocket.
+  "connect-src 'self' ws:",
+
+  // This allows getting Google fonts.
+  // "link" tags for Google fonts have an href
+  // that begins with https://fonts.googleapis.com.
+  // The linked font file contains @font-face CSS rules
+  // with a src URL beginning with https://fonts.gstatic.com.
+  "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com",
+
+  // This allows htmx.min.js to insert style elements.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
+];
+const csp = policies.join('; ');
+console.log('server.tsx: csp =', csp);
+
 const app = new Hono();
 
 // Serve static files from the public directory.
 // app.use('/*', serveStatic({root: './public'}));
 app.use('/*', (c: Context, next: Next) => {
-  const policies = [
-    "default-src 'self'",
-    // This allows reload-client.js to create a WebSocket.
-    "connect-src 'self' ws:",
-    // This allows htmx.min.js to insert style elements.
-    "style-src 'self' 'unsafe-inline'"
-  ];
-  const policy = policies.join('; ');
-  c.header('Content-Security-Policy', policy);
+  c.header('Content-Security-Policy', csp);
   c.header(
     'Content-Security-Policy-Report-Only',
-    policy + '; report-uri /csp-report'
+    csp + '; report-uri /csp-report'
   );
   const fn = serveStatic({root: './public'});
   return fn(c, next);
