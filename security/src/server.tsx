@@ -3,7 +3,7 @@ import {serveStatic} from 'hono/bun';
 import './reload-server.js';
 
 const policies = [
-  // Only resources from this domain are allowed
+  // Only resources from the current domain are allowed
   // unless overridden by a more specific directive.
   "default-src 'self'",
 
@@ -53,6 +53,7 @@ app.get('/version', (c: Context) => {
   return c.text('v' + Bun.version);
 });
 
+// This receives reports of CSP violations in a JSON object.
 app.post('/csp-report', async (c: Context) => {
   const report = await c.req.json();
   console.log(report);
