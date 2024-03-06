@@ -63,7 +63,7 @@ app.get('/reflective-xss', (c: Context) => {
 // the version of Bun running on the server.
 app.get('/version', (c: Context) => {
   // The html tagged template literal escapes
-  // HTML elements in strings, but NOT in JSX!
+  // HTML elements in strings, but not in JSX!
   const storedContent = '<script>alert("XSS!");</script>';
   const escaped = html`v${Bun.version} ${storedContent}`;
   return c.html(escaped);
