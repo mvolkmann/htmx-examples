@@ -76,7 +76,7 @@ app.post('/csp-report', async (c: Context) => {
   // console.log(report);
   let file = report['document-uri'];
   if (file.endsWith('/')) file = 'index.html';
-  console.log(
+  console.error(
     `${file} attempted to access ${report['blocked-uri']} which ` +
       `violates the ${report['effective-directive']} CSP directive.`
   );
