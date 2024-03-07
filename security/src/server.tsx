@@ -75,7 +75,8 @@ app.post('/csp-report', async (c: Context) => {
   const report = json['csp-report'];
   // console.log(report);
   let file = report['document-uri'];
-  if (file.endsWith('/')) file = 'index.html';
+  const origin = c.req.raw.headers.get('origin');
+  if (file === origin + '/') file = 'index.html';
   console.error(
     `${file} attempted to access ${report['blocked-uri']} which ` +
       `violates the ${report['effective-directive']} CSP directive.`
