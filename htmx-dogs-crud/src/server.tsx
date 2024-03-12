@@ -70,6 +70,10 @@ app.get('/deselect', (c: Context) => {
   return c.text('');
 });
 
+app.get('/dogs', (c: Context) => {
+  return c.json(Object.fromEntries(Array.from(dogs)));
+});
+
 // Gets the proper form for either adding or updating a dog.
 app.get('/form', (c: Context) => {
   const selectedDog = dogs.get(selectedId);
