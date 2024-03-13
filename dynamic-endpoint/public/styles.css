@@ -20,3 +20,7 @@ button {
 #time {
   height: 2.5rem;
 }
+
+#time-btn {
+  margin: 1rem 0;
+}

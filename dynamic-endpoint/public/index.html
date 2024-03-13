@@ -9,7 +9,17 @@
     ></script>
   </head>
   <body x-data="{count: 0}">
+    <div class="counter">
+      <button :disabled="count <= 0" x-on:click="count--">Less</button>
+      <div id="count" x-text="count"></div>
+      <button x-on:click="count++">More</button>
+    </div>
+    <!-- Using Alpine x-bind on the hx-get attribute causes its
+         value to be updated every time the value of count changes.
+         But htmx doesn't recognized the change unless it processes the
+         button element again.  Calling htmx.process($el) does just that. -->
     <button
+      id="time-btn"
       :hx-get="`/time/${count}`"
       x-effect="count; htmx.process($el)"
       hx-target="#time"
@@ -17,10 +27,5 @@
       Get Time
     </button>
     <div id="time"></div>
-    <div class="counter">
-      <button :disabled="count <= 0" x-on:click="count--">Less</button>
-      <div id="count" x-text="count"></div>
-      <button x-on:click="count++">More</button>
-    </div>
   </body>
 </html>

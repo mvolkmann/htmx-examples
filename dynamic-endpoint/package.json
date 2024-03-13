@@ -1,9 +1,8 @@
 {
   "name": "first-demo",
-  "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch run index.tsx"
+    "dev": "bun --watch run server.ts"
   },
   "dependencies": {
     "hono": "^3.12.6"
