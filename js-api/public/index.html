@@ -6,8 +6,9 @@
     <script src="reload-client.js" type="module"></script>
     <script>
       // This controls whether htmx processes script tags
-      // found in HTML returned by endpoints.
-      // htmx.config.allowScriptTags = false;
+      // found in HTML returned by endpoints,
+      // like the one returned by the GET /demo request below.
+      htmx.config.allowScriptTags = false;
 
       function addClass(event, button) {
         const section = htmx.closest(button, 'section');
