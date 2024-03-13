@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+}
+
+.big-red {
+  color: red;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+section {
+  border: 3px solid black;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}

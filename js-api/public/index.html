@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>htmx JS API</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      // This controls whether htmx processes script tags
+      // found in HTML returned by endpoints.
+      // htmx.config.allowScriptTags = false;
+
+      function addClass(event, button) {
+        const section = htmx.closest(button, 'section');
+        section.style.borderColor = 'red';
+
+        const d1 = htmx.find('#d1');
+        htmx.addClass(d1, 'big-red');
+
+        eval('alert("Hello, World!")');
+      }
+    </script>
+  </head>
+  <body>
+    <h1>htmx JS API</h1>
+
+    <section>
+      <div>Press this button to change some styles.</div>
+      <!-- `this` holds the current element. -->
+      <button hx-on:click="addClass(event, this)">Change</button>
+    </section>
+
+    <div id="d1">D1</div>
+
+    <button hx-get="/demo" hx-target="#demo">Demo</button>
+    <div id="demo"></div>
+  </body>
+</html>
