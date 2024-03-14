@@ -64,6 +64,11 @@
         // Remove the button.
         htmx.remove(event.target);
       }
+
+      function toggleBullets() {
+        const ul = htmx.find('ul');
+        htmx.toggleClass(ul, 'no-bullets');
+      }
     </script>
   </head>
   <body>
@@ -92,5 +97,6 @@
       <li>Blue</li>
     </ul>
     <button id="change-btn">Uppercase Items</button>
+    <button hx-on:click="toggleBullets()">Toggle Bullets</button>
   </body>
 </html>
