@@ -6,11 +6,17 @@
     <script src="reload-client.js" type="module"></script>
     <script>
       htmx.onLoad(body => {
-        const div = document.createElement('div');
-        div.textContent = 'new content';
-        // document.body is not set until htmx.onLoad is called.
-        body.append(div);
+        // If no element with id 'new' exists ...
+        if (!htmx.find('#new')) {
+          // Create the element and append it to the body.
+          const div = document.createElement('div');
+          div.setAttribute('id', 'new');
+          div.textContent = 'dynamic content';
+          // document.body is not set until htmx.onLoad is called.
+          body.append(div);
+        }
 
+        // Add an event handler to each list item.
         const items = htmx.findAll('ul li');
         for (const item of items) {
           item.addEventListener('click', event => {
@@ -28,14 +34,17 @@
       // the DevTools console for debugging.
       htmx.logAll();
 
-      function addClass(event, button) {
+      function changeStyles(event, button) {
+        // Change the border color of the section that surrounds the button.
         const section = htmx.closest(button, 'section');
         section.style.borderColor = 'red';
 
-        const d1 = htmx.find('#d1');
-        htmx.addClass(d1, 'big-red');
+        // Add a CSS class to the element with id 'greet'.
+        const greet = htmx.find('#greet');
+        htmx.addClass(greet, 'big-red');
 
-        eval('alert("Hello, World!")');
+        // TODO: How can you prevent this?
+        eval('alert("This was executed by eval.")');
       }
 
       // This provides a way to dynamically and conditionally
@@ -63,13 +72,19 @@
     <section>
       <div>Press this button to change some styles.</div>
       <!-- `this` holds the current element. -->
-      <button hx-on:click="addClass(event, this)">Change</button>
+      <button hx-on:click="changeStyles(event, this)">Change Styles</button>
     </section>
 
-    <div id="d1" hx-on:click="htmx.removeClass(this, 'big-red')">D1</div>
+    <div id="greet" hx-on:click="htmx.removeClass(this, 'big-red')">
+      Hello, World!
+    </div>
+
+    <hr />
 
     <button hx-get="/danger" hx-target="#result">Fetch</button>
     <div id="result"></div>
+
+    <hr />
 
     <ul>
       <li>Red</li>
