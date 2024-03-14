@@ -28,7 +28,23 @@
         setTimeout(() => {
           htmx.trigger('#toggle-btn', 'click');
         }, 5000);
+
+        // The following code is not prevented by setting
+        // htmx.config.allowEval = false;
+        /*
+        setTimeout("alert('from setTimeout')", 1000);
+        const sum = new Function('a', 'b', 'return a + b');
+        console.log('sum =', sum(1, 2));
+        */
       });
+
+      // When set to `false`, this prevents the use of the JavaScript `eval`
+      // function and the `htmx-on` attribute for registering event handling.
+      // It does not prevent passing strings of JavaScript code
+      // to the JavaScript `setTimeout` and `setInterval` functions.
+      // And it does not prevent dynamically defining functions
+      // with the JavaScript `Function` constructor.
+      // htmx.config.allowEval = false;
 
       // This controls whether htmx processes script tags
       // found in HTML returned by endpoints,
@@ -48,8 +64,9 @@
         const greet = htmx.find('#greet');
         htmx.addClass(greet, 'big-red');
 
-        // TODO: How can you prevent this?
-        eval('alert("This was executed by eval.")');
+        // This is prevented by setting htmx.config.allowEval = false;
+        // It will trigger a htmx:evalDisallowedError event.
+        // eval('alert("This was executed by eval.")');
       }
 
       // This provides a way to dynamically and conditionally
