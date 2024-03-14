@@ -8,6 +8,11 @@ body {
   font-weight: bold;
 }
 
+.selected {
+  color: green;
+  font-weight: bold;
+}
+
 section {
   border: 3px solid black;
   margin-bottom: 1rem;

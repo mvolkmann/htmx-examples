@@ -7,7 +7,7 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/demo', (c: Context) => {
+app.get('/danger', (c: Context) => {
   /*
   When Hono converts JSX to a string, it is escaped.
   That causes a syntax error when the browser tries to

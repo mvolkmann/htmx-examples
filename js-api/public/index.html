@@ -5,10 +5,28 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="reload-client.js" type="module"></script>
     <script>
+      htmx.onLoad(body => {
+        const div = document.createElement('div');
+        div.textContent = 'new content';
+        // document.body is not set until htmx.onLoad is called.
+        body.append(div);
+
+        const items = htmx.findAll('ul li');
+        for (const item of items) {
+          item.addEventListener('click', event => {
+            htmx.takeClass(event.target, 'selected');
+          });
+        }
+      });
+
       // This controls whether htmx processes script tags
       // found in HTML returned by endpoints,
-      // like the one returned by the GET /demo request below.
+      // like the one returned by the GET /danger request below.
       htmx.config.allowScriptTags = false;
+
+      // This logs all htmx-specific events to
+      // the DevTools console for debugging.
+      htmx.logAll();
 
       function addClass(event, button) {
         const section = htmx.closest(button, 'section');
@@ -18,6 +36,24 @@
         htmx.addClass(d1, 'big-red');
 
         eval('alert("Hello, World!")');
+      }
+
+      // This provides a way to dynamically and conditionally
+      // add event handling.  It is an alternative to
+      // applying the hx-on attribute in an element tag.
+      htmx.on('#change-btn', 'click', uppercaseItems);
+
+      function uppercaseItems(event) {
+        const items = htmx.findAll('ul li');
+        for (const item of items) {
+          item.textContent = item.textContent.toUpperCase();
+        }
+
+        // Stop listening for click events on the button.
+        htmx.off('#change-btn', 'click', uppercaseItems);
+
+        // Remove the button.
+        htmx.remove(event.target);
       }
     </script>
   </head>
@@ -30,9 +66,16 @@
       <button hx-on:click="addClass(event, this)">Change</button>
     </section>
 
-    <div id="d1">D1</div>
+    <div id="d1" hx-on:click="htmx.removeClass(this, 'big-red')">D1</div>
 
-    <button hx-get="/demo" hx-target="#demo">Demo</button>
-    <div id="demo"></div>
+    <button hx-get="/danger" hx-target="#result">Fetch</button>
+    <div id="result"></div>
+
+    <ul>
+      <li>Red</li>
+      <li>Green</li>
+      <li>Blue</li>
+    </ul>
+    <button id="change-btn">Uppercase Items</button>
   </body>
 </html>

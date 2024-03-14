@@ -10,9 +10,9 @@
   </head>
   <body x-data="{count: 0}">
     <div class="counter">
-      <button :disabled="count <= 0" x-on:click="count--">Less</button>
+      <button :disabled="count <= 0" @click="count--">Less</button>
       <div id="count" x-text="count"></div>
-      <button x-on:click="count++">More</button>
+      <button @click="count++">More</button>
     </div>
     <!-- Using Alpine x-bind on the hx-get attribute causes its
          value to be updated every time the value of count changes.
