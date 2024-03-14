@@ -5,16 +5,14 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="reload-client.js" type="module"></script>
     <script>
-      htmx.onLoad(body => {
-        // If no element with id 'new' exists ...
-        if (!htmx.find('#new')) {
-          // Create the element and append it to the body.
-          const div = document.createElement('div');
-          div.setAttribute('id', 'new');
-          div.textContent = 'dynamic content';
-          // document.body is not set until htmx.onLoad is called.
-          body.append(div);
-        }
+      window.onload = () => {
+        console.log('index.html onLoad: entered');
+        // Create the element and append it to the body.
+        const div = document.createElement('div');
+        div.setAttribute('id', 'new');
+        div.textContent = 'dynamic content';
+        // document.body is not set until htmx.onLoad is called.
+        document.body.append(div);
 
         // Add an event handler to each list item.
         const items = htmx.findAll('ul li');
@@ -36,7 +34,7 @@
         const sum = new Function('a', 'b', 'return a + b');
         console.log('sum =', sum(1, 2));
         */
-      });
+      };
 
       // When set to `false`, this prevents the use of the JavaScript `eval`
       // function and the `htmx-on` attribute for registering event handling.
@@ -53,7 +51,7 @@
 
       // This logs all htmx-specific events to
       // the DevTools console for debugging.
-      htmx.logAll();
+      // htmx.logAll();
 
       function changeStyles(event, button) {
         // Change the border color of the section that surrounds the button.
@@ -100,8 +98,6 @@
     </script>
   </head>
   <body>
-    <h1>htmx JS API</h1>
-
     <section>
       <div>Press this button to change some styles.</div>
       <!-- `this` holds the current element. -->
