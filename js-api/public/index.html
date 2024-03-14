@@ -23,6 +23,11 @@
             htmx.takeClass(event.target, 'selected');
           });
         }
+
+        // After 5 seconds, click the "Toggle Bullets" button.
+        setTimeout(() => {
+          htmx.trigger('#toggle-btn', 'click');
+        }, 5000);
       });
 
       // This controls whether htmx processes script tags
@@ -69,6 +74,12 @@
         const ul = htmx.find('ul');
         htmx.toggleClass(ul, 'no-bullets');
       }
+
+      function debugForm() {
+        const form = htmx.find('#my-form');
+        const values = htmx.values(form);
+        console.log('form values are', values);
+      }
     </script>
   </head>
   <body>
@@ -97,6 +108,23 @@
       <li>Blue</li>
     </ul>
     <button id="change-btn">Uppercase Items</button>
-    <button hx-on:click="toggleBullets()">Toggle Bullets</button>
+    <button id="toggle-btn" hx-on:click="toggleBullets()">
+      Toggle Bullets
+    </button>
+
+    <hr />
+
+    <form id="my-form">
+      <label>
+        Name
+        <input type="text" name="name" />
+      </label>
+      <br />
+      <label>
+        Age
+        <input type="number" name="age" />
+      </label>
+    </form>
+    <button hx-on:click="debugForm()">Debug Form</button>
   </body>
 </html>
