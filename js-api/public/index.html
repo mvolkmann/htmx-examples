@@ -12,7 +12,8 @@
       // And it does not prevent dynamically defining functions
       // with the JavaScript `Function` constructor.
       // htmx.config.allowEval = false;
-      // Uncomment this line and click the "Shout" button to see the difference.
+      // Uncomment this line and click the "Shout" button
+      // to see the difference.
       // htmx.config.allowEval = true;
 
       // When set to 'false', script tags found in HTML
@@ -39,8 +40,12 @@
         // to register these event handlers.
         // Doing it in the code allows making it conditional
         // and we can use `htmx.off` to remove the event handlers.
+        ageInput.addEventListener('change', checkAge);
+        nameInput.addEventListener('change', checkAge);
+        /* Alternative approach
         htmx.on(ageInput, 'change', checkAge);
         htmx.on(nameInput, 'change', checkAge);
+        */
 
         // Find all the list items.
         const items = document.querySelectorAll('ul li');
