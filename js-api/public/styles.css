@@ -1,11 +1,21 @@
 body {
+  background-color: lightblue;
   font-family: sans-serif;
 }
 
-.big-red {
-  color: red;
-  font-size: 2rem;
-  font-weight: bold;
+input {
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+button {
+  background-color: cornflowerblue;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  padding: 0.5rem;
 }
 
 .selected {
@@ -14,7 +24,7 @@ body {
 }
 
 section {
-  border: 3px solid black;
+  border: 3px solid transparent;
   margin-bottom: 1rem;
   padding: 1rem;
 }
@@ -22,4 +32,9 @@ section {
 .no-bullets {
   list-style-type: none;
   padding-left: 0;
+}
+
+.warning {
+  color: red;
+  font-weight: bold;
 }

@@ -5,24 +5,58 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="reload-client.js" type="module"></script>
     <script>
-      window.onload = () => {
-        console.log('index.html onLoad: entered');
-        // Create the element and append it to the body.
-        const div = document.createElement('div');
-        div.setAttribute('id', 'new');
-        div.textContent = 'dynamic content';
-        // document.body is not set until htmx.onLoad is called.
-        document.body.append(div);
+      // When set to `false`, this prevents the use of the JavaScript `eval`
+      // function AND the `htmx-on` attribute for registering event handling.
+      // It does not prevent passing strings of JavaScript code
+      // to the JavaScript `setTimeout` and `setInterval` functions.
+      // And it does not prevent dynamically defining functions
+      // with the JavaScript `Function` constructor.
+      // htmx.config.allowEval = false;
+      // Uncomment this line and click the "Shout" button to see the difference.
+      // htmx.config.allowEval = true;
 
-        // Add an event handler to each list item.
-        const items = htmx.findAll('ul li');
+      // When set to 'false', script tags found in HTML
+      // returned by endpoints, are not executed.
+      // The GET /danger endpoint returns a script tag.
+      // Comment this line out and click the "Fetch" button
+      // to see the difference.
+      htmx.config.allowScriptTags = false;
+
+      let ageInput, messageDiv, nameInput;
+
+      // Wait for document to load before attempting to find DOM elements.
+      window.onload = () => {
+        nameInput = document.querySelector('#name');
+        ageInput = document.querySelector('#age');
+        messageDiv = document.querySelector('#message');
+        /* Alternative approach
+        nameInput = htmx.find('#name');
+        ageInput = htmx.find('#age');
+        messageDiv = htmx.find('#message');
+        */
+
+        // We could use the `hx-on` attribute on the input elements
+        // to register these event handlers.
+        // Doing it in the code allows making it conditional
+        // and we can use `htmx.off` to remove the event handlers.
+        htmx.on(ageInput, 'change', checkAge);
+        htmx.on(nameInput, 'change', checkAge);
+
+        // Find all the list items.
+        const items = document.querySelectorAll('ul li');
+        // Alternate approach
+        // const items = htmx.findAll('ul li');
+
+        // Add an event handler to each list item
+        // that ensures only one has the class "selected".
         for (const item of items) {
           item.addEventListener('click', event => {
             htmx.takeClass(event.target, 'selected');
           });
         }
 
-        // After 5 seconds, click the "Toggle Bullets" button.
+        // After 5 seconds, trigger a click event
+        // on the "Toggle Bullets" button.
         setTimeout(() => {
           htmx.trigger('#toggle-btn', 'click');
         }, 5000);
@@ -36,41 +70,34 @@
         */
       };
 
-      // When set to `false`, this prevents the use of the JavaScript `eval`
-      // function and the `htmx-on` attribute for registering event handling.
-      // It does not prevent passing strings of JavaScript code
-      // to the JavaScript `setTimeout` and `setInterval` functions.
-      // And it does not prevent dynamically defining functions
-      // with the JavaScript `Function` constructor.
-      // htmx.config.allowEval = false;
-
-      // This controls whether htmx processes script tags
-      // found in HTML returned by endpoints,
-      // like the one returned by the GET /danger request below.
-      htmx.config.allowScriptTags = false;
-
       // This logs all htmx-specific events to
       // the DevTools console for debugging.
       // htmx.logAll();
-
-      function changeStyles(event, button) {
-        // Change the border color of the section that surrounds the button.
-        const section = htmx.closest(button, 'section');
-        section.style.borderColor = 'red';
-
-        // Add a CSS class to the element with id 'greet'.
-        const greet = htmx.find('#greet');
-        htmx.addClass(greet, 'big-red');
-
-        // This is prevented by setting htmx.config.allowEval = false;
-        // It will trigger a htmx:evalDisallowedError event.
-        // eval('alert("This was executed by eval.")');
-      }
 
       // This provides a way to dynamically and conditionally
       // add event handling.  It is an alternative to
       // applying the hx-on attribute in an element tag.
       htmx.on('#change-btn', 'click', uppercaseItems);
+
+      function checkAge() {
+        let ageGroup, borderColor;
+        const name = nameInput.value || 'Unknown';
+        const age = ageInput.value;
+        if (age < 21) {
+          // Change the border color of the section that surrounds the button.
+          borderColor = 'red';
+          ageGroup = 'a minor';
+          htmx.addClass(messageDiv, 'warning');
+        } else {
+          borderColor = 'transparent';
+          ageGroup = 'an adult';
+          htmx.removeClass(messageDiv, 'warning');
+        }
+
+        const section = htmx.closest(ageInput, 'section');
+        section.style.borderColor = borderColor;
+        messageDiv.textContent = `${name} is ${ageGroup}.`;
+      }
 
       function uppercaseItems(event) {
         const items = htmx.findAll('ul li');
@@ -83,6 +110,10 @@
 
         // Remove the button.
         htmx.remove(event.target);
+
+        // This is prevented by setting htmx.config.allowEval = false;
+        // It will trigger a htmx:evalDisallowedError event.
+        eval('alert("This was executed by eval.")');
       }
 
       function toggleBullets() {
@@ -99,14 +130,21 @@
   </head>
   <body>
     <section>
-      <div>Press this button to change some styles.</div>
-      <!-- `this` holds the current element. -->
-      <button hx-on:click="changeStyles(event, this)">Change Styles</button>
+      <form id="my-form">
+        <label>
+          Name
+          <input type="text" id="name" name="name" />
+        </label>
+        <br />
+        <label>
+          Age
+          <input type="number" id="age" name="age" />
+        </label>
+      </form>
+      <button hx-on:click="debugForm()">Debug Form</button>
     </section>
 
-    <div id="greet" hx-on:click="htmx.removeClass(this, 'big-red')">
-      Hello, World!
-    </div>
+    <div id="message" hx-on:click="htmx.removeClass(this, 'warning')"></div>
 
     <hr />
 
@@ -120,24 +158,11 @@
       <li>Green</li>
       <li>Blue</li>
     </ul>
-    <button id="change-btn">Uppercase Items</button>
+    <button id="change-btn">Shout</button>
     <button id="toggle-btn" hx-on:click="toggleBullets()">
       Toggle Bullets
     </button>
 
     <hr />
-
-    <form id="my-form">
-      <label>
-        Name
-        <input type="text" name="name" />
-      </label>
-      <br />
-      <label>
-        Age
-        <input type="number" name="age" />
-      </label>
-    </form>
-    <button hx-on:click="debugForm()">Debug Form</button>
   </body>
 </html>
