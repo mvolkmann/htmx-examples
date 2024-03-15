@@ -11,10 +11,9 @@
       // to the JavaScript `setTimeout` and `setInterval` functions.
       // And it does not prevent dynamically defining functions
       // with the JavaScript `Function` constructor.
-      // htmx.config.allowEval = false;
       // Uncomment this line and click the "Shout" button
       // to see the difference.
-      // htmx.config.allowEval = true;
+      // htmx.config.allowEval = false;
 
       // When set to 'false', script tags found in HTML
       // returned by endpoints, are not executed.
@@ -56,6 +55,8 @@
         // that ensures only one has the class "selected".
         for (const item of items) {
           item.addEventListener('click', event => {
+            // Alternative approach
+            // htmx.on(item, 'click', event => {
             htmx.takeClass(event.target, 'selected');
           });
         }
@@ -63,26 +64,24 @@
         // After 5 seconds, trigger a click event
         // on the "Toggle Bullets" button.
         setTimeout(() => {
-          htmx.trigger('#toggle-btn', 'click');
-        }, 5000);
+          const btn = document.querySelector('#toggle-btn');
+          btn.dispatchEvent(new Event('click'));
+          // Alternative approach
+          // htmx.trigger('#toggle-btn', 'click');
+        }, 3000);
 
-        // The following code is not prevented by setting
-        // htmx.config.allowEval = false;
-        /*
-        setTimeout("alert('from setTimeout')", 1000);
-        const sum = new Function('a', 'b', 'return a + b');
-        console.log('sum =', sum(1, 2));
-        */
+        // This provides a way to dynamically and conditionally
+        // add event handling.  It is an alternative to
+        // applying the hx-on attribute in an element tag.
+        // const btn = document.querySelector('#shout-btn');
+        // btn.dispatchEvent(new Event('click'));
+        // Alternative approach
+        htmx.on('#shout-btn', 'click', uppercaseItems);
       };
 
       // This logs all htmx-specific events to
       // the DevTools console for debugging.
       // htmx.logAll();
-
-      // This provides a way to dynamically and conditionally
-      // add event handling.  It is an alternative to
-      // applying the hx-on attribute in an element tag.
-      htmx.on('#change-btn', 'click', uppercaseItems);
 
       function checkAge() {
         let ageGroup, borderColor;
@@ -111,7 +110,7 @@
         }
 
         // Stop listening for click events on the button.
-        htmx.off('#change-btn', 'click', uppercaseItems);
+        htmx.off('#shout-btn', 'click', uppercaseItems);
 
         // Remove the button.
         htmx.remove(event.target);
@@ -163,7 +162,7 @@
       <li>Green</li>
       <li>Blue</li>
     </ul>
-    <button id="change-btn">Shout</button>
+    <button id="shout-btn">Shout</button>
     <button id="toggle-btn" hx-on:click="toggleBullets()">
       Toggle Bullets
     </button>
