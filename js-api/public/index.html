@@ -73,10 +73,10 @@
         // This provides a way to dynamically and conditionally
         // add event handling.  It is an alternative to
         // applying the hx-on attribute in an element tag.
-        // const btn = document.querySelector('#shout-btn');
-        // btn.dispatchEvent(new Event('click'));
+        const btn = document.querySelector('#shout-btn');
+        btn.addEventListener('click', uppercaseItems);
         // Alternative approach
-        htmx.on('#shout-btn', 'click', uppercaseItems);
+        // htmx.on('#shout-btn', 'click', uppercaseItems);
       };
 
       // This logs all htmx-specific events to
@@ -103,21 +103,10 @@
         messageDiv.textContent = `${name} is ${ageGroup}.`;
       }
 
-      function uppercaseItems(event) {
-        const items = htmx.findAll('ul li');
-        for (const item of items) {
-          item.textContent = item.textContent.toUpperCase();
-        }
-
-        // Stop listening for click events on the button.
-        htmx.off('#shout-btn', 'click', uppercaseItems);
-
-        // Remove the button.
-        htmx.remove(event.target);
-
-        // This is prevented by setting htmx.config.allowEval = false;
-        // It will trigger a htmx:evalDisallowedError event.
-        eval('alert("This was executed by eval.")');
+      function debugForm() {
+        const form = htmx.find('#my-form');
+        const values = htmx.values(form);
+        console.log('form values are', values);
       }
 
       function toggleBullets() {
@@ -125,10 +114,27 @@
         htmx.toggleClass(ul, 'no-bullets');
       }
 
-      function debugForm() {
-        const form = htmx.find('#my-form');
-        const values = htmx.values(form);
-        console.log('form values are', values);
+      function uppercaseItems(event) {
+        console.log('index.html uppercaseItems: entered');
+        const items = document.querySelectorAll('ul li');
+        // Alternative approach
+        // const items = htmx.findAll('ul li');
+        for (const item of items) {
+          item.textContent = item.textContent.toUpperCase();
+        }
+
+        // Stop listening for click events on the button.
+        const btn = document.querySelector('#shout-btn');
+        btn.removeEventListener('click', uppercaseItems);
+        // Alternative approach
+        // htmx.off('#shout-btn', 'click', uppercaseItems);
+
+        // Remove the button.
+        htmx.remove(event.target);
+
+        // This is prevented by setting htmx.config.allowEval = false;
+        // It will trigger a htmx:evalDisallowedError event.
+        eval('alert("This was executed by eval.")');
       }
     </script>
   </head>
