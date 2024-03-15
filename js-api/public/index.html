@@ -91,27 +91,40 @@
           // Change the border color of the section that surrounds the button.
           borderColor = 'red';
           ageGroup = 'a minor';
-          htmx.addClass(messageDiv, 'warning');
+          messageDiv.classList.add('warning');
+          // Alternative approach
+          // htmx.addClass(messageDiv, 'warning');
         } else {
           borderColor = 'transparent';
           ageGroup = 'an adult';
-          htmx.removeClass(messageDiv, 'warning');
+          messageDiv.classList.remove('warning');
+          // Alternative approach
+          // htmx.removeClass(messageDiv, 'warning');
         }
 
-        const section = htmx.closest(ageInput, 'section');
+        const section = ageInput.closest('section');
+        // Alternative approach
+        // const section = htmx.closest(ageInput, 'section');
         section.style.borderColor = borderColor;
         messageDiv.textContent = `${name} is ${ageGroup}.`;
       }
 
       function debugForm() {
-        const form = htmx.find('#my-form');
+        const form = document.querySelector('#my-form');
+        // Alternative approach
+        // const form = htmx.find('#my-form');
         const values = htmx.values(form);
         console.log('form values are', values);
       }
 
       function toggleBullets() {
-        const ul = htmx.find('ul');
-        htmx.toggleClass(ul, 'no-bullets');
+        const ul = document.querySelector('ul');
+        // Alternative approach
+        // const ul = htmx.find('ul');
+
+        ul.classList.toggle('no-bullets');
+        // Alternative approach
+        // htmx.toggleClass(ul, 'no-bullets');
       }
 
       function uppercaseItems(event) {
@@ -130,7 +143,9 @@
         // htmx.off('#shout-btn', 'click', uppercaseItems);
 
         // Remove the button.
-        htmx.remove(event.target);
+        event.target.remove();
+        // Alternative approach
+        // htmx.remove(event.target);
 
         // This is prevented by setting htmx.config.allowEval = false;
         // It will trigger a htmx:evalDisallowedError event.
@@ -172,7 +187,5 @@
     <button id="toggle-btn" hx-on:click="toggleBullets()">
       Toggle Bullets
     </button>
-
-    <hr />
   </body>
 </html>
