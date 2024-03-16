@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>Pizza Order</title>
+    <style>
+      button {
+        background-color: purple;
+        border-radius: 0.5rem;
+        color: white;
+        margin-top: 1rem;
+        padding: 0.5rem;
+      }
+
+      .ingredient {
+        border: 1px solid gray;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+        padding: 0.5rem;
+      }
+      .ingredient.selected {
+        background-color: green;
+        color: white;
+      }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script>
+      var ingredients = [
+        'Bacon',
+        'Black Olives',
+        'Green Pepper',
+        'Mushroom',
+        'Pepperoni',
+        'Pineapple',
+        'Sausage',
+        'Spinach'
+      ];
+
+      function order() {
+        const selectedIngredients = htmx.findAll('.ingredient.selected');
+        const names = Array.from(selectedIngredients).map(
+          ingredient => ingredient.textContent
+        );
+        const list = names.length ? names.join(', ') : 'no toppings';
+        alert(`Your order includes ${list}.`);
+      }
+
+      function select(event) {
+        const ingredient = event.target;
+        htmx.toggleClass(ingredient, 'selected');
+      }
+    </script>
+  </head>
+  <body x-data="">
+    <h1>Select pizza toppings</h1>
+    <div>
+      <template x-for="ingredient in ingredients">
+        <span class="ingredient" @click="select" x-text="ingredient"></span>
+      </template>
+    </div>
+    <div>
+      <button @click="order">Order</button>
+    </div>
+  </body>
+</html>
