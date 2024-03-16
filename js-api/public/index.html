@@ -65,7 +65,7 @@
         // on the "Toggle Bullets" button.
         setTimeout(() => {
           const btn = document.querySelector('#toggle-btn');
-          btn.dispatchEvent(new Event('click'));
+          btn.dispatchEvent(new CustomEvent('click', {detail: {foo: 'bar'}}));
           // Alternative approach
           // htmx.trigger('#toggle-btn', 'click');
         }, 3000);
@@ -77,6 +77,9 @@
         btn.addEventListener('click', uppercaseItems);
         // Alternative approach
         // htmx.on('#shout-btn', 'click', uppercaseItems);
+
+        updateStats();
+        setInterval(updateStats, 5000);
       };
 
       // This logs all htmx-specific events to
@@ -110,14 +113,15 @@
       }
 
       function debugForm() {
-        const form = document.querySelector('#my-form');
+        const form = document.querySelector('#register-form');
         // Alternative approach
         // const form = htmx.find('#my-form');
         const values = htmx.values(form);
         console.log('form values are', values);
       }
 
-      function toggleBullets() {
+      function toggleBullets(event) {
+        console.log('toggleBullets: event =', event);
         const ul = document.querySelector('ul');
         // Alternative approach
         // const ul = htmx.find('ul');
@@ -127,8 +131,11 @@
         // htmx.toggleClass(ul, 'no-bullets');
       }
 
+      function updateStats() {
+        htmx.ajax('GET', '/heap-size', '#heap-size');
+      }
+
       function uppercaseItems(event) {
-        console.log('index.html uppercaseItems: entered');
         const items = document.querySelectorAll('ul li');
         // Alternative approach
         // const items = htmx.findAll('ul li');
@@ -155,18 +162,18 @@
   </head>
   <body>
     <section>
-      <form id="my-form">
+      <form id="register-form" hx-post="/register" hx-target="#status">
         <label>
           Name
           <input type="text" id="name" name="name" />
         </label>
-        <br />
         <label>
           Age
           <input type="number" id="age" name="age" />
         </label>
+        <button>Submit</button>
+        <button type="button" hx-on:click="debugForm()">Debug Form</button>
       </form>
-      <button hx-on:click="debugForm()">Debug Form</button>
     </section>
 
     <div id="message" hx-on:click="htmx.removeClass(this, 'warning')"></div>
@@ -184,8 +191,10 @@
       <li>Blue</li>
     </ul>
     <button id="shout-btn">Shout</button>
-    <button id="toggle-btn" hx-on:click="toggleBullets()">
+    <button id="toggle-btn" hx-on:click="toggleBullets(event)">
       Toggle Bullets
     </button>
+
+    <div>Heap Size: <span id="heap-size"></span> MB</div>
   </body>
 </html>

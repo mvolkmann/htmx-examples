@@ -1,12 +1,11 @@
 body {
-  background-color: lightblue;
+  /* background-color: lightblue; */
   font-family: sans-serif;
 }
 
 input {
   border: 1px solid gray;
   border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
   padding: 0.5rem;
 }
 
@@ -16,6 +15,12 @@ button {
   border-radius: 0.5rem;
   color: white;
   padding: 0.5rem;
+}
+
+form {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .selected {

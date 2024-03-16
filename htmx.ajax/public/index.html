@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>htmx.ajax Demo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      window.onload = () => {
+        updateStats();
+        setInterval(updateStats, 5000);
+      };
+
+      function updateStats() {
+        htmx.ajax('GET', '/heap-size', '#heap-size');
+      }
+    </script>
+  </head>
+  <body>
+    <div>Heap Size: <span id="heap-size"></span> MB</div>
+  </body>
+</html>
