@@ -1,7 +1,12 @@
 <html>
   <head>
     <title>Color Picker</title>
-    <style></style>
+    <style>
+      p {
+        margin: 0.5rem 0 0 0;
+        padding: 0.5rem;
+      }
+    </style>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script
       defer
@@ -9,16 +14,24 @@
     ></script>
     <script>
       function updateStyles(data) {
-        const {fgColor} = data;
+        const {bgColor, fgColor} = data;
         const paragraphs = htmx.findAll('p');
         for (const p of paragraphs) {
+          p.style.backgroundColor = bgColor;
           p.style.color = fgColor;
         }
       }
     </script>
   </head>
-  <body x-data="{bgColor: '#ffffff', fgColor: '#ff0000'}" x-init="updateStyles($data)">
-    <input type="color" @input="updateStyles($data)" x-model="fgColor" />
+  <body x-data="{bgColor: '#ffffff', fgColor: '#000000'}" x-init="updateStyles($data)">
+    <label>
+      Foreground
+      <input type="color" @input="updateStyles($data)" x-model="fgColor" />
+    </label>
+    <label style="margin-left: 1rem">
+      Background
+      <input type="color" @input="updateStyles($data)" x-model="bgColor" />
+    </label>
     <p>
       Welcome to our website! We are dedicated to providing high-quality products and exceptional customer service. Whether you're looking for the latest technology gadgets, fashionable accessories, or innovative solutions for your business, you've come to the right place. Our team is committed to delivering excellence in every aspect of your shopping experience, from browsing our extensive catalog to fast and reliable shipping. Explore our website and discover how we can meet your needs and exceed your expectations.
     </p>
