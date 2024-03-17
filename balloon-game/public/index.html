@@ -57,6 +57,13 @@
 
       const pop = new Audio('pop.mp3');
 
+      function cheat() {
+        const balloons = htmx.findAll('.balloon');
+        for (const balloon of balloons) {
+          htmx.trigger(balloon, 'click');
+        }
+      }
+
       function createBalloon(data, number) {
         const balloon = document.createElement('div');
         balloon.textContent = number;
@@ -75,13 +82,6 @@
           pop.play();
           htmx.remove(balloon);
         });
-
-        function cheat() {
-          const balloons = htmx.findAll('.balloon');
-          for (const balloon of balloons) {
-            htmx.trigger(balloon, 'click');
-          }
-        }
 
         // Remove balloon when it is clicked.
         const clickHandler = () => {
@@ -139,11 +139,12 @@
         let number = 0;
         createBalloon(data, ++number);
         const timer = setInterval(() => {
-          createBalloon(data, ++number);
           data.seconds--;
           if (data.seconds == 0) {
             clearInterval(timer);
             endGame(data);
+          } else {
+            createBalloon(data, ++number);
           }
         }, 1000);
       }
