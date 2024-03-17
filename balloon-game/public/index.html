@@ -15,7 +15,7 @@
         line-height: var(--balloon-size);
         position: absolute;
         text-align: center;
-        transition: top 3s ease-in;
+        transition: top 2s ease-in;
       }
 
       body {
@@ -97,7 +97,7 @@
 
         // Wait a bit for the balloon to be added to the DOM
         // and them drop it.
-        // TODO: Why is this necessary?
+        // TODO: Why is this timeout necessary?
         setTimeout(() => {
           balloon.style.top = window.innerHeight - balloonSize + 'px';
         }, 100);
