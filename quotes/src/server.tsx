@@ -8,8 +8,13 @@ const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
 app.get('/quote', async (c: Context) => {
-  const quote = await (await fetch('https://api.quotable.io/random')).json();
-  return c.text(quote);
+  try {
+    const res = await fetch('https://api.quotable.io/random');
+    const quote = await res.json();
+    return c.text(quote.content);
+  } catch (error) {
+    return c.text(JSON.stringify(error));
+  }
 });
 
 export default app;

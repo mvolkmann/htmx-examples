@@ -2,8 +2,26 @@
 <html>
   <head>
     <title>Quotes</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      #quote {
+        font-size: 1.5rem;
+      }
+    </style>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script></script>
+    <script>
+      const getQuote = () => htmx.ajax('GET', '/quote', '#quote');
+
+      window.onload = () => {
+        getQuote();
+        setInterval(getQuote, 5000);
+      };
+    </script>
   </head>
-  <body></body>
+  <body>
+    <h1>Quotes</h1>
+    <div id="quote"></div>
+  </body>
 </html>
