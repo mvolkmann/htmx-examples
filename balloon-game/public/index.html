@@ -14,6 +14,12 @@
         transition: top 20s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       }
 
+      .banner {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+      }
+
       body {
         background-color: skyblue;
         font-family: sans-serif;
@@ -22,10 +28,11 @@
         position: relative;
       }
 
-      .score {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
+      button {
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 2rem;
+        padding: 0.5rem;
       }
     </style>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -37,15 +44,6 @@
       const size = 50;
       const pop = new Audio('pop.mp3');
 
-      function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-      }
-
       function createBalloon() {
         const balloon = document.createElement('div');
         balloon.className = 'balloon';
@@ -56,35 +54,79 @@
         return balloon;
       }
 
+      function endGame(data) {
+        data.playing = false;
+
+        // Prevent clicking any of the remaining balloons.
+        const balloons = htmx.findAll('.balloon');
+        for (const balloon of balloons) {
+          htmx.off(balloon, 'click', balloon.listener);
+        }
+      }
+
+      function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
       function startGame(data) {
+        data.playing = true;
+        data.score = 0;
+        data.seconds = 5;
+
+        // Update the seconds remaining.
+        const timer = setInterval(() => {
+          data.seconds--;
+          if (data.seconds == 0) {
+            clearInterval(timer);
+            clearInterval(dropper);
+            endGame(data);
+          }
+        }, 1000);
+
         // Create a new balloon every second.
-        setInterval(() => {
+        const dropper = setInterval(() => {
           const balloon = createBalloon();
 
           // Remove the balloon when it hits the ground.
           htmx.on(balloon, 'transitionend', () => htmx.remove(balloon));
 
           // Remove the balloon when it is clicked.
-          htmx.on(balloon, 'click', () => {
-            console.log('got click');
+          const listener = () => {
             htmx.remove(balloon);
             pop.play();
             data.score++;
-          });
+          };
+          htmx.on(balloon, 'click', listener);
+
+          // Save the listener so it's easy to remove it later.
+          balloon.listener = listener;
 
           document.body.appendChild(balloon);
-          console.log('created balloon');
+          // console.log('created balloon');
 
           // Drop the balloon.
           setTimeout(() => {
             balloon.style.top = window.innerHeight + 'px';
-            console.log('dropped balloon');
+            // console.log('dropped balloon');
           }, 10);
         }, 1000);
       }
     </script>
   </head>
-  <body x-data="{score: 0}" x-init="startGame($data)">
-    <div class="score">Score: <span x-text="score"></span></div>
+  <body x-data="{playing: false, seconds: 0, score: 0}">
+    <div class="banner">
+      <template x-if="!playing">
+        <button @click="startGame($data)">Play</button>
+      </template>
+      <span>Score: <span x-text="score"></span></span>
+      <template x-if="playing">
+        <span>, Seconds Remaining: <span x-text="seconds"></span></span>
+      </template>
+    </div>
   </body>
 </html>
