@@ -3,15 +3,14 @@
   <head>
     <style>
       .balloon {
-        --size: 100px;
+        height: var(--size);
+        width: var(--size);
+
         border: 1px solid gray;
         border-radius: 50%;
         cursor: pointer;
         position: absolute;
-        height: var(--size);
-        width: var(--size);
-
-        transition: top 20s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        transition: top 3s ease-in;
       }
 
       .banner {
@@ -21,6 +20,8 @@
       }
 
       body {
+        --size: 100px;
+
         background-color: skyblue;
         font-family: sans-serif;
         font-size: 2rem;
@@ -41,7 +42,13 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
-      const size = 50;
+      let size = 0;
+      window.onload = () => {
+        size = parseInt(
+          getComputedStyle(document.body).getPropertyValue('--size')
+        );
+      };
+
       const pop = new Audio('pop.mp3');
 
       function createBalloon() {
@@ -49,7 +56,10 @@
         balloon.className = 'balloon';
         balloon.style.backgroundColor = getRandomColor();
         const maxLeft = window.innerWidth - size;
-        balloon.style.left = Math.floor(Math.random() * maxLeft) + 'px';
+        console.log('maxLeft =', maxLeft);
+        const left = Math.floor(Math.random() * maxLeft);
+        console.log('left =', left);
+        balloon.style.left = `${left}px`;
         balloon.style.top = `-${size}px`;
         return balloon;
       }
@@ -93,7 +103,10 @@
           const balloon = createBalloon();
 
           // Remove the balloon when it hits the ground.
-          htmx.on(balloon, 'transitionend', () => htmx.remove(balloon));
+          htmx.on(balloon, 'transitionend', () => {
+            pop.play();
+            htmx.remove(balloon);
+          });
 
           // Remove the balloon when it is clicked.
           const listener = () => {
@@ -111,7 +124,7 @@
 
           // Drop the balloon.
           setTimeout(() => {
-            balloon.style.top = window.innerHeight + 'px';
+            balloon.style.top = window.innerHeight - size + 'px';
             // console.log('dropped balloon');
           }, 10);
         }, 1000);
