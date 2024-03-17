@@ -114,7 +114,7 @@
       function endGame(data) {
         data.playing = false;
 
-        // Prevent clicking any of the remaining balloons.
+        // Prevent the user from clicking any of the remaining balloons.
         const balloons = htmx.findAll('.balloon');
         for (const balloon of balloons) {
           htmx.off(balloon, 'click', balloon.clickHandler);
@@ -130,6 +130,8 @@
         return color;
       }
 
+      // This returns either "black" or "white" based on
+      // which one constrasts best with a given color.
       function getTextColor(hexColor) {
         const r = parseInt(hexColor.substr(1, 2), 16);
         const g = parseInt(hexColor.substr(3, 2), 16);
