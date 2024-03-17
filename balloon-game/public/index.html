@@ -3,33 +3,25 @@
   <head>
     <style>
       .balloon {
-        height: var(--balloonSize);
-        width: var(--balloonSize);
+        height: var(--balloon-size);
+        width: var(--balloon-size);
 
-        border: 1px solid gray;
         border-radius: 50%;
         color: white;
         cursor: pointer;
-        font-size: calc(var(--balloonSize) / 2);
+        font-size: calc(var(--balloon-size) / 2);
         font-weight: bold;
-        line-height: var(--balloonSize);
+        line-height: var(--balloon-size);
         position: absolute;
         text-align: center;
         transition: top 3s ease-in;
       }
 
-      .banner {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-      }
-
       body {
-        --balloonSize: 100px;
+        --balloon-size: 100px;
 
         background-color: skyblue;
         font-family: sans-serif;
-        font-size: 2rem;
         margin: 0;
         position: relative;
       }
@@ -39,6 +31,13 @@
         border-radius: 0.5rem;
         font-size: 2rem;
         padding: 0.5rem;
+      }
+
+      .controls {
+        font-size: 2rem;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
       }
     </style>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -52,7 +51,7 @@
 
       window.onload = () => {
         balloonSize = parseInt(
-          getComputedStyle(document.body).getPropertyValue('--balloonSize')
+          getComputedStyle(document.body).getPropertyValue('--balloon-size')
         );
       };
 
@@ -65,7 +64,9 @@
         const balloon = document.createElement('div');
         balloon.textContent = number;
         htmx.addClass(balloon, 'balloon');
-        balloon.style.backgroundColor = getRandomColor();
+        const bgColor = getBalloonColor();
+        balloon.style.backgroundColor = bgColor;
+        balloon.style.color = getTextColor(bgColor);
         const maxLeft = window.innerWidth - balloonSize;
         const left = Math.floor(Math.random() * maxLeft);
         balloon.style.left = `${left}px`;
@@ -107,13 +108,21 @@
         }
       }
 
-      function getRandomColor() {
+      function getBalloonColor() {
         const letters = '0123456789ABCDEF';
         let color = '#';
         for (let i = 0; i < 6; i++) {
           color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
+      }
+
+      function getTextColor(hexColor) {
+        const r = parseInt(hexColor.substr(1, 2), 16);
+        const g = parseInt(hexColor.substr(3, 2), 16);
+        const b = parseInt(hexColor.substr(5, 2), 16);
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        return luminance > 0.5 ? 'black' : 'white';
       }
 
       function startGame(data) {
@@ -148,7 +157,7 @@
     </script>
   </head>
   <body x-data="{playing: false, seconds: 0, score: 0}">
-    <div class="banner">
+    <div class="controls">
       <template x-if="!playing">
         <button @click="startGame($data)">Play</button>
       </template>
