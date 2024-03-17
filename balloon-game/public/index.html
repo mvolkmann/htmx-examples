@@ -55,14 +55,12 @@
 
       function createBalloon() {
         const balloon = document.createElement('div');
-        balloon.className = 'balloon';
+        htmx.addClass(balloon, 'balloon');
         balloon.style.backgroundColor = getRandomColor();
         const maxLeft = window.innerWidth - balloonSize;
-        console.log('maxLeft =', maxLeft);
         const left = Math.floor(Math.random() * maxLeft);
-        console.log('left =', left);
         balloon.style.left = `${left}px`;
-        balloon.style.top = `-${balloonSize}px`;
+        balloon.style.top = `-${balloonSize}px`; // off screen
         return balloon;
       }
 
@@ -72,7 +70,7 @@
         // Prevent clicking any of the remaining balloons.
         const balloons = htmx.findAll('.balloon');
         for (const balloon of balloons) {
-          htmx.off(balloon, 'click', balloon.listener);
+          htmx.off(balloon, 'click', balloon.clickHandler);
         }
       }
 
@@ -111,24 +109,22 @@
           });
 
           // Remove the balloon when it is clicked.
-          const listener = () => {
-            htmx.remove(balloon);
+          const clickHandler = () => {
             pop.play();
             data.score++;
+            htmx.remove(balloon);
           };
-          htmx.on(balloon, 'click', listener);
+          htmx.on(balloon, 'click', clickHandler);
 
           // Save the listener so it's easy to remove it later.
-          balloon.listener = listener;
+          balloon.clickHandler = clickHandler;
 
           document.body.appendChild(balloon);
-          console.log('created balloon');
 
           // Drop the balloon.
           setTimeout(() => {
             balloon.style.top = window.innerHeight - balloonSize + 'px';
-            console.log('dropped balloon');
-          }, 10);
+          }, 0);
         }, 1000);
       }
     </script>
