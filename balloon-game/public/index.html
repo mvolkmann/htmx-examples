@@ -6,6 +6,7 @@
         height: var(--balloon-size);
         width: var(--balloon-size);
 
+        border: 3px solid black;
         border-radius: 50%;
         color: white;
         cursor: pointer;
@@ -46,19 +47,15 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
-      let balloonSize = 0;
       const gameDuration = 5;
 
+      let balloonSize = 0; // will get from CSS variable
       window.onload = () => {
-        balloonSize = parseInt(
-          getComputedStyle(document.body).getPropertyValue('--balloon-size')
-        );
+        const style = getComputedStyle(document.body);
+        balloonSize = parseInt(style.getPropertyValue('--balloon-size'));
       };
 
       const pop = new Audio('pop.mp3');
-      pop.addEventListener('error', event => {
-        console.error(error);
-      });
 
       function createBalloon(data, number) {
         const balloon = document.createElement('div');
@@ -70,32 +67,40 @@
         const maxLeft = window.innerWidth - balloonSize;
         const left = Math.floor(Math.random() * maxLeft);
         balloon.style.left = `${left}px`;
-        balloon.style.top = `-${balloonSize}px`; // off screen
+        balloon.style.top = `-${balloonSize}px`; // off top of window
 
-        // Remove the balloon when it hits the ground.
+        // Remove balloon when it hits the ground.
         htmx.on(balloon, 'transitionend', () => {
-          console.log('playing sound');
+          // TODO: Why does this sound sometimes not play?
           pop.play();
           htmx.remove(balloon);
         });
 
-        // Remove the balloon when it is clicked.
+        function cheat() {
+          const balloons = htmx.findAll('.balloon');
+          for (const balloon of balloons) {
+            htmx.trigger(balloon, 'click');
+          }
+        }
+
+        // Remove balloon when it is clicked.
         const clickHandler = () => {
           pop.play();
           data.score++;
           htmx.remove(balloon);
         };
         htmx.on(balloon, 'click', clickHandler);
-
-        // Save the listener so it's easy to remove it later.
+        // Save listener so it's easy to remove it later.
         balloon.clickHandler = clickHandler;
 
         document.body.appendChild(balloon);
 
-        // Drop the balloon.
+        // Wait a bit for the balloon to be added to the DOM
+        // and them drop it.
+        // TODO: Why is this necessary?
         setTimeout(() => {
           balloon.style.top = window.innerHeight - balloonSize + 'px';
-        }, 10);
+        }, 100);
       }
 
       function endGame(data) {
@@ -130,29 +135,17 @@
         data.score = 0;
         data.seconds = gameDuration;
 
-        // Update the seconds remaining.
+        // Drop a balloon and update the seconds remaining every second.
+        let number = 0;
+        createBalloon(data, ++number);
         const timer = setInterval(() => {
+          createBalloon(data, ++number);
           data.seconds--;
           if (data.seconds == 0) {
             clearInterval(timer);
-            clearInterval(dropper);
             endGame(data);
           }
         }, 1000);
-
-        // Create a new balloon every second.
-        let number = 0;
-        createBalloon(data, ++number);
-        const dropper = setInterval(() => {
-          createBalloon(data, ++number);
-        }, 1000);
-      }
-
-      function cheat() {
-        const balloons = htmx.findAll('.balloon');
-        for (const balloon of balloons) {
-          htmx.trigger(balloon, 'click');
-        }
       }
     </script>
   </head>
