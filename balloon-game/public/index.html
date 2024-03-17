@@ -57,6 +57,9 @@
       };
 
       const pop = new Audio('pop.mp3');
+      pop.addEventListener('error', event => {
+        console.error(error);
+      });
 
       function createBalloon(data, number) {
         const balloon = document.createElement('div');
@@ -135,6 +138,13 @@
           createBalloon(data, ++number);
         }, 1000);
       }
+
+      function cheat() {
+        const balloons = htmx.findAll('.balloon');
+        for (const balloon of balloons) {
+          htmx.trigger(balloon, 'click');
+        }
+      }
     </script>
   </head>
   <body x-data="{playing: false, seconds: 0, score: 0}">
@@ -144,7 +154,11 @@
       </template>
       <span>Score: <span x-text="score"></span></span>
       <template x-if="playing">
-        <span>, Seconds Remaining: <span x-text="seconds"></span></span>
+        <span>
+          , Seconds Remaining:
+          <span x-text="seconds"></span>
+          <button @click="cheat">Cheat</button>
+        </span>
       </template>
     </div>
   </body>
