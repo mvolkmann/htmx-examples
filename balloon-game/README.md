@@ -1,11 +1,7 @@
-To install dependencies:
-```sh
-bun install
-```
+# Balloon Game
 
-To run:
-```sh
-bun run dev
-```
+To run this:
 
-open http://localhost:3000
+- `bun install`
+- `bun dev`
+- browse localhost:3000
