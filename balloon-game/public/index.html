@@ -47,16 +47,20 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
-      const gameDuration = 5;
+      const gameDuration = 5; // seconds
 
       let balloonSize = 0; // will get from CSS variable
+      // We cannot get CSS variables from elements
+      // until they have loaded.
       window.onload = () => {
         const style = getComputedStyle(document.body);
         balloonSize = parseInt(style.getPropertyValue('--balloon-size'));
       };
 
+      // This is the sound to play when a balloon pops.
       const pop = new Audio('pop.mp3');
 
+      // Pops all balloons currently on the screen.
       function cheat() {
         const balloons = htmx.findAll('.balloon');
         for (const balloon of balloons) {
@@ -71,19 +75,23 @@
         const bgColor = getBalloonColor();
         balloon.style.backgroundColor = bgColor;
         balloon.style.color = getTextColor(bgColor);
+
+        // Compute a random horizontal position.
         const maxLeft = window.innerWidth - balloonSize;
         const left = Math.floor(Math.random() * maxLeft);
         balloon.style.left = `${left}px`;
-        balloon.style.top = `-${balloonSize}px`; // off top of window
 
-        // Remove balloon when it hits the ground.
+        // Place the balloon just off the top of the window.
+        balloon.style.top = `-${balloonSize}px`;
+
+        // Remove the balloon when it hits the ground.
         htmx.on(balloon, 'transitionend', () => {
           // TODO: Why does this sound sometimes not play?
           pop.play();
           htmx.remove(balloon);
         });
 
-        // Remove balloon when it is clicked.
+        // Remove the balloon when the user clicks it.
         const clickHandler = () => {
           pop.play();
           data.score++;
