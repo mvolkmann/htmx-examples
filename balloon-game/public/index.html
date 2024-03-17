@@ -103,12 +103,11 @@
 
         document.body.appendChild(balloon);
 
-        // Wait a bit for the balloon to be added to the DOM
-        // and them drop it.
-        // TODO: Why is this timeout necessary?
-        setTimeout(() => {
+        // Wait until the next animiation frame
+        // so we know the balloon has been rendered.
+        requestAnimationFrame(() => {
           balloon.style.top = window.innerHeight - balloonSize + 'px';
-        }, 100);
+        });
       }
 
       function endGame(data) {
