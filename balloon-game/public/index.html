@@ -50,7 +50,8 @@
         const balloon = document.createElement('div');
         balloon.className = 'balloon';
         balloon.style.backgroundColor = getRandomColor();
-        balloon.style.left = Math.floor(Math.random() * 950) + 'px';
+        const maxLeft = window.innerWidth - size;
+        balloon.style.left = Math.floor(Math.random() * maxLeft) + 'px';
         balloon.style.top = `-${size}px`;
         return balloon;
       }
