@@ -8,8 +8,13 @@
 
         border: 1px solid gray;
         border-radius: 50%;
+        color: white;
         cursor: pointer;
+        font-size: calc(var(--balloonSize) / 2);
+        font-weight: bold;
+        line-height: var(--balloonSize);
         position: absolute;
+        text-align: center;
         transition: top 3s ease-in;
       }
 
@@ -43,7 +48,7 @@
     ></script>
     <script>
       let balloonSize = 0;
-      const gameDuration = 3;
+      const gameDuration = 5;
 
       window.onload = () => {
         balloonSize = parseInt(
@@ -53,15 +58,40 @@
 
       const pop = new Audio('pop.mp3');
 
-      function createBalloon() {
+      function createBalloon(data, number) {
         const balloon = document.createElement('div');
+        balloon.textContent = number;
         htmx.addClass(balloon, 'balloon');
         balloon.style.backgroundColor = getRandomColor();
         const maxLeft = window.innerWidth - balloonSize;
         const left = Math.floor(Math.random() * maxLeft);
         balloon.style.left = `${left}px`;
         balloon.style.top = `-${balloonSize}px`; // off screen
-        return balloon;
+
+        // Remove the balloon when it hits the ground.
+        htmx.on(balloon, 'transitionend', () => {
+          console.log('playing sound');
+          pop.play();
+          htmx.remove(balloon);
+        });
+
+        // Remove the balloon when it is clicked.
+        const clickHandler = () => {
+          pop.play();
+          data.score++;
+          htmx.remove(balloon);
+        };
+        htmx.on(balloon, 'click', clickHandler);
+
+        // Save the listener so it's easy to remove it later.
+        balloon.clickHandler = clickHandler;
+
+        document.body.appendChild(balloon);
+
+        // Drop the balloon.
+        setTimeout(() => {
+          balloon.style.top = window.innerHeight - balloonSize + 'px';
+        }, 10);
       }
 
       function endGame(data) {
@@ -99,32 +129,10 @@
         }, 1000);
 
         // Create a new balloon every second.
+        let number = 0;
+        createBalloon(data, ++number);
         const dropper = setInterval(() => {
-          const balloon = createBalloon();
-
-          // Remove the balloon when it hits the ground.
-          htmx.on(balloon, 'transitionend', () => {
-            pop.play();
-            htmx.remove(balloon);
-          });
-
-          // Remove the balloon when it is clicked.
-          const clickHandler = () => {
-            pop.play();
-            data.score++;
-            htmx.remove(balloon);
-          };
-          htmx.on(balloon, 'click', clickHandler);
-
-          // Save the listener so it's easy to remove it later.
-          balloon.clickHandler = clickHandler;
-
-          document.body.appendChild(balloon);
-
-          // Drop the balloon.
-          setTimeout(() => {
-            balloon.style.top = window.innerHeight - balloonSize + 'px';
-          }, 0);
+          createBalloon(data, ++number);
         }, 1000);
       }
     </script>
