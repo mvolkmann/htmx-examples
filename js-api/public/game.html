@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>Pizza Order</title>
+    <style>
+      button {
+        background-color: purple;
+        border-radius: 0.5rem;
+        color: white;
+        margin-top: 1rem;
+        padding: 0.5rem;
+      }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script>
+      function play() {
+        // Generate three random numbers between 1 and 100.
+        const num1 = Math.floor(Math.random() * 100) + 1;
+        const num2 = Math.floor(Math.random() * 100) + 1;
+        const num3 = Math.floor(Math.random() * 100) + 1;
+
+        // Add buttons for each number to the element with class numbers.
+        const container = htmx.find('.buttons');
+        for (const number of numbers) {
+          htmx.append(number, `<button>${num1}</button>`);
+          htmx.append(number, `<button>${num2}</button>`);
+          htmx.append(number, `<button>${num3}</button>`);
+        }
+
+        // Add event handling to the buttons.
+
+        // Use setTimeout to remove event handling from the buttons.
+
+        // Update the score.
+      }
+    </script>
+  </head>
+  <body x-data="{score: 0}">
+    <div>
+      <button @click="play">Play</button>
+    </div>
+    <h1>Click the highest number.</h1>
+    <div class="buttons"></div>
+  </body>
+</html>
