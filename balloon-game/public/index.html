@@ -3,7 +3,8 @@
   <head>
     <style>
       .balloon {
-        --size: 50px;
+        --size: 100px;
+        border: 1px solid gray;
         border-radius: 50%;
         cursor: pointer;
         position: absolute;
@@ -34,6 +35,7 @@
     ></script>
     <script>
       const size = 50;
+      const pop = new Audio('pop.mp3');
 
       function getRandomColor() {
         const letters = '0123456789ABCDEF';
@@ -65,15 +67,18 @@
           htmx.on(balloon, 'click', () => {
             console.log('got click');
             htmx.remove(balloon);
+            pop.play();
             data.score++;
           });
 
           document.body.appendChild(balloon);
+          console.log('created balloon');
 
           // Drop the balloon.
           setTimeout(() => {
             balloon.style.top = window.innerHeight + 'px';
-          }, 0);
+            console.log('dropped balloon');
+          }, 10);
         }, 1000);
       }
     </script>
