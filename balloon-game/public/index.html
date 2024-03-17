@@ -3,8 +3,8 @@
   <head>
     <style>
       .balloon {
-        height: var(--size);
-        width: var(--size);
+        height: var(--balloonSize);
+        width: var(--balloonSize);
 
         border: 1px solid gray;
         border-radius: 50%;
@@ -20,7 +20,7 @@
       }
 
       body {
-        --size: 100px;
+        --balloonSize: 100px;
 
         background-color: skyblue;
         font-family: sans-serif;
@@ -42,10 +42,12 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
-      let size = 0;
+      let balloonSize = 0;
+      const gameDuration = 3;
+
       window.onload = () => {
-        size = parseInt(
-          getComputedStyle(document.body).getPropertyValue('--size')
+        balloonSize = parseInt(
+          getComputedStyle(document.body).getPropertyValue('--balloonSize')
         );
       };
 
@@ -55,12 +57,12 @@
         const balloon = document.createElement('div');
         balloon.className = 'balloon';
         balloon.style.backgroundColor = getRandomColor();
-        const maxLeft = window.innerWidth - size;
+        const maxLeft = window.innerWidth - balloonSize;
         console.log('maxLeft =', maxLeft);
         const left = Math.floor(Math.random() * maxLeft);
         console.log('left =', left);
         balloon.style.left = `${left}px`;
-        balloon.style.top = `-${size}px`;
+        balloon.style.top = `-${balloonSize}px`;
         return balloon;
       }
 
@@ -86,7 +88,7 @@
       function startGame(data) {
         data.playing = true;
         data.score = 0;
-        data.seconds = 5;
+        data.seconds = gameDuration;
 
         // Update the seconds remaining.
         const timer = setInterval(() => {
@@ -120,12 +122,12 @@
           balloon.listener = listener;
 
           document.body.appendChild(balloon);
-          // console.log('created balloon');
+          console.log('created balloon');
 
           // Drop the balloon.
           setTimeout(() => {
-            balloon.style.top = window.innerHeight - size + 'px';
-            // console.log('dropped balloon');
+            balloon.style.top = window.innerHeight - balloonSize + 'px';
+            console.log('dropped balloon');
           }, 10);
         }, 1000);
       }
