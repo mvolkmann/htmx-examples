@@ -29,7 +29,7 @@ function dogRow(breed: string) {
         hx-put={`/dog/${breed}`}
         hx-target="this"
         hx-indicator=".htmx-indicator"
-        x-on:click="optimisticLike(event)"
+        hx-on:click="optimisticLike(event)"
       >
         {getHeart(dogs.get(breed) ?? false)}
       </td>
