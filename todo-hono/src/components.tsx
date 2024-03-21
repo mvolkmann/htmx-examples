@@ -106,7 +106,7 @@ export const TodoItem: FC<TodoItemProps> = ({
         class="plain"
         hx-confirm={`Really delete "${description}"?`}
         hx-delete={`/todos/${id}`}
-        hx-swap="outerHTML swap:1s"
+        hx-swap="delete swap:1s"
         hx-target="closest div"
       >
         🗑
