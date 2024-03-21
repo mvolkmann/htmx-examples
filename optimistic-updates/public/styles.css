@@ -1,0 +1,28 @@
+body {
+  background-color: cornflowerblue;
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+}
+
+td,
+th {
+  border: 1px solid cornflowerblue;
+  padding: 0.5rem;
+}
+
+td {
+  background-color: white;
+
+  & button {
+    background-color: transparent;
+    color: white;
+  }
+}
+
+th {
+  background-color: orange;
+}
