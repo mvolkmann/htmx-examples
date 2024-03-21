@@ -15,7 +15,7 @@ th {
 }
 
 td {
-  background-color: white;
+  background-color: lightblue;
 
   & button {
     background-color: transparent;

@@ -1,6 +1,6 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.ts';
+import './reload-server';
 
 const breeds = [
   'Beagle',
@@ -24,10 +24,14 @@ function dogRow(breed: string) {
   return (
     <tr>
       <td>{breed}</td>
-      <td id="like">{dogs.get(breed) ? '❤️' : '🤍'}</td>
+      <td id="like" hx-put={`/dog/${breed}`} hx-target="this">
+        {getHeart(dogs.get(breed) ?? false)}
+      </td>
     </tr>
   );
 }
+
+const getHeart = (like: boolean) => (like ? '❤️' : '🤍');
 
 const app = new Hono();
 
@@ -40,9 +44,9 @@ app.get('/dogs', (c: Context) => {
 
 app.put('/dog/:breed', async (c: Context) => {
   const breed = c.req.param('breed');
-  const like = dogs.get(breed);
-  dogs.set(breed, !like);
-  return c.html(dogRow(breed));
+  const like = !(dogs.get(breed) ?? false);
+  dogs.set(breed, like);
+  return c.text(getHeart(like));
 });
 
 export default app;
