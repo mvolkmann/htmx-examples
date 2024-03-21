@@ -9,8 +9,7 @@
     "hono": "^3.12.6"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "tailwindcss": "^3.3.6"
+    "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
