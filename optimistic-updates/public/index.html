@@ -3,7 +3,17 @@
     <title>htmx Optimistic Updates</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
     <script src="reload-client.js" type="module"></script>
+    <script>
+      function optimisticLike(event) {
+        const td = event.target;
+        td.textContent = '🩷';
+      }
+    </script>
   </head>
   <body>
     <h1>Dogs</h1>
@@ -16,5 +26,6 @@
       </thead>
       <tbody></tbody>
     </table>
+    <img alt="waiting" class="htmx-indicator" src="/spinner.gif" />
   </body>
 </html>

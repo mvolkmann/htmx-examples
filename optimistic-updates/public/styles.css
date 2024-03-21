@@ -3,6 +3,15 @@ body {
   font-family: sans-serif;
 }
 
+.center {
+  text-align: center;
+}
+
+.htmx-indicator {
+  height: 2rem;
+  width: 2rem;
+}
+
 table {
   border-collapse: collapse;
   margin-bottom: 0.5rem;

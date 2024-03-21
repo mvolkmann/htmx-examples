@@ -24,7 +24,13 @@ function dogRow(breed: string) {
   return (
     <tr>
       <td>{breed}</td>
-      <td id="like" hx-put={`/dog/${breed}`} hx-target="this">
+      <td
+        class="center"
+        hx-put={`/dog/${breed}`}
+        hx-target="this"
+        hx-indicator=".htmx-indicator"
+        x-on:click="optimisticLike(event)"
+      >
         {getHeart(dogs.get(breed) ?? false)}
       </td>
     </tr>
@@ -43,6 +49,7 @@ app.get('/dogs', (c: Context) => {
 });
 
 app.put('/dog/:breed', async (c: Context) => {
+  Bun.sleepSync(1000);
   const breed = c.req.param('breed');
   const like = !(dogs.get(breed) ?? false);
   dogs.set(breed, like);
