@@ -7,7 +7,7 @@ To run this:
 
 - Install Bun
 - Enter `bun install`
-- Enter `bun run dev`
+- Enter `bun dev`
 - Browse localhost:1919
 - Open DevTools and click the Network tab.
 - Scroll to the bottom of the page.

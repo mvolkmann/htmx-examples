@@ -3,7 +3,7 @@
 To run this:
 
 1. Enter `bun install` to install dependencies.
-1. Enter `bun run dev` to start the server.
+1. Enter `bun dev` to start the server.
 1. Browse localhost:1919.
 
 If modifying styling using Tailwind classes,

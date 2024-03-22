@@ -5,7 +5,7 @@ This is a todo app implemented with htmx, Bun, and Hono.
 To run this:
 
 - Enter `bun install`
-- Enter `bun run dev`
+- Enter `bun dev`
 - Browse localhost:1919
 
 ## Database Setup

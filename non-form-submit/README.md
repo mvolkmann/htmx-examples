@@ -14,7 +14,7 @@ To run this:
 
 - Install Bun
 - Enter `bun install`
-- Enter `bun run dev`
+- Enter `bun dev`
 - Browse localhost:1919
 - Enter a first and last name.
 - Click the "Submit" button.

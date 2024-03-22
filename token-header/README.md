@@ -7,6 +7,6 @@ To run this:
 
 - Install Bun
 - Enter `bun install`
-- Enter `bun run dev`
+- Enter `bun dev`
 - Browse localhost:1919
 - Click the buttons.

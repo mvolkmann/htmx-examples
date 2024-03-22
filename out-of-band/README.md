@@ -1,11 +1,5 @@
-To install dependencies:
-```sh
-bun install
-```
+To run this:
 
-To run:
-```sh
-bun run dev
-```
-
-open http://localhost:3000
+1. Enter `bun install`
+1. Enter `bun dev`
+1. Browse http://localhost:3000

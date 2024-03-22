@@ -7,7 +7,7 @@ To run this:
 
 - Install Bun
 - Enter `bun install`
-- Enter `bun run dev`
+- Enter `bun dev`
 - Browse localhost:1919
 - Enter a number that is greater than 5.
 - Press the "Submit" button.
