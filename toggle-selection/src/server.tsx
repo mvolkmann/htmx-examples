@@ -15,7 +15,8 @@ let selectedName = '';
 type DogProps = {name: string; toggle?: boolean};
 function Dog({name, toggle}: DogProps) {
   const classes = 'dog' + (name === selectedName ? ' selected' : '');
-  const attrs = toggle ? {'hx-swap': 'none', 'hx-swap-oob': 'true'} : {};
+  // We don't want this attributes for the initial renders.
+  const attrs = toggle ? {'hx-swap-oob': 'true'} : {};
   return (
     <div
       class={classes}
