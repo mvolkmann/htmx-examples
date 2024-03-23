@@ -2,11 +2,6 @@ import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import './reload-server.ts';
 
-const app = new Hono();
-
-// This serves static files from the public directory.
-app.use('/*', serveStatic({root: './public'}));
-
 const dogs = ['Comet', 'Maisey', 'Oscar', 'Ramsay'];
 
 // This holds the name of the one selected dog.
@@ -29,6 +24,11 @@ function Dog({name, toggle}: DogProps) {
     </div>
   );
 }
+
+const app = new Hono();
+
+// This serves static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
 
 app.get('/dogs', (c: Context) =>
   c.html(
