@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Progress Bar</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body>
+    <div hx-get="/progress-bar" hx-trigger="load"></div>
+    <button
+      id="reset-btn"
+      hx-get="/progress"
+      hx-swap="outerHTML"
+      hx-target="#progress-container"
+    >
+      Reset
+    </button>
+  </body>
+</html>
