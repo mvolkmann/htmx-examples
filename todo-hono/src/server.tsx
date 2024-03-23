@@ -57,10 +57,9 @@ function updateTodo(
   c: Context,
   statement: Statement,
   todo: Todo,
-  property: string
+  property: 'description' | 'completed'
 ) {
   try {
-    // @ts-ignore
     const value = todo[property];
     statement.run(value, todo.id);
     return c.html(
