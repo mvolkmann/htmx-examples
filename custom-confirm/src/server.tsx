@@ -18,7 +18,7 @@ const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
 app.get('/pokemon', async (c: Context) => {
-  await Bun.sleep(1000);
+  await Bun.sleep(1000); // simulates a long-running request
   const url = POKEMON_URL_PREFIX;
   const response = await fetch(url);
   const json = (await response.json()) as PokemonData;
