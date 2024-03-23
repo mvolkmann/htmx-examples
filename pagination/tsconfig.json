@@ -1,25 +1,12 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "bundler",
-    "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "composite": true,
+    "esModuleInterop": true,
     "strict": true,
-    "downlevelIteration": true,
-    "skipLibCheck": true,
-    "jsx": "react",
-    "jsxFactory": "Html.createElement",
-    "jsxFragmentFactory": "Html.Fragment",
-    "plugins": [{"name": "@kitajs/ts-html-plugin"}],
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "types": [
-      "bun-types" // add Bun global
-    ]
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "module": "nodeNext",
+    "moduleResolution": "nodeNext",
+    "target": "esnext",
+    "types": ["bun-types"]
   }
 }

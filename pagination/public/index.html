@@ -3,13 +3,15 @@
     <title>Pagination with htmx</title>
     <link rel="stylesheet" href="/styles.css" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
   </head>
   <body>
     <h1>Pagination</h1>
     <table
-      hx-indicator=".htmx-indicator"
       hx-trigger="load"
       hx-get="/pokemon-rows?page=1"
+      hx-indicator=".htmx-indicator"
+      hx-swap="outerHTML"
     ></table>
     <div id="pagination-row">
       <span id="pagination-buttons"></span>
