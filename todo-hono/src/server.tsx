@@ -189,6 +189,7 @@ function getAllTodos(): Todo[] {
 }
 
 // Render the todo list UI ... the R in CRUD.
+// It can also return the todos as JSON.
 app.get('/todos', (c: Context) => {
   const todos = getAllTodos();
 
