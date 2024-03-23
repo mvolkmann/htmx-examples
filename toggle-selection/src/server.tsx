@@ -13,15 +13,9 @@ function Dog({name, toggle}: DogProps) {
   // We don't want this attributes for the initial renders.
   const attrs = toggle ? {'hx-swap-oob': 'true'} : {};
   return (
-    <div
-      class={classes}
-      hx-get={`/toggle/${name}`}
-      hx-trigger="click"
-      id={name}
-      {...attrs}
-    >
+    <button class={classes} hx-get={`/toggle/${name}`} id={name} {...attrs}>
       {name}
-    </div>
+    </button>
   );
 }
 
