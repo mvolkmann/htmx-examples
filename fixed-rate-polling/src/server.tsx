@@ -1,9 +1,11 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 
-let chiefsHaveBall = true;
-let bills = 0;
-let chiefs = 0;
+let team1HasBall = true;
+let score1 = 0;
+let score2 = 0;
+const team1 = 'Chiefs';
+const team2 = '49ers';
 
 function getPoints() {
   const number = Math.floor(Math.random() * 10);
@@ -18,17 +20,17 @@ const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
 app.get('/score', async (c: Context) => {
-  if (chiefsHaveBall) {
-    chiefs += getPoints();
+  if (team1HasBall) {
+    score1 += getPoints();
   } else {
-    bills += getPoints();
+    score2 += getPoints();
   }
-  chiefsHaveBall = !chiefsHaveBall;
+  team1HasBall = !team1HasBall;
 
   // Returning a status of 286 terminates fixed rate polling.
-  c.status(chiefs > 30 || bills > 30 ? 286 : 200);
+  c.status(score1 > 30 || score1 > 30 ? 286 : 200);
 
-  return c.text(`Chiefs: ${chiefs}, Bills: ${bills}`);
+  return c.text(`${team1}: ${score1}, ${team2}: ${score2}`);
 });
 
 export default app;
