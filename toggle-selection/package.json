@@ -1,9 +1,8 @@
 {
   "name": "toggle-selection",
-  "module": "index.tsx",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.tsx",
+    "dev": "bun run --watch src/server.tsx",
     "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
   },
   "dependencies": {

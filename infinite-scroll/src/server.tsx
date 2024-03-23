@@ -10,11 +10,6 @@ type Pokemon = {
   url: string;
 };
 
-const app = new Hono();
-
-// Serve static files from the public directory.
-app.use('/*', serveStatic({root: './public'}));
-
 function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
   const attributes = isLast
     ? {
@@ -39,14 +34,18 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
   );
 }
 
+const app = new Hono();
+
+// Serve static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
+
 app.get('/pokemon-rows', async (c: Context) => {
-  const page = c.req.query('page');
+  const page = Number(c.req.query('page'));
   if (!page) throw new Error('page query parameter is required');
 
   // Bun.sleepSync(500); // simulates long-running query
 
-  const pageNumber = Number(page);
-  const offset = (pageNumber - 1) * ROWS_PER_PAGE;
+  const offset = (page - 1) * ROWS_PER_PAGE;
   const url = POKEMON_URL_PREFIX + `?offset=${offset}&limit=${ROWS_PER_PAGE}`;
   const response = await fetch(url);
   const json = await response.json();
@@ -56,7 +55,7 @@ app.get('/pokemon-rows', async (c: Context) => {
     <>
       {pokemonList.map((pokemon, index) => {
         const isLast = index === ROWS_PER_PAGE - 1;
-        return TableRow(pageNumber, pokemon, isLast);
+        return TableRow(page, pokemon, isLast);
       })}
     </>
   );
