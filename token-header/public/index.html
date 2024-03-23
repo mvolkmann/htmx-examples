@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Token Headers</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      window.onload = () => {
+        document.body.addEventListener('htmx:configRequest', event => {
+          event.detail.headers['X-Token'] = 'my-token';
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Token in Header</h1>
+    <div>
+      <button hx-get="/request1" hx-target="#result1">Request #1</button>
+      <button hx-post="/request2" hx-target="#result2">Request #2</button>
+    </div>
+    <div id="result1" />
+    <div id="result2" />
+  </body>
+</html>
