@@ -41,14 +41,14 @@ app.get('/dogs', (c: Context) =>
 
 app.get('/toggle/:name', (c: Context) => {
   const name = c.req.param('name');
-  console.log('server.tsx toggle: name =', name);
   const previousDog = selectedName ? <Dog name={selectedName} toggle /> : null;
   const thisDog = <Dog name={name} toggle />;
+  // If the selected dog is clicked again, it is deselected.
   selectedName = name === selectedName ? '' : name;
 
-  // If a dog was previously selected, two Dog components are returned.
+  // If a different dog was previously selected,
+  // two Dog components are returned.
   // Otherwise only one is returned.
-  // Both will have hx-swap-oob set to true.
   return c.html(
     <>
       {previousDog}
