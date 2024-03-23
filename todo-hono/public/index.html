@@ -21,7 +21,7 @@
       hx-swap="afterbegin"
       hx-disabled-elt="#add-btn"
       hx-indicator=".htmx-indicator"
-      hx-on:htmx:after-request="this.reset()"
+      hx-on::after-request="this.reset()"
       x-data="{text: ''}"
     >
       <input
@@ -31,11 +31,7 @@
         type="text"
         x-model="text"
       />
-      <button
-        id="add-btn"
-        type="submit"
-        x-bind:disabled="text.trim().length == 0"
-      >
+      <button id="add-btn" x-bind:disabled="text.trim().length == 0">
         Add
       </button>
       <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
