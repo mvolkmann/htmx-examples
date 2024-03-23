@@ -26,7 +26,7 @@ app.get('/pokemon', async (c: Context) => {
 
   return c.html(
     <>
-      {pokemonList.map((pokemon, index) => {
+      {pokemonList.map(pokemon => {
         return <div>{pokemon.name}</div>;
       })}
     </>

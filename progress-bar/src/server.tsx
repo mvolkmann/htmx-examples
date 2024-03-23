@@ -16,7 +16,7 @@ function ProgressBar() {
       aria-valuenow={percentComplete}
     >
       <div id="progress-text">{percentComplete.toFixed(1)}%</div>
-      {/* This div MUST have an id in order for the CSS transition to work! */}
+      {/* This div MUST have an id in order for the CSS transition to work. */}
       <div id="progress-bar" style={`width: ${percentComplete}%`} />
     </div>
   );
@@ -30,7 +30,7 @@ app.use('/*', serveStatic({root: './public'}));
 app.get('/progress-bar', (c: Context) => c.html(<ProgressBar />));
 
 app.get('/progress', (c: Context) => {
-  // Determine what DOM element triggered this request.
+  // Determine which DOM element triggered this request.
   const trigger = c.req.header('hx-trigger');
   // If it was the reset button, reset the progress to zero.
   if (trigger === 'reset-btn') {
