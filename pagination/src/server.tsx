@@ -44,11 +44,13 @@ app.get('/pokemon-rows', async (c: Context) => {
 
   return c.html(
     <>
+      {/* It doesn't work to put the headings in index.html
+          and replace tbody instead of table. */}
       <table id="pokemon-table">
         <tr>
-          <td>ID</td>
-          <td>Name</td>
-          <td>Description</td>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
         </tr>
         {pokemonList.map((pokemon, index) => {
           const isLast = index === ROWS_PER_PAGE - 1;
