@@ -1,9 +1,9 @@
 import {Database, Statement} from 'bun:sqlite';
 import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
+import type {FC} from 'hono/jsx';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
-import {Err, Layout, Todo, TodoForm, TodoItem, TodoList} from './components';
 import './reload-server.js';
 
 //-----------------------------------------------------------------------------
@@ -93,6 +93,72 @@ const todoSchema = z
 const todoValidator = zValidator('form', todoSchema);
 
 //-----------------------------------------------------------------------------
+// Component definitions
+//-----------------------------------------------------------------------------
+
+type ErrProps = {message?: string};
+export const Err: FC<ErrProps> = ({message = ''}) => (
+  <p id="error" hx-swap-oob="true">
+    {message}
+  </p>
+);
+
+export type Todo = {
+  id: number;
+  description: string;
+  completed: number; // 0 or 1 for SQLite compatibility
+};
+
+type TodoItemProps = {todo: Todo};
+const TodoItem: FC<TodoItemProps> = ({
+  todo: {completed, description, id}
+}: TodoItemProps) => {
+  // Attribute spreading is used here because VS Code
+  // does not like attributes containing colons.
+  const handleInputClick = {'x-on:click.stop': ''};
+  const handleTextClick = {'x-on:click.stop': 'editingId = id'};
+
+  return (
+    <div class="todo-item" x-data={`{id: ${id}}`}>
+      <input
+        type="checkbox"
+        checked={completed === 1}
+        hx-patch={`/todos/${id}/toggle-complete`}
+        hx-swap="outerHTML"
+        hx-target="closest div"
+      />
+      <div class="description" x-show="id !== editingId" {...handleTextClick}>
+        {description}
+      </div>
+      <input
+        hx-include="this"
+        hx-patch={`/todos/${id}/description`}
+        hx-swap="outerHTML"
+        hx-target="closest div"
+        hx-trigger="blur, keyup[keyCode == 13]"
+        name="description"
+        type="text"
+        value={description}
+        x-show="id === editingId"
+        {...handleInputClick}
+      />
+      {/* The swap modifier is set to 1 second
+          to give a CSS transition time to complete.
+          See ".todo-item.htmx-swapping" in styles.css. */}
+      <button
+        class="plain"
+        hx-confirm={`Really delete "${description}"?`}
+        hx-delete={`/todos/${id}`}
+        hx-swap="delete swap:1s"
+        hx-target="closest div"
+      >
+        🗑
+      </button>
+    </div>
+  );
+};
+
+//-----------------------------------------------------------------------------
 // Endpoint definitions
 //-----------------------------------------------------------------------------
 
@@ -126,29 +192,13 @@ function getAllTodos(): Todo[] {
 // Render the todo list UI ... the R in CRUD.
 app.get('/todos', (c: Context) => {
   const todos = getAllTodos();
-
-  // We could choose between returning JSON and HTML
-  // based on the value of the Accept header.
-  const accept = c.req.header('accept');
-  if (accept?.includes('application/json')) {
-    return c.json(todos);
-  }
-
   return c.html(
-    <Layout>
-      <h1>To Do List</h1>
-      <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
-      <Err />
-      <TodoForm />
-      <TodoList todos={todos} />
-    </Layout>
+    <div id="todo-list" x-on:description-change="editingId = 0">
+      {todos.map(todo => (
+        <TodoItem todo={todo} />
+      ))}
+    </div>
   );
-});
-
-// This endpoint returns all the todos as JSON.
-app.get('/todos/json', (c: Context) => {
-  const todos = getAllTodos();
-  return c.json(todos);
 });
 
 // Get the status text that is displayed at the top of the page.

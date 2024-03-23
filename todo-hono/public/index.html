@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>To Do List</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <!-- editingId is state that only belongs on the client. If the user clicks
+  outside of any todo description, deselect the currently selected todo. -->
+  <body x-data="{editingId: 0}" x-on:click="editingId = 0">
+    <h1>To Do List</h1>
+    <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
+    <p id="error"></p>
+    <form
+      hx-post="/todos"
+      hx-target="#todo-list"
+      hx-swap="afterbegin"
+      hx-disabled-elt="#add-btn"
+      hx-indicator=".htmx-indicator"
+      hx-on:htmx:after-request="this.reset()"
+      x-data="{text: ''}"
+    >
+      <input
+        name="description"
+        placeholder="enter new todo here"
+        size="{30}"
+        type="text"
+        x-model="text"
+      />
+      <button
+        id="add-btn"
+        type="submit"
+        x-bind:disabled="text.trim().length == 0"
+      >
+        Add
+      </button>
+      <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
+    </form>
+    <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
+    <div hx-get="/todos" hx-trigger="load"></div>
+  </body>
+</html>
