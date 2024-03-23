@@ -191,6 +191,12 @@ function getAllTodos(): Todo[] {
 // Render the todo list UI ... the R in CRUD.
 app.get('/todos', (c: Context) => {
   const todos = getAllTodos();
+
+  const accept = c.req.header('accept');
+  if (accept?.includes('application/json')) {
+    return c.json(todos);
+  }
+
   return c.html(
     <div id="todo-list" x-on:description-change="editingId = 0">
       {todos.map(todo => (
