@@ -1,21 +1,20 @@
-import {Elysia} from 'elysia';
-import {html} from '@elysiajs/html'; // enables use of JSX
-import {staticPlugin} from '@elysiajs/static'; // enables static file serving
-import {Html} from '@kitajs/html';
+import {type Context, Hono} from 'hono';
+import {serveStatic} from 'hono/bun';
+import './reload-server.ts';
 import './reload-server.js';
 
 const URL = 'https://jsonplaceholder.typicode.com/users';
 
-const app = new Elysia();
-app.use(html());
-// This causes link and script tags to look for files in the public directory.
-app.use(staticPlugin({prefix: ''}));
+const app = new Hono();
 
-app.get('/users', async () => {
+// Serve static files from the public directory.
+app.use('/*', serveStatic({root: './public'}));
+
+app.get('/users', async (c: Context) => {
   Bun.sleepSync(1000); // simulates long-running query
   const res = await fetch(URL);
   const users = await res.json();
-  return (
+  return c.html(
     <table>
       <thead>
         <tr>
@@ -39,5 +38,4 @@ app.get('/users', async () => {
   );
 });
 
-app.listen(3000);
-console.log('listening on port', app.server?.port);
+export default app;
