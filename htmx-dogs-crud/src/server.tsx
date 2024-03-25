@@ -70,10 +70,6 @@ app.get('/deselect', (c: Context) => {
   return c.body(null);
 });
 
-app.get('/dogs', (c: Context) => {
-  return c.json(Object.fromEntries(Array.from(dogMap)));
-});
-
 // Gets the proper form for either adding or updating a dog.
 app.get('/form', (c: Context) => {
   const selectedDog = dogMap.get(selectedId);
@@ -115,7 +111,6 @@ app.get('/form', (c: Context) => {
           value={selectedDog?.breed ?? ''}
         />
       </div>
-
       <div class="buttons">
         <button id="submit-btn">{selectedId ? 'Update' : 'Add'}</button>
         {selectedId && (
@@ -130,10 +125,9 @@ app.get('/form', (c: Context) => {
 
 // Gets table rows for all the dogs.
 app.get('/rows', (c: Context) => {
-  const sortedDogs = Array.from(dogMap.values()).sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  return c.html(<>{sortedDogs.map(dog => dogRow(dog))}</>);
+  const dogs = Array.from(dogMap.values());
+  dogs.sort((a: Dog, b: Dog) => a.name.localeCompare(b.name));
+  return c.html(<>{dogs.map(dog => dogRow(dog))}</>);
 });
 
 // Selects a dog.
