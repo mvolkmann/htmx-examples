@@ -4,19 +4,19 @@ import './reload-server.ts';
 
 type Dog = {id: string; name: string; breed: string};
 
-const dogs = new Map<string, Dog>();
-
 let selectedId = '';
+
+const dogMap = new Map<string, Dog>();
+
+addDog('Comet', 'Whippet');
+addDog('Oscar', 'German Shorthaired Pointer');
 
 function addDog(name: string, breed: string): Dog {
   const id = crypto.randomUUID(); // standard web API
   const dog = {id, name, breed};
-  dogs.set(id, dog);
+  dogMap.set(id, dog);
   return dog;
 }
-
-addDog('Comet', 'Whippet');
-addDog('Oscar', 'German Shorthaired Pointer');
 
 function dogRow(dog: Dog, updating = false) {
   const attrs: {[key: string]: string} = {};
@@ -59,7 +59,7 @@ app.use('/*', serveStatic({root: './public'}));
 // Deletes the dog with a given id.
 app.delete('/dog/:id', (c: Context) => {
   const id = c.req.param('id');
-  dogs.delete(id);
+  dogMap.delete(id);
   return c.text('');
 });
 
@@ -71,12 +71,12 @@ app.get('/deselect', (c: Context) => {
 });
 
 app.get('/dogs', (c: Context) => {
-  return c.json(Object.fromEntries(Array.from(dogs)));
+  return c.json(Object.fromEntries(Array.from(dogMap)));
 });
 
 // Gets the proper form for either adding or updating a dog.
 app.get('/form', (c: Context) => {
-  const selectedDog = dogs.get(selectedId);
+  const selectedDog = dogMap.get(selectedId);
 
   const attrs: {[key: string]: string} = {
     'hx-on:htmx:after-request': 'this.reset()'
@@ -130,7 +130,7 @@ app.get('/form', (c: Context) => {
 
 // Gets table rows for all the dogs.
 app.get('/rows', (c: Context) => {
-  const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
+  const sortedDogs = Array.from(dogMap.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
   return c.html(<>{sortedDogs.map(dog => dogRow(dog))}</>);
@@ -159,7 +159,7 @@ app.put('/dog/:id', async (c: Context) => {
   const name = (formData.get('name') as string) || '';
   const breed = (formData.get('breed') as string) || '';
   const updatedDog = {id, name, breed};
-  dogs.set(id, updatedDog);
+  dogMap.set(id, updatedDog);
 
   selectedId = '';
   c.header('HX-Trigger', 'selection-change');
