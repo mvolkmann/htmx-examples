@@ -31,7 +31,7 @@ function dogRow(dog: Dog, updating = false) {
           hx-confirm="Are you sure?"
           hx-delete={`/dog/${dog.id}`}
           hx-target="closest tr"
-          hx-swap="outerHTML"
+          hx-swap="delete"
           type="button"
         >
           ✕
@@ -60,7 +60,7 @@ app.use('/*', serveStatic({root: './public'}));
 app.delete('/dog/:id', (c: Context) => {
   const id = c.req.param('id');
   dogMap.delete(id);
-  return c.text('');
+  return c.body(null);
 });
 
 // Deselects the currently selected dog.
