@@ -123,18 +123,18 @@ app.get('/form', (c: Context) => {
   );
 });
 
-// Gets table rows for all the dogs.
-app.get('/rows', (c: Context) => {
-  const dogs = Array.from(dogMap.values());
-  dogs.sort((a: Dog, b: Dog) => a.name.localeCompare(b.name));
-  return c.html(<>{dogs.map(dog => dogRow(dog))}</>);
-});
-
 // Selects a dog.
 app.get('/select/:id', (c: Context) => {
   selectedId = c.req.param('id');
   c.header('HX-Trigger', 'selection-change');
   return c.body(null);
+});
+
+// Gets table rows for all the dogs.
+app.get('/table-rows', (c: Context) => {
+  const dogs = Array.from(dogMap.values());
+  dogs.sort((a: Dog, b: Dog) => a.name.localeCompare(b.name));
+  return c.html(<>{dogs.map(dog => dogRow(dog))}</>);
 });
 
 // Creates a dog.
