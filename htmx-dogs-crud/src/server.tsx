@@ -67,7 +67,7 @@ app.delete('/dog/:id', (c: Context) => {
 app.get('/deselect', (c: Context) => {
   selectedId = '';
   c.header('HX-Trigger', 'selection-change');
-  return c.text('');
+  return c.body(null);
 });
 
 app.get('/dogs', (c: Context) => {
@@ -140,7 +140,7 @@ app.get('/rows', (c: Context) => {
 app.get('/select/:id', (c: Context) => {
   selectedId = c.req.param('id');
   c.header('HX-Trigger', 'selection-change');
-  return c.text('');
+  return c.body(null);
 });
 
 // Creates a dog.
