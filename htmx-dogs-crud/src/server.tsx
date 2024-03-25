@@ -36,7 +36,7 @@ function dogRow(dog: Dog, updating = false) {
         >
           ✕
         </button>
-        {/* This selects the dog which triggers a selection-change event
+        {/* This selects the dog which triggers a selection-change event,
             which causes the form to update. */}
         <button
           class="show-on-hover"
