@@ -80,9 +80,13 @@ app.get('/form', (c: Context) => {
   };
   if (selectedId) {
     // Update an existing row.
+    // A new table row will replace the current one
+    // using an out-of-band swap.
     attrs['hx-put'] = '/dog/' + selectedId;
   } else {
     // Add a new row.
+    // A new table row will be added after the beginning of the
+    // `tbody` element, making it the new, first child element.
     attrs['hx-post'] = '/dog';
     attrs['hx-target'] = 'tbody';
     attrs['hx-swap'] = 'afterbegin';
