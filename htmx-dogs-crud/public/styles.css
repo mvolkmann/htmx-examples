@@ -53,7 +53,12 @@ label {
 
 table {
   border-collapse: collapse;
+  display: none; /* fix for cummulative layout shift */
   margin-bottom: 0.5rem;
+}
+/* fix for cummulative layout shift */
+body:has(form) table {
+  display: block;
 }
 
 td,
