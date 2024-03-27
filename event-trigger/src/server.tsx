@@ -31,9 +31,7 @@ app.use('/*', serveStatic({root: './public'}));
 app.get('/alt-order', (c: Context) => {
   // This demonstrates triggering an event with no associated data.
   c.header('HX-Trigger', 'alt-order');
-
-  // The response body is empty.
-  return c.body();
+  return c.body(null); // empty response body
 });
 
 app.get('/meal', (c: Context) => {
@@ -41,9 +39,7 @@ app.get('/meal', (c: Context) => {
   // The key in this object is the event name.
   const trigger = {meal: randomMealName()};
   c.header('HX-Trigger', JSON.stringify(trigger));
-
-  // The response body is empty.
-  return c.body(); // empty
+  return c.body(null); // empty response body
 });
 
 app.get('/order', (c: Context) => {
