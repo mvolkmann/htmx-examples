@@ -59,7 +59,8 @@ app.use('/*', serveStatic({root: './public'}));
 // Deletes the dog with a given id.
 app.delete('/dog/:id', (c: Context) => {
   const id = c.req.param('id');
-  dogMap.delete(id);
+  const existed = dogMap.delete(id);
+  if (!existed) c.status(404);
   return c.body(null);
 });
 
