@@ -10,7 +10,7 @@ type Pokemon = {
   url: string;
 };
 
-function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
+function TableRow(pokemon: Pokemon, isLast: boolean) {
   const {name, url} = pokemon;
   const id = url.split('/')[6];
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
@@ -54,7 +54,7 @@ app.get('/pokemon-rows', async (c: Context) => {
         </tr>
         {pokemonList.map((pokemon, index) => {
           const isLast = index === ROWS_PER_PAGE - 1;
-          return TableRow(page, pokemon, isLast);
+          return TableRow(pokemon, isLast);
         })}
       </table>
 
