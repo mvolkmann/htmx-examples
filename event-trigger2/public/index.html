@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      function handleEvent1(event) {
+        const {value} = event.detail;
+        console.log('handleEvent1: value =', value);
+      }
+      function handleEvent2(event) {
+        const {value} = event.detail;
+        console.log('handleEvent2: value =', value);
+      }
+      function handleEvent3(event) {
+        const {detail} = event;
+        console.log('handleEvent3: detail =', detail);
+      }
+    </script>
+  </head>
+  <body
+    hx-on:event1="handleEvent1(event)"
+    hx-on:event2="handleEvent2(event)"
+    hx-on:event3="handleEvent3(event)"
+  >
+    <button hx-get="/event-with-no-data" hx-target="#content">
+      Event w/ no data
+    </button>
+    <button hx-get="/event-with-string" hx-target="#content">
+      Event w/ string
+    </button>
+    <button hx-get="/event-with-object" hx-target="#content">
+      Event w/ object
+    </button>
+    <div id="content"></div>
+  </body>
+</html>
