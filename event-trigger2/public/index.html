@@ -7,15 +7,18 @@
     <script>
       function handleEvent1(event) {
         const {value} = event.detail;
-        console.log('handleEvent1: value =', value);
+        alert('got event1 with ' + value);
       }
       function handleEvent2(event) {
         const {value} = event.detail;
-        console.log('handleEvent2: value =', value);
+        alert('got event2 with ' + JSON.stringify(value));
       }
       function handleEvent3(event) {
         const {detail} = event;
-        console.log('handleEvent3: detail =', detail);
+        // elt is a reference to the element that triggered the request.
+        // JSON.stringify hits a circular reference if that is included.
+        delete detail.elt; // causes circular reference
+        alert('got event3 with ' + JSON.stringify(detail));
       }
     </script>
   </head>
