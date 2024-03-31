@@ -50,6 +50,9 @@
     <script>
       const gameDuration = 5; // seconds
 
+      // This is the sound to play when a balloon pops.
+      const pop = new Audio('pop.mp3');
+
       let balloonSize = 0; // will get from CSS variable
       // We cannot get CSS variables from elements
       // until they have loaded.
@@ -57,9 +60,6 @@
         const style = getComputedStyle(document.body);
         balloonSize = parseInt(style.getPropertyValue('--balloon-size'));
       };
-
-      // This is the sound to play when a balloon pops.
-      const pop = new Audio('pop.mp3');
 
       // Pops all balloons currently on the screen.
       function cheat() {
