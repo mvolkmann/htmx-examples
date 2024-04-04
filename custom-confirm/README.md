@@ -6,4 +6,4 @@ To run this:
 
 - Enter `bun install`
 - Enter `bun dev`
-- Browse localhost:1919
+- Browse localhost:3000

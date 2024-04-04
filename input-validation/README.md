@@ -10,11 +10,11 @@ To run this:
 - Install Bun
 - Enter `bun install`
 - Enter `bun dev`
-- Browse localhost:1919
+- Browse localhost:3000
 - Open DevTools and the Network tab.
 - Enter an email address in the "Email" input.
 - Note that debounced GET requests to
-  http://localhost:1919/email-validate?email={value} are made.
+  http://localhost:3000/email-validate?email={value} are made.
 - See the list of `existingEmails` in `src/index.tsx``.
 - Enter an email address from this list.
 - Note that the message "email in use" is returned from the endpoint

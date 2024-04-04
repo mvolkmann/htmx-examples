@@ -1,4 +1,4 @@
-# lazy-laod
+# lazy-load
 
 This is an example project that uses Bun, ElysiaJS, and htmx.
 It demonstrates lazy loading of data when its HTML comes into view.
@@ -8,7 +8,7 @@ To run this:
 - Install Bun
 - Enter `bun install`
 - Enter `bun dev`
-- Browse localhost:1919
+- Browse localhost:3000
 - Open DevTools and click the Network tab.
 - Scroll to the bottom of the page.
 - Note that a spinner appears briefly
