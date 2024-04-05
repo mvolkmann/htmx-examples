@@ -11,7 +11,7 @@ type Pokemon = {
 };
 
 function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
-  const attributes = isLast
+  const attrs = isLast
     ? {
         'hx-trigger': 'revealed',
         'hx-get': '/pokemon-rows?page=' + (page + 1),
@@ -24,7 +24,7 @@ function TableRow(page: number, pokemon: Pokemon, isLast: boolean) {
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   return (
-    <tr {...attributes}>
+    <tr {...attrs}>
       <td>{id}</td>
       <td>{name}</td>
       <td>
