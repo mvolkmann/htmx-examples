@@ -45,7 +45,7 @@ const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
 app.get('/dogs', (c: Context) => {
-  return c.html(<>{breeds.map(breed => dogRow(breed))}</>);
+  return c.html(<>{breeds.map(dogRow)}</>);
 });
 
 app.put('/dog/:breed', async (c: Context) => {
