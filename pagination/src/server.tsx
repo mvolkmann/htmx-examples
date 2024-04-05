@@ -11,6 +11,7 @@ type Pokemon = {
 };
 
 function TableRow(pokemon: Pokemon, isLast: boolean) {
+  // The url looks like https://pokeapi.co/api/v2/pokemon-species/1/
   const {name, url} = pokemon;
   const id = url.split('/')[6];
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
