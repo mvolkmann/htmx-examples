@@ -1,6 +1,6 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.ts';
+import './reload-server';
 
 const POKEMON_URL_PREFIX = 'https://pokeapi.co/api/v2/pokemon-species';
 const ROWS_PER_PAGE = 5;

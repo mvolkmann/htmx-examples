@@ -1,7 +1,7 @@
 import {type Context, Hono, type Next} from 'hono';
 import {html} from 'hono/html';
 import {serveStatic} from 'hono/bun';
-import './reload-server.js';
+import './reload-server';
 
 const policies = [
   // This specifies where POST requests for violation reports will be sent.

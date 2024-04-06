@@ -1,7 +1,6 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.ts';
-import './reload-server.js';
+import './reload-server';
 
 const URL = 'https://jsonplaceholder.typicode.com/users';
 

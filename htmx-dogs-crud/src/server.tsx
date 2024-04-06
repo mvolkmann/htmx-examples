@@ -1,6 +1,6 @@
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.ts';
+import './reload-server';
 
 type Dog = {id: string; name: string; breed: string};
 

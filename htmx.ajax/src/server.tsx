@@ -1,7 +1,7 @@
 import {heapStats} from 'bun:jsc';
 import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.js';
+import './reload-server';
 
 const app = new Hono();
 

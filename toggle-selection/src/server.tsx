@@ -1,6 +1,6 @@
 import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
-import './reload-server.ts';
+import './reload-server';
 
 const dogs = ['Comet', 'Maisey', 'Oscar', 'Ramsay'];
 

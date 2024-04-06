@@ -3,7 +3,7 @@ import {serveStatic} from 'hono/bun';
 // import {HtmlValidate} from 'html-validate';
 // import tagMap from 'js2htmlstr';
 // const {img} = tagMap;
-import './reload-server.js';
+import './reload-server';
 
 const app = new Hono();
 

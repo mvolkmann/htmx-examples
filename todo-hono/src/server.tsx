@@ -4,7 +4,7 @@ import {serveStatic} from 'hono/bun';
 import type {FC} from 'hono/jsx';
 import {z} from 'zod';
 import {zValidator} from '@hono/zod-validator';
-import './reload-server.js';
+import './reload-server';
 
 //-----------------------------------------------------------------------------
 // SQLite preparation
