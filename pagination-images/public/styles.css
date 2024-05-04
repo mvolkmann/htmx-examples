@@ -1,0 +1,31 @@
+.htmx-indicator {
+  --size: 1.5rem;
+  height: var(--size);
+  width: var(--size);
+}
+
+img,
+svg {
+  max-height: 6rem;
+  max-width: 6rem;
+}
+
+#pagination-buttons > button {
+  margin-right: 1rem;
+}
+
+#pagination-row {
+  display: flex;
+  align-items: center;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 0.5rem;
+}
