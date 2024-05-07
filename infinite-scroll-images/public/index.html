@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Infinite Scroll with htmx</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="reload-client.js" type="module"></script>
+  </head>
+  <body>
+    <h1>Infinite Scroll</h1>
+    <table
+      hx-trigger="load"
+      hx-get="/image-rows?page=1"
+      hx-indicator=".htmx-indicator"
+      hx-swap="beforeend"
+    >
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </table>
+    <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
+  </body>
+</html>

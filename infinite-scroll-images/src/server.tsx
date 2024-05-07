@@ -1,12 +1,20 @@
-import {type Context, Hono} from 'hono';
+import {Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import {readdir} from 'node:fs/promises';
 import './reload-server';
 
 const IMAGE_DIR = './public/images';
-const ROWS_PER_PAGE = 5;
+const ROWS_PER_PAGE = 10;
 
-async function ImageRow(filename: string, isLast: boolean) {
+async function ImageRow(page: number, filename: string, isLast: boolean) {
+  const attrs = isLast
+    ? {
+        'hx-trigger': 'revealed',
+        'hx-get': '/image-rows?page=' + (page + 1),
+        'hx-indicator': '.htmx-indicator',
+        'hx-swap': 'afterend'
+      }
+    : {};
   const file = Bun.file(IMAGE_DIR + '/' + filename);
   const isSVG = filename.endsWith('.svg');
   let contents, url;
@@ -17,7 +25,7 @@ async function ImageRow(filename: string, isLast: boolean) {
     url = 'data:image/png;base64,' + Buffer.from(arrBuf).toString('base64');
   }
   return (
-    <tr>
+    <tr {...attrs}>
       <td>{filename}</td>
       <td>
         {isSVG ? (
@@ -42,7 +50,7 @@ app.get('/image-rows', async (c: Context) => {
   const page = Number(c.req.query('page'));
   if (!page) throw new Error('page query parameter is required');
 
-  Bun.sleepSync(500); // simulates long-running query
+  // Bun.sleepSync(500); // simulates long-running query
 
   if (page === 1) {
     allFilenames = await readdir(IMAGE_DIR);
@@ -57,32 +65,10 @@ app.get('/image-rows', async (c: Context) => {
   const pageFilenames = allFilenames.slice(offset, offset + ROWS_PER_PAGE);
   return c.html(
     <>
-      {/* It doesn't work to put the headings in index.html
-          and replace tbody instead of table. */}
-      <table id="image-table">
-        <tr>
-          <th>File Name</th>
-          <th>Image</th>
-        </tr>
-        {pageFilenames.map((filename, index) => {
-          const isLast = index === ROWS_PER_PAGE - 1;
-          return ImageRow(filename, isLast);
-        })}
-      </table>
-
-      {/* The hx-indicator and hx-target attributes are
-          inherited by the buttons inside this span. */}
-      <span
-        id="pagination-buttons"
-        hx-swap-oob="true"
-        hx-indicator=".htmx-indicator"
-        hx-target="#image-table"
-      >
-        <button disabled={page === 1} hx-get={`/image-rows?page=${page - 1}`}>
-          Previous
-        </button>
-        <button hx-get={`/image-rows?page=${page + 1}`}>Next</button>
-      </span>
+      {pageFilenames.map((filename, index) => {
+        const isLast = index === ROWS_PER_PAGE - 1;
+        return ImageRow(page, filename, isLast);
+      })}
     </>
   );
 });

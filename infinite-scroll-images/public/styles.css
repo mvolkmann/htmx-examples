@@ -1,0 +1,21 @@
+.htmx-indicator {
+  height: 1.5rem;
+  margin-top: 0.5rem;
+  width: 1.5rem;
+}
+
+img,
+svg {
+  max-height: 6rem;
+  max-width: 6rem;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 0.5rem;
+}

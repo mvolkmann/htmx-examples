@@ -1,0 +1,14 @@
+{
+  "name": "infinite-scroll",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/server.tsx",
+    "format": "prettier --write '**/*.{css,html,js,ts,tsx}'"
+  },
+  "dependencies": {
+    "hono": "^3.12.5"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0"
+  }
+}
