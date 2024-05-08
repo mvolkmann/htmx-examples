@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Custom Confirm Dialog</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+    <script>
+      window.onload = () => {
+        const loadBtn = document.getElementById('load-btn');
+        loadBtn.addEventListener('htmx:confirm', confirm);
+      };
+
+      function confirm(event) {
+        event.preventDefault(); // prevents use of browser confirm dialog
+        Swal.fire({
+          icon: 'question',
+          title: 'Confirm Action',
+          text: 'Are you sure you want to do this?',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, do it!',
+          cancelButtonText: 'No way!'
+        }).then(result => {
+          if (result.isConfirmed) {
+            event.detail.issueRequest(true);
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Custom Confirm Dialog</h1>
+    <button
+      id="load-btn"
+      hx-confirm="Are you sure you want to do this?"
+      hx-get="/images"
+      hx-indicator=".htmx-indicator"
+      hx-target="#image-list"
+    >
+      Load Images
+    </button>
+    <div id="image-list"></div>
+    <img alt="loading..." class="htmx-indicator" src="/spinner.gif" />
+  </body>
+</html>

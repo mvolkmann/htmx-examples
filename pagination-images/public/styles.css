@@ -4,8 +4,7 @@
   width: var(--size);
 }
 
-img,
-svg {
+img {
   max-height: 6rem;
   max-width: 6rem;
 }

@@ -4,17 +4,10 @@
   width: 1.5rem;
 }
 
-img {
+.cover {
+  border: 1px solid gray;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
   max-height: 6rem;
   max-width: 6rem;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-td,
-th {
-  border: 1px solid black;
-  padding: 0.5rem;
 }
