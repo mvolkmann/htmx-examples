@@ -13,7 +13,7 @@ To run this:
 - Create the database with `sqlite3 todos.db`
 - Create a table with `create table todos(id integer primary key autoincrement, description string, completed numeric, unique (description collate nocase));`
 - Verify that the table was created with `.schema`
-- Insert two rows with `insert into todos values('t1', 'cut grass', 0);`
-  and `insert into todos values('t2', 'buy milk', 1);`
+- Insert two rows with `insert into todos values(0, 't1', 'cut grass');`
+  and `insert into todos values(1, 't2', 'buy milk');`
 - Verify that the rows were inserted with `select * from todos;`
 - Exit with `.exit`
