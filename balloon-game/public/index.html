@@ -150,7 +150,7 @@
         createBalloon(data, ++number);
         const timer = setInterval(() => {
           data.seconds--;
-          if (data.seconds == 0) {
+          if (data.seconds === 0) {
             clearInterval(timer);
             endGame(data);
           } else {

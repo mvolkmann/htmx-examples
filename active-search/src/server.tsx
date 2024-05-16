@@ -22,7 +22,7 @@ const names: string[] = [
 app.post('/search', async (c: Context) => {
   const data = await c.req.formData();
   const name = (data.get('name') as string) || '';
-  if (name == '') return c.html('');
+  if (name === '') return c.html('');
 
   const lowerName = name.toLowerCase();
   const matches = names.filter(n => n.toLowerCase().includes(lowerName));

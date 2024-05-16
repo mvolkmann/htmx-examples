@@ -134,7 +134,7 @@ const TodoItem: FC<TodoItemProps> = ({
         hx-patch={`/todos/${id}/description`}
         hx-swap="outerHTML"
         hx-target="closest div"
-        hx-trigger="blur, keyup[keyCode == 13]"
+        hx-trigger="blur, keyup[keyCode === 13]"
         name="description"
         type="text"
         value={description}
