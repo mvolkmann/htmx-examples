@@ -101,12 +101,14 @@
         // Save listener so it's easy to remove it later.
         balloon.clickHandler = clickHandler;
 
-        document.body.appendChild(balloon);
-
-        // Wait until the next animiation frame
-        // so we know the balloon has been rendered.
+        // Wait until the next animiation frame to add a new ballon.
         requestAnimationFrame(() => {
-          balloon.style.top = window.innerHeight - balloonSize + 'px';
+          document.body.appendChild(balloon);
+          // Wait until the next animiation frame
+          // so we know the balloon has been rendered.
+          requestAnimationFrame(() => {
+            balloon.style.top = window.innerHeight - balloonSize + 'px';
+          });
         });
       }
 
