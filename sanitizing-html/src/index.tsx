@@ -28,7 +28,7 @@ const BaseHtml: FC = ({children}) => (
       {/* The request timeout can be specified on individual requests
           with the `hx-request` attribute. */}
       {/* <meta name="htmx-config" content='{"timeout": 2000}' /> */}
-      <link rel="stylesheet" href="/styles.css" />
+      <link rel="stylesheet" href="styles.css" />
       {/* The CSP above blocks getting scripts from other domains,
           so this project includes a local copy of htmx.min.js. */}
       <script src="htmx.min.js"></script>
