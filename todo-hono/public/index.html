@@ -32,7 +32,7 @@
         x-model="text"
       />
       <button id="add-btn" :disabled="text.trim().length === 0">Add</button>
-      <img alt="loading..." class="htmx-indicator" src="spinner.gif" />
+      <img alt="loading" class="htmx-indicator" src="spinner.gif" />
     </form>
     <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
     <div hx-get="/todos" hx-trigger="load"></div>
