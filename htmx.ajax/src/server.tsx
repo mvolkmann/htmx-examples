@@ -10,7 +10,7 @@ app.use('/*', serveStatic({root: './public'}));
 
 app.get('/heap-size', (c: Context) => {
   const stats = heapStats();
-  return c.text((stats.heapSize / 1024 / 1024).toFixed(2));
+  return c.text((stats.heapSize / 1024 / 1024).toFixed(4));
 });
 
 export default app;
