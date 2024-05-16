@@ -2,6 +2,15 @@ import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import './reload-server';
 
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  company: {
+    name: string;
+  };
+};
+
 const URL = 'https://jsonplaceholder.typicode.com/users';
 
 const app = new Hono();
@@ -24,7 +33,7 @@ app.get('/users', async (c: Context) => {
         </tr>
       </thead>
       <tbody>
-        {users.map(user => (
+        {users.map((user: User) => (
           <tr>
             <td>{user.id}</td>
             <td>{user.name}</td>
