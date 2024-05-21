@@ -65,7 +65,7 @@ app.delete('/dog/:id', (c: Context) => {
 });
 
 // Deselects the currently selected dog.
-app.get('/deselect', (c: Context) => {
+app.put('/deselect', (c: Context) => {
   selectedId = '';
   c.header('HX-Trigger', 'selection-change');
   return c.body(null);
@@ -119,7 +119,7 @@ app.get('/form', (c: Context) => {
       <div class="buttons">
         <button id="submit-btn">{selectedId ? 'Update' : 'Add'}</button>
         {selectedId && (
-          <button hx-get="/deselect" hx-swap="none" type="button">
+          <button hx-put="/deselect" hx-swap="none" type="button">
             Cancel
           </button>
         )}
