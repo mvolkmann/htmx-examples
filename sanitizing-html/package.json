@@ -8,6 +8,7 @@
     "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.0"
+    "@types/bun": "^1.0.0",
+    "@types/sanitize-html": "^2.11.0"
   }
 }

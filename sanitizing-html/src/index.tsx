@@ -1,4 +1,4 @@
-import {Context, Hono} from 'hono';
+import {type Context, Hono} from 'hono';
 import {serveStatic} from 'hono/bun';
 import type {FC} from 'hono/jsx';
 import sanitizeHtml from 'sanitize-html';
