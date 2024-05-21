@@ -50,7 +50,10 @@
       const gameDuration = 5; // seconds
 
       // This is the sound to play when a balloon pops.
-      const pop = new Audio('pop.mp3');
+      //const pop = new Audio('pop.mp3');
+      const audioContext = new AudioContext();
+      let decodedAudio;
+      loadSound();
 
       let balloonSize = 0; // will get from CSS variable
       // We cannot get CSS variables from elements
@@ -87,13 +90,18 @@
         // Remove the balloon when it hits the ground.
         htmx.on(balloon, 'transitionend', () => {
           // TODO: Why does this sound sometimes not play?
-          pop.play();
+          //pop.play();
+          //new Audio('pop.mp3').play();
+          pop();
+
           htmx.remove(balloon);
         });
 
         // Remove the balloon when the user clicks it.
         const clickHandler = () => {
-          pop.play();
+          //pop.play();
+          //new Audio('pop.mp3').play();
+          pop();
           data.score++;
           htmx.remove(balloon);
         };
@@ -139,6 +147,23 @@
         const b = parseInt(hexColor.substr(5, 2), 16);
         const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
         return luminance > 0.5 ? 'black' : 'white';
+      }
+
+      async function loadSound() {
+        try {
+          const res = await fetch('pop.mp3');
+          const arrayBuffer = await res.arrayBuffer();
+          decodedAudio = await audioContext.decodeAudioData(arrayBuffer);
+        } catch (err) {
+          console.error('Audio error:', err);
+        }
+      }
+
+      function pop() {
+        const source = audioContext.createBufferSource();
+        source.buffer = decodedAudio;
+        source.connect(audioContext.destination);
+        source.start();
       }
 
       function startGame(data) {

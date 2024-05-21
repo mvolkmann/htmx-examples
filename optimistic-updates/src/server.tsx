@@ -44,7 +44,7 @@ const app = new Hono();
 // Serve static files from the public directory.
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/dogs', (c: Context) => {
+app.get('/table-rows', (c: Context) => {
   return c.html(<>{breeds.map(dogRow)}</>);
 });
 

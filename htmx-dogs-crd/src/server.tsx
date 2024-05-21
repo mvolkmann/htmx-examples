@@ -38,7 +38,7 @@ function dogRow(dog: Dog) {
 const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
-app.get('/dog', (c: Context) => {
+app.get('/table-rows', (c: Context) => {
   const sortedDogs = Array.from(dogs.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
