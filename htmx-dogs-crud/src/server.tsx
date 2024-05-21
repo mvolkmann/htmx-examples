@@ -40,7 +40,7 @@ function dogRow(dog: Dog, updating = false) {
             which causes the form to update. */}
         <button
           class="show-on-hover"
-          hx-get={'/select/' + dog.id}
+          hx-put={'/select/' + dog.id}
           hx-swap="none"
           type="button"
         >
@@ -129,7 +129,7 @@ app.get('/form', (c: Context) => {
 });
 
 // Selects a dog.
-app.get('/select/:id', (c: Context) => {
+app.put('/select/:id', (c: Context) => {
   selectedId = c.req.param('id');
   c.header('HX-Trigger', 'selection-change');
   return c.body(null);
