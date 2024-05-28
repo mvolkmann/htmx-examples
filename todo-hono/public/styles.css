@@ -54,6 +54,11 @@ input:checked + .description {
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
+  transition: opacity 1s ease-in;
+}
+
+.todo-item.htmx-added {
+  opacity: 0;
 }
 
 .todo-item.htmx-swapping {
