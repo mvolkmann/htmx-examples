@@ -13,7 +13,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
     <head>
       <title>Progress Bar</title>
       <link rel="stylesheet" href="styles.css" />
-      <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+      <script src="https://unpkg.com/htmx.org@2.0.0"></script>
     </head>
     <body>{children}</body>
   </html>

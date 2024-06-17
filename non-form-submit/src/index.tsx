@@ -12,7 +12,7 @@ const BaseHtml = ({children}: {children: Html.Children}) => (
   <html>
     <head>
       <title>htmx non-form submit</title>
-      <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+      <script src="https://unpkg.com/htmx.org@2.0.0"></script>
     </head>
     <body class="p-8">{children}</body>
   </html>
