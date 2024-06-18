@@ -14,7 +14,7 @@ const BaseHtml: FC = ({children}) => (
       <title>Server-Sent Events</title>
       <link rel="stylesheet" href="styles.css" />
       <script src="https://unpkg.com/htmx.org@2.0.0"></script>
-      <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+      <script src="https://unpkg.com/htmx-ext-sse@2.0.0/sse.js"></script>
     </head>
     <body>{children}</body>
   </html>
