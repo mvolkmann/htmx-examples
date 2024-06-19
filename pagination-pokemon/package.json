@@ -6,7 +6,7 @@
     "format": "prettier --write '**/*.{css,html,js,ts}'"
   },
   "dependencies": {
-    "hono": "^4.1.3"
+    "hono": "^4.4.7"
   },
   "devDependencies": {
     "bun-types": "latest",

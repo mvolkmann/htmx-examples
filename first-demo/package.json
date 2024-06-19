@@ -6,7 +6,7 @@
     "dev": "bun --watch run index.tsx"
   },
   "dependencies": {
-    "hono": "^3.12.6"
+    "hono": "^4.4.7"
   },
   "devDependencies": {
     "@types/bun": "latest"
