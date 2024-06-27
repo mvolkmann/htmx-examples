@@ -9,8 +9,11 @@
     ></script>
     <script src="reload-client.js" type="module"></script>
   </head>
-  <!-- editingId is state that only belongs on the client. If the user clicks
-  outside of any todo description, deselect the currently selected todo. -->
+  <!-- editingId is state that only belongs on the client.
+       If the user clicks the text of a todo description,
+       this is set to its id.
+       When editing is completed, this is reset to zero.
+  -->
   <body x-data="{editingId: 0}" x-on:click="editingId = 0">
     <h1>To Do List</h1>
     <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />

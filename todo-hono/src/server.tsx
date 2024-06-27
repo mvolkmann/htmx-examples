@@ -131,6 +131,8 @@ const TodoItem: FC<TodoItemProps> = ({
       <div class="description" x-show="id !== editingId" {...handleTextClick}>
         {description}
       </div>
+      {/* Clicking outside this input or pressing the return key
+          triggers this input. */}
       <input
         hx-include="this"
         hx-patch={`/todos/${id}/description`}
@@ -200,6 +202,9 @@ app.get('/todos', (c: Context) => {
     return c.json(todos);
   }
 
+  // The description-change event is triggered by the patch endpoint
+  // for the path '/todos/:id/description'.
+  // It indicates that we are finished editing the description of a todo.
   return c.html(
     <div id="todo-list" x-on:description-change="editingId = 0">
       {todos.map(todo => (
