@@ -11,11 +11,8 @@ import './reload-server';
 //-----------------------------------------------------------------------------
 
 const db = new Database('todos.db', {create: true});
-// Alternative way to access database in src directory:
-// import {Statement} from 'bun:sqlite';
-// import db from "./todos.db" with {"type": "sqlite"};
 const deleteTodoQuery = db.query('delete from todos where id = ?');
-const getAllTodosQuery = db.query('select * from todos order by description;');
+const getAllTodosQuery = db.query('select * from todos order by description');
 const getTodoQuery = db.query('select * from todos where id = ?');
 const insertTodoQuery = db.query(
   'insert into todos (description, completed) values (?, 0) returning id'
@@ -47,7 +44,9 @@ function addTodo(c: Context, description: string) {
     );
   } catch (e) {
     let message = e instanceof Error ? e.message : String(e);
-    const isDuplicate = message.includes('UNIQUE constraint failed');
+    const isDuplicate =
+      message.includes('UNIQUE constraint failed') ||
+      message === 'out of memory';
     if (isDuplicate) message = `duplicate todo "${description}"`;
     return c.html(<Err message={message} />);
   }
@@ -114,7 +113,10 @@ const TodoItem: FC<TodoItemProps> = ({
 }: TodoItemProps) => {
   // Attribute spreading is used here because VS Code
   // does not like attributes containing colons.
+  // This is used to stop the click event from bubbling up to the div
+  // that sets editingId to 0 when clicking outside the active input..
   const handleInputClick = {'x-on:click.stop': ''};
+  // This is used to being editing the clicked todo description.
   const handleTextClick = {'x-on:click.stop': 'editingId = id'};
 
   return (
