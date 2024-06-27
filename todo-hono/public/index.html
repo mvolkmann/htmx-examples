@@ -18,6 +18,8 @@
     <h1>To Do List</h1>
     <p hx-get="/todos/status" hx-trigger="load, status-change from:body" />
     <p id="error"></p>
+    <!-- hx-disabled-elt specifies elements to disable
+         while the HTTP request is processing. -->
     <form
       hx-post="/todos"
       hx-target="#todo-list"
