@@ -52,15 +52,16 @@ function addTodo(c: Context, description: string) {
   }
 }
 
+// This handles two kinds of todo updates, the description or completed status.
 function updateTodo(
   c: Context,
   statement: Statement,
-  todo: Todo,
+  todo: Todo, // already updated
   property: 'description' | 'completed'
 ) {
   try {
     const value = todo[property];
-    statement.run(value, todo.id);
+    statement.run(value, todo.id); // updates database
     return c.html(
       <>
         <TodoItem todo={todo} />
