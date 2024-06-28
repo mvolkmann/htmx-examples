@@ -126,8 +126,8 @@ const TodoItem: FC<TodoItemProps> = ({
         type="checkbox"
         checked={completed === 1}
         hx-patch={`/todos/${id}/toggle-complete`}
-        hx-swap="outerHTML"
         hx-target="closest div"
+        hx-swap="outerHTML"
       />
       <div class="description" x-show="id !== editingId" {...handleTextClick}>
         {description}
@@ -135,11 +135,10 @@ const TodoItem: FC<TodoItemProps> = ({
       {/* Clicking outside this input or pressing the return key
           triggers this input. */}
       <input
-        hx-include="this"
-        hx-patch={`/todos/${id}/description`}
-        hx-swap="outerHTML"
-        hx-target="closest div"
         hx-trigger="blur, keyup[keyCode === 13]"
+        hx-patch={`/todos/${id}/description`}
+        hx-target="closest div"
+        hx-swap="outerHTML"
         name="description"
         type="text"
         value={description}
@@ -153,8 +152,8 @@ const TodoItem: FC<TodoItemProps> = ({
         class="plain"
         hx-confirm={`Really delete "${description}"?`}
         hx-delete={`/todos/${id}`}
-        hx-swap="delete swap:1s"
         hx-target="closest div"
+        hx-swap="delete swap:1s"
       >
         🗑
       </button>
@@ -182,7 +181,7 @@ app.delete('/todos/:id', idValidator, (c: Context) => {
 
   // By not returning any HTML for this todo item,
   // we replace the existing todo item with nothing.
-  return c.text('');
+  return c.body(null);
 });
 
 // Redirect root URL to todo list.
