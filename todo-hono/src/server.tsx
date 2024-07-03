@@ -214,12 +214,6 @@ app.get('/todos', (c: Context) => {
   );
 });
 
-// This endpoint returns all the todos as JSON.
-app.get('/todos/json', (c: Context) => {
-  const todos = getAllTodos();
-  return c.json(todos);
-});
-
 // Get the status text that is displayed at the top of the page.
 app.get('/todos/status', (c: Context) => {
   const todos = getAllTodosQuery.all() as Todo[];
