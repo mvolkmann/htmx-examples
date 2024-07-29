@@ -35,6 +35,10 @@ header {
   padding: 0.5rem 2rem;
 }
 
+.my-tasks {
+  min-height: 23rem; /* room for dropdown list of colors */
+}
+
 nav {
   box-sizing: border-box;
   grid-area: nav;
@@ -57,6 +61,12 @@ nav {
   }
 }
 
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 sl-tab-group {
   height: 100%;
 
@@ -77,4 +87,8 @@ sl-tab-group {
 
 sl-tab-panel {
   padding: 1rem;
+}
+
+#version {
+  margin-top: 0.5rem;
 }

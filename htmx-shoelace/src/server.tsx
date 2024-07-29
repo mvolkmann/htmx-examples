@@ -11,6 +11,7 @@ const app = new Hono();
 app.use('/*', serveStatic({root: './public'}));
 
 app.get('/version', (c: Context) => {
+  Bun.sleepSync(1000);
   // Return a Response whose body contains
   // the version of Bun running on the server.
   return c.text('v' + Bun.version);

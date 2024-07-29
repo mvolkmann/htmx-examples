@@ -57,7 +57,9 @@
       <a href="#">Webinar Manager</a>
       <a href="#">MI Portal Content</a>
     </nav>
-    <main x-data="{alertCount: 0, likesIceCream: false, name: ''}">
+    <main
+      x-data="{alertCount: 0, iceCreamRating: 0, likesIceCream: false, name: ''}"
+    >
       <sl-tab-group>
         <sl-tab slot="nav" panel="dashboard" active>Dashboard</sl-tab>
         <sl-tab slot="nav" panel="records">Records</sl-tab>
@@ -72,13 +74,30 @@
         <sl-tab slot="nav" panel="workshops">Workshops</sl-tab>
 
         <sl-tab-panel name="dashboard">
-          <!-- When this button is clicked,
+          <div class="row">
+            <sl-tooltip>
+              <div slot="content">
+                Gets the version of Bun<br />
+                running on the server
+              </div>
+              <!-- When this button is clicked,
           an HTTP GET request is sent to /version.
           The text it returns replaces the innerHTML
           of the element with id "version". -->
-          <sl-button hx-get="/version" hx-target="#version" variant="primary">
-            Get Bun Version
-          </sl-button>
+              <sl-button
+                hx-get="/version"
+                hx-indicator=".htmx-indicator"
+                hx-target="#version"
+                variant="primary"
+              >
+                Get Bun Version
+              </sl-button>
+            </sl-tooltip>
+            <sl-spinner
+              class="htmx-indicator"
+              style="font-size: 2rem; --track-width: 5px"
+            ></sl-spinner>
+          </div>
           <div id="version"></div>
         </sl-tab-panel>
 
@@ -121,14 +140,62 @@
             Like Ice Cream?
           </sl-switch>
           <div x-show="likesIceCream">So many flavors!</div>
-          <div x-show="!likesIceCream">So sorry!</div>
+          <div class="row">
+            <sl-rating
+              label="Ice Cream Rating"
+              @sl-change="iceCreamRating = $event.target.value"
+            ></sl-rating>
+            <span x-text="iceCreamRating"></span>
+          </div>
         </sl-tab-panel>
+
         <sl-tab-panel name="surveys">
-          The content for the surveys tab goes here.
+          <sl-tree>
+            <sl-tree-item>
+              Deciduous
+              <sl-tree-item>Birch</sl-tree-item>
+              <sl-tree-item>
+                Maple
+                <sl-tree-item>Field maple</sl-tree-item>
+                <sl-tree-item>Red maple</sl-tree-item>
+                <sl-tree-item>Sugar maple</sl-tree-item>
+              </sl-tree-item>
+              <sl-tree-item>Oak</sl-tree-item>
+            </sl-tree-item>
+
+            <sl-tree-item>
+              Coniferous
+              <sl-tree-item>Cedar</sl-tree-item>
+              <sl-tree-item>Pine</sl-tree-item>
+              <sl-tree-item>Spruce</sl-tree-item>
+            </sl-tree-item>
+
+            <sl-tree-item>
+              Non-trees
+              <sl-tree-item>Bamboo</sl-tree-item>
+              <sl-tree-item>Cactus</sl-tree-item>
+              <sl-tree-item>Fern</sl-tree-item>
+            </sl-tree-item>
+          </sl-tree>
         </sl-tab-panel>
-        <sl-tab-panel name="myTasks">
-          The content for the My Tasks tab goes here.
+
+        <sl-tab-panel class="my-tasks" name="myTasks">
+          <sl-select
+            clearable
+            label="Select colors"
+            multiple
+            placement="bottom"
+            value="yellow purple"
+          >
+            <sl-option value="red">Red</sl-option>
+            <sl-option value="orange">Orange</sl-option>
+            <sl-option value="yellow">Yellow</sl-option>
+            <sl-option value="green">Green</sl-option>
+            <sl-option value="blue">Blue</sl-option>
+            <sl-option value="purple">Purple</sl-option>
+          </sl-select>
         </sl-tab-panel>
+
         <sl-tab-panel name="actionItems">
           The content for the Action Items tab goes here.
         </sl-tab-panel>
