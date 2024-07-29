@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@2.0.0"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"
+    ></script>
+    <script src="reload-client.js" type="module"></script>
+    <script>
+      let warningAlert;
+
+      function showWarningAlert(data) {
+        data.alertCount++;
+        if (!warningAlert) {
+          warningAlert = document.getElementById('warning-alert');
+        }
+        warningAlert.toast();
+      }
+
+      function updateName(data) {
+        data.name = event.target.value;
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <img alt="logo" class="logo" src="images/impact-group-logo.webp" />
+    </header>
+    <nav>
+      <h2>My IMPAXIS</h2>
+      <a href="#">Document Library</a>
+      <a href="#">Facebook Community</a>
+      <a href="#">myIMPACT Linkedin Group</a>
+      <a href="#">Staff Training</a>
+      <h2>Delivery Tools</h2>
+      <a href="#">CRM</a>
+      <a href="#">Delivery Tracking</a>
+      <a href="#">Emergency Contacts for Coaches</a>
+      <a href="#">Neighborhood Scout</a>
+      <a href="#">Report Center</a>
+      <a href="#">Time Tracking</a>
+      <a href="#">Webinar Calendar</a>
+      <h2>Administration and Content</h2>
+      <a href="#">myIMPACT Tools</a>
+      <a href="#">Site Admin</a>
+      <a href="#">Talent Development Content</a>
+      <a href="#">Webinar Manager</a>
+      <a href="#">MI Portal Content</a>
+    </nav>
+    <main x-data="{alertCount: 0, likesIceCream: false, name: ''}">
+      <sl-tab-group>
+        <sl-tab slot="nav" panel="dashboard" active>Dashboard</sl-tab>
+        <sl-tab slot="nav" panel="records">Records</sl-tab>
+        <sl-tab slot="nav" panel="coaches">Coaches</sl-tab>
+        <sl-tab slot="nav" panel="research">Research</sl-tab>
+        <sl-tab slot="nav" panel="surveys">Surveys</sl-tab>
+        <sl-tab slot="nav" panel="myTasks">My Tasks</sl-tab>
+        <sl-tab slot="nav" panel="actionItems">Action Items</sl-tab>
+        <sl-tab slot="nav" panel="svcAlerts">Svc Alerts</sl-tab>
+        <sl-tab slot="nav" panel="resume">Resume/CV</sl-tab>
+        <sl-tab slot="nav" panel="invoiceCredit">Invoice/Credit</sl-tab>
+        <sl-tab slot="nav" panel="workshops">Workshops</sl-tab>
+
+        <sl-tab-panel name="dashboard">
+          <!-- When this button is clicked,
+          an HTTP GET request is sent to /version.
+          The text it returns replaces the innerHTML
+          of the element with id "version". -->
+          <sl-button hx-get="/version" hx-target="#version" variant="primary">
+            Get Bun Version
+          </sl-button>
+          <div id="version"></div>
+        </sl-tab-panel>
+
+        <sl-tab-panel name="records">
+          <sl-button
+            hx-get="/version"
+            hx-target="#version"
+            variant="warning"
+            @click="showWarningAlert($data)"
+          >
+            Show Alert
+            <sl-badge variant="danger" pill>
+              <span x-text="alertCount"></span>
+            </sl-badge>
+          </sl-button>
+          <sl-alert
+            id="warning-alert"
+            variant="warning"
+            duration="3000"
+            closable
+          >
+            <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
+            Something concerning just happened.
+          </sl-alert>
+        </sl-tab-panel>
+
+        <sl-tab-panel name="coaches">
+          <sl-input
+            clearable
+            placeholder="your name"
+            @sl-input="updateName($data)"
+          ></sl-input>
+          <div class="greeting" x-show="name">
+            Hello, <span x-text="name"></span>!
+          </div>
+        </sl-tab-panel>
+
+        <sl-tab-panel name="research">
+          <sl-switch @sl-change="likesIceCream = $event.target.checked">
+            Like Ice Cream?
+          </sl-switch>
+          <div x-show="likesIceCream">So many flavors!</div>
+          <div x-show="!likesIceCream">So sorry!</div>
+        </sl-tab-panel>
+        <sl-tab-panel name="surveys">
+          The content for the surveys tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="myTasks">
+          The content for the My Tasks tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="actionItems">
+          The content for the Action Items tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="svcAlerts">
+          The content for the Svc Alerts tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="resume">
+          The content for the Resume/CV tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="invoiceCredit">
+          The content for the Invoice/Credit tab goes here.
+        </sl-tab-panel>
+        <sl-tab-panel name="workshops">
+          The content for the WorkShops tab goes here.
+        </sl-tab-panel>
+      </sl-tab-group>
+      <div class="content"></div>
+    </main>
+  </body>
+</html>

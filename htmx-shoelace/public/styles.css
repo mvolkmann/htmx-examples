@@ -1,0 +1,80 @@
+body {
+  --header-height: 5rem;
+  --nav-width: 18rem;
+
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'nav main';
+  grid-template-columns: var(--nav-width) 1fr;
+  grid-template-rows: var(--header-height) 1fr;
+
+  font-family: sans-serif;
+  margin: 0;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.greeting {
+  color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+header {
+  grid-area: header;
+  height: var(--header-height);
+}
+
+.logo {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0.5rem 2rem;
+}
+
+nav {
+  box-sizing: border-box;
+  grid-area: nav;
+  padding: 0 1rem;
+  width: var(--nav-width);
+
+  a {
+    color: gray;
+    display: block;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    text-decoration: none;
+  }
+
+  h2 {
+    background-color: #004378;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+}
+
+sl-tab-group {
+  height: 100%;
+
+  sl-tab::part(base) {
+    background-color: var(--track-color);
+    border-left: 1px solid var(--track-color);
+    border-right: 1px solid var(--track-color);
+    border-top: 1px solid var(--track-color);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    padding: 0.25rem 7px;
+  }
+
+  [active]::part(base) {
+    background-color: white;
+  }
+}
+
+sl-tab-panel {
+  padding: 1rem;
+}
