@@ -9,7 +9,9 @@
     "playwright": "^1.45.3"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@playwright/test": "^1.45.3",
+    "@types/bun": "latest",
+    "@types/node": "^22.0.0"
   },
   "name": "htmx-shoelace",
   "module": "index.ts",
