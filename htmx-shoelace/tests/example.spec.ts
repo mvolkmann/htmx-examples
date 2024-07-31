@@ -19,11 +19,10 @@ test('get started link', async ({page}) => {
 
 test('gets bun version', async ({page}) => {
   await page.goto('http://localhost:3000/');
-  await page.screenshot({path: 'screenshot.png'});
+  //await page.screenshot({path: 'screenshot.png'});
   // Using getByText instead of page.locator('button:text("Button Text Here")')
   // because Shoelace buttons do not use a button element.
   const button = await page.getByText('Get Bun Version');
   button.click();
-  //await page.waitForTimeout(1000);
   await expect(page.getByText('v1.1.21')).toBeVisible();
 });
