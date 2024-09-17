@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>htmx Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+    <script src="reload-client.js" type="module"></script>
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHGsTsgVMN_YIKIiq3OKX1jT9RFS8hpYQ&callback=console.debug&libraries=maps,marker&v=beta"
+    ></script>
+    <script>
+      const lat = 38.70955;
+      const lng = -90.59491;
+      const center = {lat, lng};
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center,
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
+          zoom: 15
+        });
+        var marker = new google.maps.Marker({
+          position: center,
+          map,
+          title: 'Home' // tooltip when hovering over marker
+        });
+      }
+    </script>
+  </head>
+  <body onload="initMap()">
+    <!--gmp-map
+      center="38.70955,-90.59491"
+      map-id="myMapId"
+      type="roadmap"
+      zoom="15"
+    >
+      <gmp-advanced-marker
+        position="38.70955,-90.59491"
+        title="Home"
+      ></gmp-advanced-marker>
+    </gmp-map-->
+    <div id="map"></div>
+  </body>
+</html>

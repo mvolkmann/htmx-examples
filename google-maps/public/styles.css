@@ -1,0 +1,24 @@
+body {
+  font-family: sans-serif;
+}
+
+/* Fills the window. */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+/* Always set the map height explicitly to define
+  the size of the div element that contains the map. */
+gmp-map,
+#map {
+  height: 100%;
+}
