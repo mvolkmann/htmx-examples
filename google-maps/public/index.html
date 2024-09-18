@@ -44,23 +44,56 @@
           title: 'Home' // tooltip when hovering over marker
         });
 
-        addBoundary(map);
+        addOverlay(map);
+
+        // This is useful for capturing overlay boundary points.
+        map.addListener('click', event => {
+          const lat = event.latLng.lat();
+          const lng = event.latLng.lng();
+          console.log(`{lat: ${lat}, lng: ${lng}},`);
+        });
       }
 
-      function addBoundary(map) {
+      function addOverlay(map) {
         const delta = 0.001;
         const paths = [
+          /*
           {lat: lat - delta, lng: lng - delta},
           {lat: lat + delta, lng: lng - delta},
           {lat: lat + delta, lng: lng + delta},
           {lat: lat - delta, lng: lng + delta}
+          */
+          {lat: 38.71261408328874, lng: -90.60023150268555},
+          {lat: 38.71325032455394, lng: -90.59868655029297},
+          {lat: 38.71345124167171, lng: -90.59718451324463},
+          {lat: 38.71325032455394, lng: -90.596712444458},
+          {lat: 38.711308096634454, lng: -90.59495291534424},
+          {lat: 38.71117414793624, lng: -90.59448084655762},
+          {lat: 38.711308096634454, lng: -90.59413752380371},
+          {lat: 38.71150901921116, lng: -90.59362253967285},
+          {lat: 38.711308096634454, lng: -90.59327921691894},
+          {lat: 38.7109397371105, lng: -90.59306464019775},
+          {lat: 38.71063835063367, lng: -90.59297880950928},
+          {lat: 38.71006906159964, lng: -90.59250674072265},
+          {lat: 38.71000208612114, lng: -90.59160551849365},
+          {lat: 38.70986813497587, lng: -90.59117636505127},
+          {lat: 38.70936581594587, lng: -90.59151968780517},
+          {lat: 38.70943279202046, lng: -90.59182009521484},
+          {lat: 38.709164887345636, lng: -90.59220633331299},
+          {lat: 38.709700695691375, lng: -90.59310755554199},
+          {lat: 38.70919837548488, lng: -90.59443793121338},
+          {lat: 38.70923186360845, lng: -90.59491},
+          {lat: 38.70986813497587, lng: -90.59538206878662},
+          {lat: 38.711308096634454, lng: -90.59619746032715},
+          {lat: 38.71114066072249, lng: -90.59757075134277},
+          {lat: 38.71211178355296, lng: -90.60023150268555}
         ];
         const overlay = new google.maps.Polygon({
           paths: paths,
-          strokeColor: '#FF0000', // Red border
+          strokeColor: '#FF0000', // red border
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#FF0000', // Red fill
+          fillColor: '#0000FF', // blue fill
           fillOpacity: 0.35
         });
         overlay.setMap(map);
