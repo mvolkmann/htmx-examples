@@ -89,7 +89,7 @@
           {lat: 38.71211178355296, lng: -90.60023150268555}
         ];
         const overlay = new google.maps.Polygon({
-          paths: paths,
+          paths,
           strokeColor: '#FF0000', // red border
           strokeOpacity: 0.8,
           strokeWeight: 2,
@@ -97,6 +97,19 @@
           fillOpacity: 0.35
         });
         overlay.setMap(map);
+
+        // See the rule for .gm-ui-hover-effect in styles.css.
+        const infoWindow = new google.maps.InfoWindow();
+
+        //overlay.addListener('click', event => {
+        overlay.addListener('mouseover', event => {
+          infoWindow.setContent('Jacobs Summit subdivision');
+          infoWindow.setPosition(event.latLng);
+          infoWindow.open(map);
+        });
+        overlay.addListener('mouseout', event => {
+          infoWindow.close();
+        });
       }
     </script>
   </head>

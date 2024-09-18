@@ -22,3 +22,9 @@ gmp-map,
 #map {
   height: 100%;
 }
+
+/* This removes the close button ("X") from all
+   InfoWindow instances provided by the Google Maps API. */
+.gm-ui-hover-effect {
+  display: none !important;
+}
