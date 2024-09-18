@@ -3,7 +3,7 @@
     <title>htmx Demo</title>
     <link rel="stylesheet" href="styles.css" />
     <!-- <script src="https://unpkg.com/htmx.org@2.0.2"></script> -->
-    <!-- <script src="reload-client.js" type="module"></script> -->
+    <script src="reload-client.js" type="module"></script>
 
     <script type="module">
       try {
@@ -31,8 +31,8 @@
         var map = new google.maps.Map(document.getElementById('map'), {
           center,
           mapId,
-          mapTypeId: google.maps.MapTypeId.SATELLITE,
-          //TODO: Enable labels.
+          //mapTypeId: google.maps.MapTypeId.SATELLITE,
+          mapTypeId: google.maps.MapTypeId.HYBRID, // adds labels to satellite
           zoom: 15
         });
 
