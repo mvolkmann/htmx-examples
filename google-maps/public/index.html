@@ -9,9 +9,7 @@
         const res = await fetch('/api-key');
         const apiKey = await res.text();
         const script = document.createElement('script');
-        script.async = true;
-        script.defer = true;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap`;
         document.head.appendChild(script);
       } catch (e) {
         console.error(e);
@@ -35,6 +33,8 @@
           zoom: 15
         });
 
+        addOverlay(map);
+
         const {AdvancedMarkerElement, PinElement} =
           await google.maps.importLibrary('marker');
         const marker = new google.maps.marker.AdvancedMarkerElement({
@@ -42,8 +42,6 @@
           position: center,
           title: 'Home' // tooltip when hovering over marker
         });
-
-        addOverlay(map);
 
         // This is useful for capturing overlay boundary points.
         map.addListener('click', event => {
@@ -82,20 +80,20 @@
         ];
         const overlay = new google.maps.Polygon({
           paths,
-          strokeColor: '#FF0000', // red border
+          strokeColor: 'red', // red border
           //strokeOpacity: 0.8,
           //strokeWeight: 2,
-          fillColor: '#0000FF', // blue fill
+          fillColor: 'blue', // blue fill
           fillOpacity: 0.35
         });
         overlay.setMap(map);
 
         // See the CSS rule for .gm-ui-hover-effect in styles.css.
         const infoWindow = new google.maps.InfoWindow();
+        infoWindow.setContent('Jacobs Summit subdivision');
 
         //overlay.addListener('click', event => {
         overlay.addListener('mouseover', event => {
-          infoWindow.setContent('Jacobs Summit subdivision');
           infoWindow.setPosition(event.latLng);
           infoWindow.open(map);
         });
