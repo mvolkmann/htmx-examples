@@ -2,7 +2,6 @@
   <head>
     <title>htmx Demo</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- <script src="https://unpkg.com/htmx.org@2.0.2"></script> -->
     <script src="reload-client.js" type="module"></script>
 
     <script type="module">
@@ -55,14 +54,7 @@
       }
 
       function addOverlay(map) {
-        const delta = 0.001;
         const paths = [
-          /*
-          {lat: lat - delta, lng: lng - delta},
-          {lat: lat + delta, lng: lng - delta},
-          {lat: lat + delta, lng: lng + delta},
-          {lat: lat - delta, lng: lng + delta}
-          */
           {lat: 38.71261408328874, lng: -90.60023150268555},
           {lat: 38.71325032455394, lng: -90.59868655029297},
           {lat: 38.71345124167171, lng: -90.59718451324463},
@@ -91,14 +83,14 @@
         const overlay = new google.maps.Polygon({
           paths,
           strokeColor: '#FF0000', // red border
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
+          //strokeOpacity: 0.8,
+          //strokeWeight: 2,
           fillColor: '#0000FF', // blue fill
           fillOpacity: 0.35
         });
         overlay.setMap(map);
 
-        // See the rule for .gm-ui-hover-effect in styles.css.
+        // See the CSS rule for .gm-ui-hover-effect in styles.css.
         const infoWindow = new google.maps.InfoWindow();
 
         //overlay.addListener('click', event => {
@@ -114,17 +106,6 @@
     </script>
   </head>
   <body>
-    <!--gmp-map
-      center="38.70955,-90.59491"
-      map-id="myMapId"
-      type="roadmap"
-      zoom="15"
-    >
-      <gmp-advanced-marker
-        position="38.70955,-90.59491"
-        title="Home"
-      ></gmp-advanced-marker>
-    </gmp-map-->
     <div id="map"></div>
   </body>
 </html>
