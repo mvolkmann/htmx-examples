@@ -51,7 +51,7 @@ app.get('/pokemon-rows', async (c: Context) => {
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>Description</th>
+          <th>Image</th>
         </tr>
         {pokemonList.map((pokemon, index) => {
           const isLast = index === ROWS_PER_PAGE - 1;
