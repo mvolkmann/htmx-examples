@@ -6,12 +6,9 @@
     "dev": "bun run --watch src/server.tsx"
   },
   "dependencies": {
-    "hono": "^4.4.7"
+    "hono": "^4.8.12"
   },
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "@types/bun": "latest"
   }
 }
